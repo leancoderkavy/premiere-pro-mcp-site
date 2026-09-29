@@ -12,9 +12,14 @@
     "render:ad": "node scripts/render-cinematic-ad.mjs && node scripts/finish-cinematic-ad.mjs",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
     "test:e2e": "playwright test",
-    "prebuild": "node ../scripts/generate-marketing-reference.mjs --check",
-    "images:optimize": "node scripts/optimize-public-images.mjs"
+    "images:optimize": "node scripts/optimize-public-images.mjs",
+    "prebuild": "node scripts/generate-marketing-reference.mjs --check",
+    "facts:sync": "node scripts/sync-package-facts.mjs",
+    "facts:check": "node scripts/sync-package-facts.mjs --check",
+    "facts:generate": "node scripts/generate-marketing-reference.mjs",
+    "facts:verify": "node scripts/generate-marketing-reference.mjs --check"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
@@ -44,7 +49,8 @@
     "sharp": "^0.35.4",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.4.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.11"
   },
   "overrides": {
     "@hono/node-server": "^2.0.11",

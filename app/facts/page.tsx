@@ -2,7 +2,7 @@ import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { HomeLink } from "@/components/ui/home-link"
-import { product, safeFirstPrompt, sourceCatalog } from "@/lib/product"
+import { product, safeFirstPrompt } from "@/lib/product"
 
 const pageUrl = "https://premiere-pro-mcp.com/facts/"
 
@@ -64,7 +64,7 @@ const facts = [
   },
   {
     question: "How many tools does it expose?",
-    answer: `Published v${product.version} registers ${product.coreToolCount} core tools; the default capability profile exposes ${product.defaultProfileToolCount}. An authenticated compatible UXP host can add capability-gated tools for a ${product.connectedUxpToolCount}-tool connected surface. The development source separately registers ${sourceCatalog.coreTools} core tools, with ${sourceCatalog.defaultProfileWithUxpTools} in the connected surface; it may include unreleased work. These are catalog counts, not proof that every operation succeeds in a particular live host.`,
+    answer: `Published v${product.version} registers ${product.coreToolCount} core tools; the default capability profile exposes ${product.defaultProfileToolCount}. An authenticated compatible UXP host can add capability-gated tools for a ${product.connectedUxpToolCount}-tool connected surface. These are catalog counts, not proof that every operation succeeds in a particular live host.`,
   },
   {
     question: "What is the safest first check?",
@@ -73,7 +73,7 @@ const facts = [
 ] as const
 
 const sources = [
-  { label: "Published-package provenance and separate source catalog", href: "/marketing-facts.json", publisher: "Project metadata" },
+  { label: "Published-package provenance", href: "/marketing-facts.json", publisher: "Project metadata" },
   { label: "Workflow starter kit", href: "/workflows/", publisher: "Project recipes" },
   {
     label: "Project source and README",

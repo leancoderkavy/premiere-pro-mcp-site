@@ -52,7 +52,7 @@ const problems = [
     title: "A recipe asks for a missing capability",
     steps: [
       "Stop the recipe. Inspect the actual tools available in this session and compare your package and connector versions with the release notes.",
-      "The source catalog can include unreleased work. UXP operations also require a compatible connected host and advertised capabilities.",
+      "The website tool reference describes the latest published package; an older or newer install can differ. UXP operations also require a compatible connected host and advertised capabilities.",
       "Report the bounded error code, OS, client, and version if you need help. Do not bypass the capability check or substitute an arbitrary script.",
     ],
   },

@@ -1,8 +1,7 @@
 import published from "./published-release.json"
-export { default as sourceCatalog } from "./source-catalog.json"
 
-// Public downloads and software metadata describe the inspected published package.
-// Development counts are generated separately from the current source catalog.
+// Every product fact describes the published npm package. scripts/sync-package-facts.mjs
+// downloads and verifies that package, then writes lib/published-release.json.
 export const product = {
   name: "MCP for Adobe Premiere Pro",
   version: published.version,

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
-    { "@type": "CollectionPage", "@id": "https://premiere-pro-mcp.com/tools/#reference", name: "Premiere Pro MCP Tool Reference", url: "https://premiere-pro-mcp.com/tools/", description: "Source-derived MCP action descriptions and availability. May include unreleased work; not a licensed-host verification record.", isPartOf: { "@id": "https://premiere-pro-mcp.com/#website" } },
+    { "@type": "CollectionPage", "@id": "https://premiere-pro-mcp.com/tools/#reference", name: "Premiere Pro MCP Tool Reference", url: "https://premiere-pro-mcp.com/tools/", description: `MCP action descriptions and availability from the published premiere-pro-mcp@${product.version} npm package; not a licensed-host verification record.`, isPartOf: { "@id": "https://premiere-pro-mcp.com/#website" } },
     { "@type": "BreadcrumbList", itemListElement: [
       { "@type": "ListItem", position: 1, name: product.name, item: "https://premiere-pro-mcp.com/" },
       { "@type": "ListItem", position: 2, name: "Tool reference", item: "https://premiere-pro-mcp.com/tools/" },
@@ -37,7 +37,7 @@ export default function ToolsPage() {
             <p className="font-mono text-sm text-site-accent">PREMIERE PRO MCP TOOL REFERENCE</p>
             <h1 className="mt-4 text-balance text-4xl font-bold tracking-tight sm:text-5xl">Find the tool for your Premiere workflow.</h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-site-detail">Look up media inspection, timeline editing, captions, export, and planning tools before asking your assistant to act. Each entry includes its source description and required availability.</p>
-            <p className="mt-5 max-w-3xl text-sm leading-7 text-site-muted">This reference is generated from development source v{catalog.sourceVersion} and may include unreleased changes. <Link href="/facts/" className="text-site-accent underline underline-offset-4">Published package facts</Link> are tracked separately. A catalogue entry does not establish success on your Premiere host.</p>
+            <p className="mt-5 max-w-3xl text-sm leading-7 text-site-muted">This reference is generated from the supported-actions catalog in the published premiere-pro-mcp@{catalog.packageVersion} npm package, the same release described in <Link href="/facts/" className="text-site-accent underline underline-offset-4">product facts</Link>. A catalogue entry does not establish success on your Premiere host.</p>
           </header>
           <details className="border-b border-site-line py-5">
             <summary className="min-h-11 cursor-pointer content-center font-semibold text-site-accent focus-visible:ring-2 focus-visible:ring-site-accent">Availability and connection requirements</summary>
@@ -50,7 +50,7 @@ export default function ToolsPage() {
             <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm text-site-accent">
               <Link className="inline-flex min-h-11 items-center underline underline-offset-4" href="/docs/">Install and connect</Link>
               <Link className="inline-flex min-h-11 items-center underline underline-offset-4" href="/workflows/">Try a workflow with sample media</Link>
-              <a className="inline-flex min-h-11 items-center underline underline-offset-4" href="/tool-catalog.json">Download source reference JSON</a>
+              <a className="inline-flex min-h-11 items-center underline underline-offset-4" href="/tool-catalog.json">Download tool reference JSON</a>
             </div>
           </details>
           <ToolExplorer tools={catalog.tools} />
