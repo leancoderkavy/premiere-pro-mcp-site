@@ -167,15 +167,41 @@ async function readCurrentRelease() {
   return JSON.parse(await readFile(releasePath, "utf8"));
 }
 
+/** Seconds to keep polling for an explicitly requested version (FACTS_SYNC_WAIT_SECONDS, default 600). */
+function registryWaitSeconds() {
+  const raw = process.env.FACTS_SYNC_WAIT_SECONDS;
+  const value = raw === undefined || raw === "" ? 600 : Number(raw);
+  if (!Number.isInteger(value) || value < 0 || value > 3600) throw new Error("FACTS_SYNC_WAIT_SECONDS must be an integer from 0 to 3600");
+  return value;
+}
+
+/**
+ * The publish workflow dispatches a sync seconds after `npm publish`, before the
+ * registry serves the new version everywhere. When a version was requested,
+ * poll until it appears (or the wait runs out) instead of failing on the race.
+ */
+export async function readPackument(requested, waitSeconds, { fetchJson, sleep } = {}) {
+  const get = fetchJson ?? (async () => (await fetchOk(`${REGISTRY}/${PACKAGE}`, "application/json")).json());
+  const pause = sleep ?? ((ms) => new Promise((resolveSleep) => setTimeout(resolveSleep, ms)));
+  const attempts = requested ? Math.floor(waitSeconds / 20) + 1 : 1;
+  for (let attempt = 1; ; attempt++) {
+    const packument = await get();
+    const version = requested ?? packument["dist-tags"]?.latest;
+    if (version && packument.versions?.[version]) return { packument, version };
+    if (attempt >= attempts) {
+      throw new Error(`${PACKAGE}@${version} is not on the npm registry${requested && waitSeconds ? ` after waiting ${waitSeconds}s` : ""}`);
+    }
+    console.log(`${PACKAGE}@${requested} is not on the registry yet (attempt ${attempt}); retrying in 20s.`);
+    await pause(20_000);
+  }
+}
+
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const current = await readCurrentRelease();
   if (options.pinned) options.version = current.version;
-  const packument = await (await fetchOk(`${REGISTRY}/${PACKAGE}`, "application/json")).json();
-  const latest = packument["dist-tags"]?.latest;
-  const version = options.version ?? latest;
-  const metadata = packument.versions?.[version];
-  if (!metadata) throw new Error(`${PACKAGE}@${version} is not on the npm registry`);
+  const { packument, version } = await readPackument(options.version, options.pinned ? 0 : registryWaitSeconds());
+  const metadata = packument.versions[version];
   const { tarball, integrity } = metadata.dist ?? {};
   if (!String(tarball).startsWith(`${REGISTRY}/`)) throw new Error(`Unexpected tarball URL: ${tarball}`);
 
