@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.18.5",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.18.5",
-  "sourceSha256": "c991ae5f7a6f7c642d7c9ac2baa80972343bc8516df9c143466c6e87cde16482",
+  "packageVersion": "1.18.6",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.18.6",
+  "sourceSha256": "5fc6cfd33d9c6ee47fa02aa60eddae3127614aa6ddbc38c781878189d8617723",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
     "default": 382,
@@ -2589,7 +2589,7 @@
       "name": "set_scale_width_height",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set independent Scale Width and Scale Height on a clip (requires Uniform Scale to be OFF)."
+      "description": "Set independent width and height scale on a clip. Turns Uniform Scale off, writes Motion > Scale Width (width) and Motion > Scale (which Premiere uses as the height once Uniform Scale is off), then reads all three back. Fails when a value does not read back."
     },
     {
       "name": "set_scratch_disk_path",
