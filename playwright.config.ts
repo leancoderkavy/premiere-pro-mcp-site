@@ -23,7 +23,7 @@ export default defineConfig({
   },
   webServer: {
     command: "node e2e/server.mjs",
-    url: `http://127.0.0.1:${port}/health`,
+    url: `http://127.0.0.1:${port}/robots.txt`,
     reuseExistingServer: false,
     timeout: 30_000,
     gracefulShutdown: { signal: "SIGTERM", timeout: 5_000 },

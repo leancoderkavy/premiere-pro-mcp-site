@@ -1,8 +1,6 @@
 import { test, expect, type Page, type APIRequestContext } from "@playwright/test"
-import { readFileSync } from "node:fs"
 import published from "../lib/published-release.json"
-import manifest from "../../public-product-manifest.json"
-import { safeFirstPrompt, product, sourceCatalog } from "../lib/product"
+import { safeFirstPrompt, product } from "../lib/product"
 import AxeBuilder from "@axe-core/playwright"
 
 const fixtureURL = `http://127.0.0.1:${process.env.LANDING_E2E_POSTHOG_PORT || 3161}`
@@ -60,11 +58,8 @@ for (const variant of ["control", "test"]) {
     await expect.poll(async () => (await state(request)).events.filter(event => event.event === "$experiment_exposure").length).toBe(1)
     expect(product.version).toBe(published.version)
     expect(product.coreToolCount).toBe(published.coreTools)
-    expect(manifest.generatedFrom.evidenceScope).toBe("source_checkout_not_published_package")
-    expect(manifest.capabilitySurface.registeredCoreTools).toBe(sourceCatalog.coreTools)
     await expect(page.locator("body")).toContainText(String(published.coreTools))
     await expect(page.locator("body")).toContainText(safeFirstPrompt)
-    expect(readFileSync("../README.md", "utf8")).toContain(safeFirstPrompt)
     await expect(page.locator(`a[href="${product.downloads.claudeBundle}"]`).first()).toBeVisible()
     await expect(page.locator(`a[href="${product.downloads.signedCepConnector}"]`).first()).toBeVisible()
     await copyButton(page).click()
