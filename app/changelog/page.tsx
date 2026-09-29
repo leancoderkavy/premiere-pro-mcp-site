@@ -6,6 +6,21 @@ import { product } from "@/lib/product"
 
 const releases = [
   {
+    version: "1.18.6",
+    date: "2026-09-29",
+    label: "Independent width and height scale, and a website of its own",
+    groups: [
+      { title: "Fixed", items: [
+        "set_scale_width_height sets the height through Motion > Scale, reads the width, height, and Uniform Scale back, and fails on a mismatch instead of reporting success."
+      ] },
+      { title: "Changed", items: [
+        "The website moved to its own repository and syncs version and tool counts from the published npm package automatically.",
+        "The hosted server at premiere-pro-mcp.fly.dev serves MCP only; point token-authenticated clients at https://premiere-pro-mcp.fly.dev/mcp."
+      ] },
+      { title: "Verification scope", items: ["Automated checks validate package behavior; the scale fix has not been re-verified on a licensed Premiere host."] }
+    ],
+  },
+  {
     version: "1.18.5",
     date: "2026-09-28",
     label: "Timeline edits that stay in place, and exports checked on disk",
