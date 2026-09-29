@@ -62,6 +62,6 @@ jobs:
           version="$(node -p "require('./lib/published-release.json').version")"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add lib/published-release.json data/supported-actions.md public/tool-catalog.json public/marketing-facts.json public/llms.txt public/llms-full.txt
+          git add lib/published-release.json data/supported-actions.md data/project-intake-validator.js data/project-intake-validator.d.ts public/tool-catalog.json public/marketing-facts.json public/llms.txt public/llms-full.txt
           git commit -m "chore: sync published package facts to v${version}"
           git push origin HEAD:main

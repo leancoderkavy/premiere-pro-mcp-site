@@ -23,12 +23,17 @@ const PACKAGE = "premiere-pro-mcp";
 const REGISTRY = "https://registry.npmjs.org";
 const MANIFEST_ENTRY = "package/public-product-manifest.json";
 const CATALOG_ENTRY = "package/docs/supported-actions.md";
+// The shipped Project Intake validator, so the site's starter templates are checked by the real code.
+const INTAKE_ENTRY = "package/dist/intake/project-intake.js";
+const INTAKE_TYPES_ENTRY = "package/dist/intake/project-intake.d.ts";
 const MAX_TARBALL_BYTES = 100 * 1024 * 1024;
 const EVIDENCE = "Downloaded npm tarball public-product-manifest and supported-actions catalog, integrity verified; not a licensed-host test.";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const releasePath = resolve(root, "lib/published-release.json");
 const catalogPath = resolve(root, "data/supported-actions.md");
+const intakePath = resolve(root, "data/project-intake-validator.js");
+const intakeTypesPath = resolve(root, "data/project-intake-validator.d.ts");
 
 function parseArgs(argv) {
   const options = { check: false, pinned: false, version: undefined };
@@ -178,9 +183,16 @@ async function main() {
   const bytes = Buffer.from(await tarballResponse.arrayBuffer());
   if (bytes.length > MAX_TARBALL_BYTES) throw new Error("Tarball is larger than expected");
   verifyIntegrity(bytes, integrity);
-  const entries = extractTarEntries(gunzipSync(bytes, { maxOutputLength: 4 * MAX_TARBALL_BYTES }), [MANIFEST_ENTRY, CATALOG_ENTRY]);
+  const entries = extractTarEntries(gunzipSync(bytes, { maxOutputLength: 4 * MAX_TARBALL_BYTES }), [MANIFEST_ENTRY, CATALOG_ENTRY, INTAKE_ENTRY, INTAKE_TYPES_ENTRY]);
   const manifest = JSON.parse(entries.get(MANIFEST_ENTRY).toString("utf8"));
   const catalog = entries.get(CATALOG_ENTRY).toString("utf8").replaceAll("\r\n", "\n");
+  // Source maps are not shipped next to the extracted copy, so drop their pointers.
+  const withoutSourceMap = (text) => text.replaceAll("\r\n", "\n").replace(/\n\/\/# sourceMappingURL=\S+\s*$/, "\n");
+  const intake = withoutSourceMap(entries.get(INTAKE_ENTRY).toString("utf8"));
+  const intakeTypes = withoutSourceMap(entries.get(INTAKE_TYPES_ENTRY).toString("utf8"));
+  if (/^\s*import\s[^;]*from\s+"(?!node:)/m.test(intake)) {
+    throw new Error("The packaged Project Intake validator imports a non-built-in module; update the site sync.");
+  }
 
   const today = new Date().toISOString().slice(0, 10);
   const release = releaseFromManifest({
@@ -198,6 +210,8 @@ async function main() {
     if (current.version !== version) problems.push(`lib/published-release.json is v${current.version}; npm ${options.version ? "requested" : "latest"} is v${version}`);
     else if (factsChanged) problems.push("lib/published-release.json does not match the verified npm package");
     if (currentCatalog !== catalog) problems.push("data/supported-actions.md does not match the verified npm package");
+    const currentIntake = await readFile(intakePath, "utf8").then((text) => text.replaceAll("\r\n", "\n"), () => "");
+    if (currentIntake !== intake) problems.push("data/project-intake-validator.js does not match the verified npm package");
     const stale = await staleReferenceFiles().catch((error) => [`cannot regenerate (${error.message})`]);
     if (stale.length) problems.push(`generated references are stale: ${stale.join(", ")}`);
     if (problems.length) {
@@ -212,6 +226,8 @@ async function main() {
 
   await mkdir(dirname(catalogPath), { recursive: true });
   await writeFile(catalogPath, catalog);
+  await writeFile(intakePath, intake);
+  await writeFile(intakeTypesPath, intakeTypes);
   await writeFile(releasePath, releaseText);
   await writeReferenceFiles();
   console.log(`${factsChanged ? "Synced" : "Re-verified"} package facts from ${PACKAGE}@${version} (integrity verified).`);
