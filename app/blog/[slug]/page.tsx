@@ -10,7 +10,8 @@ type ArticlePageProps = {
   params: Promise<{ slug: string }>
 }
 
-export const dynamic = "force-static"
+// Pages render per request for the CSP nonce; unknown slugs still 404.
+export const dynamicParams = false
 const socialImage = "/marketing/premiere-pro-mcp-social-square-v1.png"
 
 const articleDateFormatter = new Intl.DateTimeFormat("en-US", {

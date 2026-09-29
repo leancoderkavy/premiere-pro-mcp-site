@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { headers } from "next/headers";
 import "./globals.css";
 import { MarketingPageView } from "@/components/analytics/marketing-page-view";
 import { product } from "@/lib/product";
+import { firstPaintExposureScript, isHomepageVariant } from "@/lib/runtime/homepage-experiment";
+import { EXPOSURE_HEADER, NONCE_HEADER } from "@/lib/runtime/security-headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -109,11 +112,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Reading request headers renders every page per request, which the CSP
+  // nonce requires. proxy.ts sets both headers and drops client-sent copies.
+  const requestHeaders = await headers();
+  const nonce = requestHeaders.get(NONCE_HEADER) ?? undefined;
+  const exposure = requestHeaders.get(EXPOSURE_HEADER);
   return (
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth">
       <head>
@@ -129,6 +137,12 @@ export default function RootLayout({
           href="/llms-full.txt"
           title="Complete machine-readable reference for MCP for Adobe Premiere Pro"
         />
+        {nonce && isHomepageVariant(exposure) ? (
+          <script
+            nonce={nonce}
+            dangerouslySetInnerHTML={{ __html: firstPaintExposureScript(exposure) }}
+          />
+        ) : null}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -140,6 +154,7 @@ export default function RootLayout({
           <Script
             src="/analytics.js"
             strategy="lazyOnload"
+            nonce={nonce}
             data-google-analytics-id={googleAnalyticsId}
             data-posthog-project-token={posthogProjectToken}
             data-posthog-host={posthogHost}
