@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build && npm run performance:check",
     "performance:check": "node scripts/check-performance-budget.mjs",
+    "seo:check": "node scripts/check-seo-export.mjs",
     "render:demo-video": "node scripts/render-demo-video.mjs",
     "record:demo-live": "node scripts/record-live-demo.mjs",
     "render:demo-live": "node scripts/render-live-demo.mjs",
