@@ -3,6 +3,8 @@
 //   node scripts/sync-package-facts.mjs                 write facts for npm `latest`
 //   node scripts/sync-package-facts.mjs --version 1.2.3 write facts for a specific version
 //   node scripts/sync-package-facts.mjs --check         verify committed facts match npm `latest`
+//   node scripts/sync-package-facts.mjs --check --pinned
+//        verify committed facts match the committed version on npm (ignores newer releases)
 //
 // The tarball is downloaded, its sha512 is checked against the registry's
 // `dist.integrity`, and only then are `package/public-product-manifest.json` and
@@ -29,10 +31,11 @@ const releasePath = resolve(root, "lib/published-release.json");
 const catalogPath = resolve(root, "data/supported-actions.md");
 
 function parseArgs(argv) {
-  const options = { check: false, version: undefined };
+  const options = { check: false, pinned: false, version: undefined };
   for (let index = 0; index < argv.length; index++) {
     const arg = argv[index];
     if (arg === "--check") options.check = true;
+    else if (arg === "--pinned") options.pinned = true;
     else if (arg === "--version") options.version = argv[++index];
     else if (arg.startsWith("--version=")) options.version = arg.slice("--version=".length);
     else throw new Error(`Unknown argument: ${arg}`);
@@ -40,6 +43,7 @@ function parseArgs(argv) {
   if (options.version !== undefined && !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(options.version)) {
     throw new Error("--version needs an exact semver version such as 1.18.5");
   }
+  if (options.pinned && options.version !== undefined) throw new Error("Use either --pinned or --version, not both");
   return options;
 }
 
@@ -161,6 +165,7 @@ async function readCurrentRelease() {
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const current = await readCurrentRelease();
+  if (options.pinned) options.version = current.version;
   const packument = await (await fetchOk(`${REGISTRY}/${PACKAGE}`, "application/json")).json();
   const latest = packument["dist-tags"]?.latest;
   const version = options.version ?? latest;

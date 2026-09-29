@@ -1,0 +1,67 @@
+name: Sync published package facts
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Exact premiere-pro-mcp version to sync (default npm latest)
+        required: false
+        type: string
+  repository_dispatch:
+    types: [package-published]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-facts
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: main
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Sync facts from the verified npm tarball
+        env:
+          # Passed through env, never interpolated into the script; the sync script validates semver.
+          REQUESTED_VERSION: ${{ inputs.version || github.event.client_payload.version || '' }}
+        run: |
+          if [ -n "$REQUESTED_VERSION" ]; then
+            npm run facts:sync -- --version "$REQUESTED_VERSION"
+          else
+            npm run facts:sync
+          fi
+      - name: Detect changes
+        id: diff
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git status --short
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Facts already match npm."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.diff.outputs.changed == 'true'
+        run: npm test
+      - if: steps.diff.outputs.changed == 'true'
+        run: npm run build
+      - name: Commit and push to main
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          version="$(node -p "require('./lib/published-release.json').version")"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/published-release.json data/supported-actions.md public/tool-catalog.json public/marketing-facts.json public/llms.txt public/llms-full.txt
+          git commit -m "chore: sync published package facts to v${version}"
+          git push origin HEAD:main

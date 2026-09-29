@@ -1,9 +1,25 @@
-# Landing site (premiere-pro-mcp.com)
+# premiere-pro-mcp.com site
 
-This directory is the Next.js 16 marketing site for MCP for Adobe Premiere Pro.
-Repo-wide agent instructions: [`../AGENTS.md`](../AGENTS.md). Claims: [`../docs/claims-registry.md`](../docs/claims-registry.md).
-Do not hand-edit generated crawl files such as `public/llms.txt`. Do not mix development-source
-tool counts with published-package facts in `lib/published-release.json`.
+Standalone Next.js 16 marketing site for MCP for Adobe Premiere Pro. The product (MCP server,
+CEP and UXP panels, claims registry) lives in https://github.com/leancoderkavy/premiere-pro-mcp.
+See README.md for commands.
+
+## Product facts
+
+- Every product fact comes from the published npm package `premiere-pro-mcp`. Do not add
+  development-source counts or read the product repository at build time.
+- Update facts with `npm run facts:sync` (verifies the npm tarball integrity). It writes
+  `lib/published-release.json` and `data/supported-actions.md`, then regenerates
+  `public/tool-catalog.json`, `public/marketing-facts.json`, `public/llms.txt`, and
+  `public/llms-full.txt`. Never hand-edit those files.
+- Read facts through `lib/product.ts`. Do not hard-code the current version; only the
+  release history in `app/changelog/page.tsx` may name versions.
+- Catalog counts are not proof of success in a licensed Premiere host. Keep that boundary in copy.
+
+## Checks
+
+Run `npm run lint`, `npm test`, and `npm run build` before calling work done.
+`e2e/` Playwright specs need a local server harness and are not part of `npm test`.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
