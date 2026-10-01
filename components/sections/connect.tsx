@@ -40,10 +40,10 @@ const assistantRoutes: AssistantRoute[] = [
     name: "Claude Desktop",
     shortDescription: "Download the self-contained desktop bundle.",
     availability: "Recommended for the easiest start",
-    primaryAction: "Download Claude Desktop bundle",
+    primaryAction: "Get Claude Desktop bundle on GitHub",
     href: product.downloads.claudeBundle,
     detail:
-      "Open the downloaded bundle in Claude Desktop. It includes the local server, so this path does not ask you to install Node just to connect Claude.",
+      "Open the latest GitHub release and download its .mcpb bundle. Open it in Claude Desktop; it includes the local server, so this path does not ask you to install Node just to connect Claude.",
     status: "recommended",
   },
   {
@@ -200,7 +200,7 @@ export function ConnectSection() {
                   onClick={() => trackOnboardingEvent("onboarding_download_started", { route: "cep_connector" })}
                   className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-purple-200 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 >
-                  <Download className="h-4 w-4" aria-hidden="true" /> Download connector package <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  <Download className="h-4 w-4" aria-hidden="true" /> Get connector on GitHub <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                 </a>
               </li>
               <li className="border-t border-zinc-800 pt-5">

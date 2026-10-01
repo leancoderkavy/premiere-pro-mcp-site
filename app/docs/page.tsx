@@ -89,8 +89,8 @@ export default function DocsPage() {
           <h2 id="install-heading" className="text-3xl font-semibold">Start without developer setup</h2>
           <p className="mt-5 max-w-3xl leading-8 text-site-muted">The default route has two parts: your AI assistant gets a local server, and Premiere gets a separate connector. Claude Desktop is the recommended first route because the released bundle contains the server.</p>
           <ol className="mt-6 list-decimal space-y-3 pl-6 leading-7 text-site-detail">
-            <li><a className="font-medium text-site-accent hover:text-site-text" href={product.downloads.claudeBundle}>Download the Claude Desktop bundle</a> and open it in Claude Desktop.</li>
-            <li><a className="font-medium text-site-accent hover:text-site-text" href={product.downloads.signedCepConnector}>Download the signed Premiere connector</a>. This is separate from the assistant bundle.</li>
+            <li><a className="font-medium text-site-accent hover:text-site-text" href={product.downloads.claudeBundle}>Get the Claude Desktop bundle on GitHub</a>: download the .mcpb asset from the latest release and open it in Claude Desktop.</li>
+            <li><a className="font-medium text-site-accent hover:text-site-text" href={product.downloads.signedCepConnector}>Get the signed Premiere connector on GitHub</a>: download MCPBridgeCEP.zxp from the same release. This is separate from the assistant bundle.</li>
             <li>Restart Claude Desktop and Premiere, then open a project.</li>
             <li>Send this read-only first prompt: <code className="rounded bg-site-raised px-2 py-1 text-site-accent">{safeFirstPrompt}</code></li>
           </ol>
