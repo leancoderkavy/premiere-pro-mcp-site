@@ -200,8 +200,8 @@ const clients = [
     tag: "RECOMMENDED",
     title: "Install the Claude Desktop bundle.",
     detail:
-      "The self-contained Claude bundle includes the local MCP server. Add the Premiere connector below to complete the bridge.",
-    action: "Download Claude bundle",
+      "Download the .mcpb bundle from the latest GitHub release. It includes the local MCP server. Add the Premiere connector from the same release to complete the bridge.",
+    action: "Get Claude bundle on GitHub",
     href: product.downloads.claudeBundle
   },
   {
@@ -374,7 +374,7 @@ export function StudioInstaller() {
                     })
                   }
                 >
-                  Download Premiere connector <ArrowDown size={14} />
+                  Get Premiere connector on GitHub <ArrowDown size={14} />
                 </a>
               </div>
             </li>

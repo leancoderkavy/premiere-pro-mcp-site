@@ -227,14 +227,14 @@ export const articles: Article[] = [
         heading: "Install the Premiere connector (CEP-first)",
         paragraphs: [
           "Your assistant talks to Premiere through a separate local connector. Fully quit Premiere before running the versioned installer below.",
-          `Alternatively, download the signed CEP package from the v${product.version} release and open it with a trusted ZXP installer.`,
+          "Alternatively, download MCPBridgeCEP.zxp from the latest GitHub release and open it with a trusted ZXP installer.",
           "Then reopen Premiere and restart your assistant. Open a disposable project with an active sequence. In Premiere, confirm Window → Extensions → MCP for Adobe Premiere Pro.",
         ],
         codeBlocks: [
           { label: "Install CEP connector with versioned command", code: `npx --yes premiere-pro-mcp@${product.version} --install-cep` },
         ],
         links: [
-          { label: `v${product.version} release`, href: `https://github.com/leancoderkavy/premiere-pro-mcp/releases/tag/v${product.version}` },
+          { label: "Latest release on GitHub", href: product.links.latestRelease },
         ],
       },
       {
@@ -1252,20 +1252,20 @@ export const articles: Article[] = [
         "bullets": [
             "Use the desktop Claude app for the local bundle route. A connection configured in the browser is a different setup.",
             "Choose a disposable project or a copy, open an active sequence, and keep the original edit recoverable.",
-            "Use the matching downloads below. The npm package published by this repository is premiere-pro-mcp; similarly named packages belong to other projects."
+            "The links below open the latest GitHub release. Download its .mcpb bundle and MCPBridgeCEP.zxp connector from the same release. The npm package published by this repository is premiere-pro-mcp; similarly named packages belong to other projects."
         ],
         "links": [
             {
-                "label": "Download the Claude Desktop bundle",
+                "label": "Get the Claude Desktop bundle on GitHub",
                 "href": product.downloads.claudeBundle
             },
             {
-                "label": "Download the Premiere CEP connector",
+                "label": "Get the Premiere CEP connector on GitHub",
                 "href": product.downloads.signedCepConnector
             },
             {
-                "label": "Read the matching release notes",
-                "href": product.downloads.releaseNotes
+                "label": "Read the latest release notes on GitHub",
+                "href": product.links.latestRelease
             }
         ]
     },
