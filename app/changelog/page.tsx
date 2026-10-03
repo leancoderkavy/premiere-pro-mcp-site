@@ -6,6 +6,25 @@ import { product } from "@/lib/product"
 
 const releases = [
   {
+    version: "1.19.0",
+    date: "2026-10-03",
+    label: "Readable UXP point values and safer, verified edits",
+    groups: [
+      { title: "Fixed", items: [
+        "UXP point and color parameter inspection accepts Premiere's array values. Guarded writes read those values back; unavailable or malformed host values fail with a specific error.",
+        "CEP clip enabled-state reads use the disabled property, so disabled clips no longer appear enabled when Premiere lacks isDisabled().",
+        "Timeline edits, keyframes, markers, imports, saves, and exports validate their targets and preserve partial or unreadable write outcomes. Missing media and untitled saves fail before opening a blocking host dialog."
+      ] },
+      { title: "Added", items: [
+        "list_stock_titles lists Premiere's bundled title templates; add_title places a copied template and reads its requested text back."
+      ] },
+      { title: "Compatibility", items: [
+        "Clients must use declared argument names. Unknown arguments now fail before dispatch, and unsafe or unverifiable host operations can refuse instead of reporting success."
+      ] },
+      { title: "Verification scope", items: ["Automated checks validate package behavior; this release has not been re-verified on a licensed Premiere host or for rendered output."] }
+    ],
+  },
+  {
     version: "1.18.6",
     date: "2026-09-29",
     label: "Independent width and height scale, and a website of its own",

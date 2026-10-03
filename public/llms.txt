@@ -6,10 +6,10 @@ Preferred product name: **MCP for Adobe Premiere Pro**. Common shorthand: Premie
 
 ## Published package
 
-Current project release: 1.18.6.
-Published v1.18.6: 384 core tools, 382 default-profile tools, and 96 authenticated capability-gated UXP additions (478 connected tools).
+Current project release: 1.19.0.
+Published v1.19.0: 386 core tools, 384 default-profile tools, and 96 authenticated capability-gated UXP additions (480 connected tools).
 These counts come from the downloaded npm artifact, whose integrity was verified against the registry. They do not prove a successful operation in a licensed Premiere host.
-Release: https://github.com/leancoderkavy/premiere-pro-mcp/releases/tag/v1.18.6
+Release: https://github.com/leancoderkavy/premiere-pro-mcp/releases/tag/v1.19.0
 
 ## Start a workflow
 

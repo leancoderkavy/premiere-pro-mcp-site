@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.18.6",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.18.6",
-  "sourceSha256": "5fc6cfd33d9c6ee47fa02aa60eddae3127614aa6ddbc38c781878189d8617723",
+  "packageVersion": "1.19.0",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.19.0",
+  "sourceSha256": "065a18724d7a723f97f2a2d74a8a95d4f9e4b948f274680da4cbee45b6fe77d8",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
-    "default": 382,
+    "default": 384,
     "uxp": 96,
     "restricted": 2
   },
@@ -15,7 +15,7 @@
       "name": "add_adjustment_layer",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Add an adjustment layer to the active sequence via QE DOM. The layer is added at the playhead position on the specified track."
+      "description": "EXPERIMENTAL (QE DOM): add an adjustment layer at the playhead on the specified track. Refuses when the host lacks the QE APIs; verifies a new public TrackItem using isAdjustmentLayer and placement readback."
     },
     {
       "name": "add_audio_keyframes",
@@ -33,49 +33,55 @@
       "name": "add_keyframe",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Add and read back a keyframe on an effect property. This verifies stored parameter data only; render/playback verification remains host-dependent."
+      "description": "Add and read back a keyframe on an effect property. The receipt warns when its time is outside the clip's visible range. This verifies stored parameter data only; render/playback verification remains host-dependent."
     },
     {
       "name": "add_marker",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Add a marker to the active sequence or a clip"
+      "description": "Add a marker to the active sequence or a clip and read its name, comments, color and duration back. EXPERIMENTAL (QE DOM): the receipt reports undoStackIndex movement, which does not prove QE can reverse the marker. Every marker attempt protects an engine undo boundary; undoTracked:false means the marker did not observably advance the QE index."
     },
     {
       "name": "add_marker_to_project_item",
       "surface": "default",
       "modes": "type: Comment, Chapter, Segmentation, WebLink",
-      "description": "Add a marker to a project item (source clip marker)."
+      "description": "Add a marker to a project item (source clip marker). EXPERIMENTAL QE: records an observed marker boundary for guarded Undo/Redo; crossing it is refused by default, and unreadable history records unknown protection. This boundary does not verify native marker reversal."
     },
     {
       "name": "add_markers_batch",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Add up to 200 sequence or clip markers in one verified CEP request (beat grids, chapters, silence reviews, client notes). Every marker is validated and range-checked before the first write; the tool reads back the marker count and each created marker's time and fails closed on any mismatch."
+      "description": "Add up to 200 sequence or clip markers in one verified CEP request (beat grids, chapters, silence reviews, client notes). Every marker is validated and range-checked before the first write; the tool reads back the marker count and each created marker's time and fails closed on any mismatch. EXPERIMENTAL QE: records an observed marker boundary for guarded Undo/Redo; crossing it is refused by default, and unreadable history records unknown protection. This boundary does not verify native marker reversal."
     },
     {
       "name": "add_text_overlay",
       "surface": "default",
       "modes": "caption_format: subtitle, 608, 708, teletext",
-      "description": "Unavailable: Premiere does not expose a supported scripting API to create caption clips directly from raw text. Import an .srt/.vtt and use create_caption_track, or use a MOGRT/PNG overlay for title graphics."
+      "description": "Unavailable: Premiere does not expose a supported scripting API to create caption clips directly from raw text. For on-screen titles from plain text use add_title; for captions import an .srt/.vtt and use create_caption_track."
+    },
+    {
+      "name": "add_title",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Add an on-screen title from plain text using a stock Essential Graphics template that ships with Premiere (default: Basic Title). Pass text for one line, or lines to fill the template's text fields in order (for example a lower third's name and role). Premiere-built templates (kind 'premiere') get the text baked into a verified copy of the template before import, because Premiere exposes no writable text for them (textVerification 'template_verified'; confirm the render with export_frame). After Effects-built templates (kind 'after_effects') are imported and their text fields written by position and read back from Premiere (textVerification 'verified', 'mismatch', 'missing_property', or 'committed_unverified'). The graphic is trimmed to duration_seconds and its length read back. Use list_stock_titles to see templates, their kind, and how many lines each takes."
     },
     {
       "name": "add_to_render_queue",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Request an Adobe Media Encoder render-queue handoff for the active sequence. Requires a saved project and an .epr preset_path. Same as Project presets are refused before Premiere is contacted because AME encodes from a scratch project copy."
+      "description": "Request an Adobe Media Encoder render-queue handoff for the active sequence. Requires a saved project and an .epr preset_path. Same as Project presets are refused before Premiere is contacted because AME encodes from a scratch project copy. Optional start_batch requests processing of every ready AME queue job, including unrelated jobs."
     },
     {
       "name": "add_to_timeline",
       "surface": "default",
       "modes": "scope: sync_locked, target_tracks",
-      "description": "Insert a project item at a timeline position, ripple QE sync-locked tracks to match Premiere's insert, and verify Premiere added no unexpected same-track fragments. Pass scope 'target_tracks' to ripple only the named pair (this will desync other tracks)."
+      "description": "Insert a project item at a timeline position. Experimental: if a target clip spans that point, QE razors it before insertion to attempt to preserve its tail; both target and sync-locked track changes are read back. A host may still displace a tail, in which case the edit is reported as committed_unverified. Pass scope 'target_tracks' to ripple only the named pair (this will desync other tracks)."
     },
     {
       "name": "add_to_timeline_batch",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Insert up to 32 project items in one validated CEP request. All items and target tracks are preflighted before the first insertion; every requested placement is read back, and the tool fails closed if Premiere cannot verify one."
+      "description": "Insert up to 32 project items with insert-edit semantics in one validated CEP request. Experimental QE sync-lock handling may ripple or split earlier placements. The tool preflights items and tracks, then verifies every placement again in the final sequence; changed placements return committed_unverified with their observed final positions."
     },
     {
       "name": "add_track",
@@ -93,13 +99,13 @@
       "name": "add_transition",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Add a video transition between two clips at a cut point. Uses QE DOM."
+      "description": "EXPERIMENTAL (undocumented QE DOM): Add a video transition between two clips at a cut point. Reads the transition back from the sequence track."
     },
     {
       "name": "add_transition_to_clip",
       "surface": "default",
       "modes": "position: start, end, both",
-      "description": "Add a transition to a specific clip's start or end"
+      "description": "EXPERIMENTAL (undocumented QE DOM): Add a transition to a specific video clip's start, end, or both edges, then read back the requested placement."
     },
     {
       "name": "add_video_transition_uxp",
@@ -147,7 +153,7 @@
       "name": "apply_audio_effect",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Apply an audio effect to a clip. Uses QE catalog lookup, with an exact-name QE probe when enumeration is empty."
+      "description": "Apply an audio effect to a clip. Experimental QE catalog lookup includes an exact-name probe when enumeration is empty. A component-list readback does not verify rendered audio."
     },
     {
       "name": "apply_beat_markers_uxp",
@@ -165,7 +171,7 @@
       "name": "apply_edit_plan",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Apply a previously previewed compound edit after revalidating every target. Requires the edit capability and exact preview confirmation token."
+      "description": "Apply a previously previewed compound edit after revalidating stable project, sequence and target identities before activation or mutation. Requires the edit capability and exact preview confirmation token; changed targets require a fresh preview."
     },
     {
       "name": "apply_editorial_organization_plan",
@@ -177,13 +183,13 @@
       "name": "apply_effect",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Apply a video effect to a clip. Uses QE DOM catalog lookup, with an exact-name QE probe when Premiere's catalog enumeration is empty."
+      "description": "Apply a video effect to a clip. Experimental QE DOM catalog lookup includes an exact-name probe when enumeration is empty. A component-list readback does not verify rendered pixels."
     },
     {
       "name": "apply_lut",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Apply a LUT file to a clip via Lumetri Color"
+      "description": "Unavailable on the CEP backend: Premiere's scripting API cannot load a LUT file into Lumetri Color. Its Input LUT and Look parameters are menu indexes over a curated set of bundled looks, and writing a file path to the LUT asset parameters is accepted but not rendered (seen on Premiere Pro 25.2.3, macOS, by comparing exported frames with the same LUT applied by ffmpeg; other builds were not tested). Fails before changing the clip. Apply the LUT in Lumetri Color > Creative > Look (Browse...) instead."
     },
     {
       "name": "apply_mogrt_premiere_handoff",
@@ -225,7 +231,7 @@
       "name": "auto_reframe_sequence",
       "surface": "default",
       "modes": "motion_preset: slower, default, faster",
-      "description": "Auto-reframe a sequence for a different aspect ratio"
+      "description": "Auto-reframe a sequence into a new sequence of target_width x target_height. Premiere derives the new sequence from the source height (a 1080p source at 9:16 comes out 607x1080), so the tool then sets the requested frame size and verifies it; the Auto Reframe effect refits to the new size."
     },
     {
       "name": "automate_effect_parameters_uxp",
@@ -237,7 +243,7 @@
       "name": "batch_add_transitions",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Add the same transition to all cut points on a track"
+      "description": "EXPERIMENTAL (undocumented QE DOM): Add the same video transition at each eligible cut point on a track and report per-cut readback."
     },
     {
       "name": "batch_apply_effect",
@@ -261,7 +267,7 @@
       "name": "batch_selected_clips_uxp",
       "surface": "uxp",
       "modes": "inspect, add_effect, remove_effect",
-      "description": "Inspect the current timeline selection or apply one native effect add/remove across up to 64 same-type selected clips as a single compound transaction."
+      "description": "Inspect the current timeline selection or apply one native effect add/remove across up to 64 same-type selected clips as a single compound transaction. Effect readback verifies component-chain changes only, not rendered output."
     },
     {
       "name": "build_caption_artifact",
@@ -315,25 +321,25 @@
       "name": "close_project",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Close the current Premiere Pro project"
+      "description": "Close an open Premiere Pro project: the active one, or the open project at project_path. Verifies it is no longer open and reports which project is active afterwards."
     },
     {
       "name": "close_sequence",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Close a sequence tab in the timeline"
+      "description": "Request closing a sequence timeline tab. Premiere exposes no open-tab enumeration, so dispatch is requested_unverified; the sequence stays in the project."
     },
     {
       "name": "close_source_monitor",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Close the clip currently open in the Source Monitor."
+      "description": "Close the clip currently showing in the Source Monitor. Premiere then shows the previously opened clip, if any; the result names it."
     },
     {
       "name": "color_correct",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Apply basic color correction to a clip using Lumetri Color"
+      "description": "Apply basic color correction through experimental QE Lumetri insertion. Requires Lumetri component and requested property readback; rendered output is not verified."
     },
     {
       "name": "compare_cmx3600_edls",
@@ -357,7 +363,7 @@
       "name": "consolidate_and_transfer",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Consolidate, copy, or transcode project media using the Project Manager. Reports success only after a new destination folder contains a copied Premiere project."
+      "description": "Collect (copy) or transcode project media into a new project with Premiere's Project Manager. Premiere writes a Copied_<project> folder inside destination_path (created if missing); success is reported only after that folder holds the copied .prproj, with the copied files listed."
     },
     {
       "name": "consolidate_duplicates",
@@ -471,7 +477,7 @@
       "name": "create_sequence_from_preset",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Create a new sequence from a specific preset file (.sqpreset)"
+      "description": "EXPERIMENTAL (undocumented QE DOM): create a new sequence from a specific preset file (.sqpreset) using qe.project.newSequence. Reports success only after a new sequence ID appears in the project collection; a same-name sequence that was already active is not treated as created."
     },
     {
       "name": "create_sequence_with_preset_uxp",
@@ -525,13 +531,13 @@
       "name": "delete_marker",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Delete a marker at a specific time position"
+      "description": "Delete a marker at a specific time position. EXPERIMENTAL (QE DOM): the receipt reports undoStackIndex movement, which does not prove QE can reverse the marker. Every marker attempt protects an engine undo boundary; undoTracked:false means the marker did not observably advance the QE index."
     },
     {
       "name": "delete_multiple_project_items",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Delete multiple project items at once from the project panel."
+      "description": "Delete several project items (bins, sequences, clips or files) and read back that each is gone. Every item is checked before any is deleted. organize_project_items_uxp with action 'remove' (authenticated UXP bridge) is the preferred, documented route; this CEP fallback deletes clips and files through a temporary bin, which cannot be undone here. Items (or bins whose contents are) used on a timeline are refused unless confirm_remove_from_sequences is true."
     },
     {
       "name": "delete_preview_files",
@@ -543,7 +549,7 @@
       "name": "delete_project_item",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Delete a project item (clip, bin, etc.) from the project panel. This removes it from the project but does not affect timeline instances."
+      "description": "Delete a project item (bin, sequence, clip or file) from the project panel and read back that it is gone. organize_project_items_uxp with action 'remove' (authenticated UXP bridge) is the preferred, documented route. This CEP fallback deletes a clip or file by moving it into a temporary bin and deleting that bin, which cannot be undone here. Deleting media also removes its clips from every sequence, so an item (or a bin whose contents are) used on a timeline is refused unless confirm_remove_from_sequences is true."
     },
     {
       "name": "delete_sequence",
@@ -555,7 +561,7 @@
       "name": "delete_track",
       "surface": "default",
       "modes": "track_type: video, audio",
-      "description": "Delete a video or audio track from the active sequence"
+      "description": "EXPERIMENTAL (undocumented QE DOM: removeVideoTrack/removeAudioTrack). Delete a video or audio track from the active sequence through QE and verify that exactly that track was removed (the remaining tracks keep their clips, custom names and lock/mute state in order). Refuses a track that still holds clips unless force is true."
     },
     {
       "name": "deselect_all_clips",
@@ -639,7 +645,7 @@
       "name": "duplicate_clip",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Duplicate a clip on the timeline (copy to same position on next available track)"
+      "description": "EXPERIMENTAL: Duplicate a timeline clip, with its linked audio/video partner, onto the first tracks above it that are empty for the clip's time range. The copy keeps the clip's source in point and visible duration, is placed with an overwrite edit (nothing ripples), and is read back. A post-write mismatch is committed_unverified; inspect the timeline or use Undo. Fails without changes when no free track is available; add one with add_tracks."
     },
     {
       "name": "duplicate_sequence",
@@ -717,13 +723,13 @@
       "name": "export_as_fcp_xml",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export the active sequence as a Final Cut Pro XML file"
+      "description": "Export the active sequence as a Final Cut Pro XML file. Fails when Premiere writes no file or leaves a pre-existing output unchanged."
     },
     {
       "name": "export_as_project",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export a sequence as a standalone Premiere Pro project file"
+      "description": "Export a sequence as a standalone Premiere Pro project file. Fails when Premiere writes no file or leaves a pre-existing output unchanged."
     },
     {
       "name": "export_frame",
@@ -752,8 +758,8 @@
     {
       "name": "export_sequence",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Export the active sequence using Adobe Media Encoder"
+      "modes": "range: entire, in_to_out, work_area",
+      "description": "Export the active sequence directly (Premiere renders it; blocks until done) with an Adobe Media Encoder preset. The output extension must match what the preset writes (an H.264 preset in AME's QuickTime folder writes .mov); a missing extension is added. Refuses an output_path that already exists unless overwrite is true. Fails if Premiere rejects the render, and verifies a non-empty file was written (for an overwrite, that the file changed). range 'work_area' fails closed unless the work area is enabled and covers only part of the sequence — otherwise Premiere would encode the entire timeline."
     },
     {
       "name": "export_sequence_clip_review_frames",
@@ -783,7 +789,7 @@
       "name": "extract_selection",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Extract (remove and close gap) the content between sequence in/out points."
+      "description": "EXPERIMENTAL (undocumented QE DOM: extract()). Extract (remove and close the gap) the content between the sequence in/out points on every targeted, unlocked track, then verify each targeted track lost exactly the range and its later clips moved up by the range. Requires sequence in/out marks that do not span the whole sequence. Premiere can also change untargeted tracks (for example the linked audio of targeted video, or sync-locked tracks); those are not verified but are listed in otherTracksChanged."
     },
     {
       "name": "find_items_by_media_path",
@@ -945,7 +951,7 @@
       "name": "get_export_file_extension",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Get the file extension that would be used when exporting the active sequence with a given preset"
+      "description": "Get the export file extension from Premiere. If Premiere returns none, infer it only for an existing .epr in a recognized Adobe Media Encoder format folder; that fallback is marked unconfirmed and should be checked before delivery."
     },
     {
       "name": "get_footage_interpretation",
@@ -993,7 +999,7 @@
       "name": "get_keyframes",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Get all keyframes for a specific effect property on a clip"
+      "description": "Get all keyframes for a specific effect property on a clip. Each key's time is in seconds from the clip's start; mediaSeconds is Premiere's stored media time."
     },
     {
       "name": "get_linked_items",
@@ -1059,7 +1065,7 @@
       "name": "get_project_scratch_disks",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Get the current scratch disk paths for the project."
+      "description": "Get the project's scratch disk locations (captured media, previews, auto-save, Motion Graphics template media, and more). Premiere's scripting API has no scratch-disk getter, so the settings are read from the saved .prproj file; unsaved changes are not reflected. 'SameAsProject' resolves to the project's folder."
     },
     {
       "name": "get_qe_clip_info",
@@ -1191,7 +1197,7 @@
       "name": "get_value_at_time",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Get the interpolated value of an effect property at a specific time"
+      "description": "Get the interpolated value of an effect property at a time, in seconds from the clip's start"
     },
     {
       "name": "get_version_info",
@@ -1263,7 +1269,7 @@
       "name": "import_media",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Import media files into the project"
+      "description": "Import media files into the project and confirm a new project item for each file"
     },
     {
       "name": "import_mogrt",
@@ -1275,7 +1281,7 @@
       "name": "import_mogrt_from_library",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Import a MOGRT from a named Adobe Creative Cloud Library."
+      "description": "Request importing a MOGRT from a named Adobe Creative Cloud Library. Library contents cannot be enumerated through CEP; host acceptance is committed_unverified, and rendered appearance must be checked in Premiere."
     },
     {
       "name": "import_project_media_uxp",
@@ -1299,7 +1305,7 @@
       "name": "insert_from_source",
       "surface": "default",
       "modes": "scope: sync_locked, target_tracks",
-      "description": "Insert the clip from the Source Monitor at the playhead (insert edit). Sequence.insertClip only ripples the named tracks; by default this then razors and shifts every QE sync-locked track so they stay in sync, and verifies the result. Pass scope 'target_tracks' to ripple only the named pair (this will desync other tracks)."
+      "description": "Insert the clip from the Source Monitor at the playhead (insert edit). Experimental: a target clip spanning the playhead is QE-razored before insertion to attempt to preserve its split tail. By default the tool also razors and shifts every QE sync-locked track, then reads the placement and target tails back; a displaced tail is reported as committed_unverified. Pass scope 'target_tracks' to ripple only the named pair (this will desync other tracks)."
     },
     {
       "name": "inspect_after_effects_render_templates",
@@ -1347,7 +1353,7 @@
       "name": "inspect_fcpxml_interchange",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Inspect a local FCPXML document's root version, sequence/clip counts, bounded asset declarations, and text-only parser warnings before deliberate Premiere import."
+      "description": "Inspect a local FCPXML or FCP7 XML (xmeml, what Premiere's export_as_fcp_xml writes) document: format, version, sequence/clip counts, bounded media declarations, and text-only parser warnings, before deliberate Premiere import."
     },
     {
       "name": "inspect_film_editorial_workflow",
@@ -1521,7 +1527,7 @@
       "name": "lift_selection",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Lift (remove without closing gap) the content between sequence in/out points or selected clips."
+      "description": "EXPERIMENTAL (undocumented QE DOM: the sequence lift command, exposed as left() on 25.2). Lift (remove without closing the gap) the content between the sequence in/out points on every targeted, unlocked track, then verify the range is empty on those tracks and nothing else on them moved. Requires sequence in/out marks that do not span the whole sequence. Untargeted tracks are not verified; any that changed are listed in otherTracksChanged."
     },
     {
       "name": "lift_selection_uxp",
@@ -1545,7 +1551,7 @@
       "name": "list_available_audio_transitions",
       "surface": "default",
       "modes": "Single operation",
-      "description": "List all available audio transitions. Uses QE DOM and reports an unavailable or empty legacy catalog as an error rather than an assumed usable list."
+      "description": "EXPERIMENTAL (undocumented QE DOM): List audio transitions. Reports an unavailable or empty legacy catalog as an error rather than an assumed usable list."
     },
     {
       "name": "list_available_effects",
@@ -1557,13 +1563,13 @@
       "name": "list_available_transitions",
       "surface": "default",
       "modes": "Single operation",
-      "description": "List all available video transitions. Uses QE DOM. Returns a hint set on PPro 2026 where the transition registry list is empty even though by-name lookup works."
+      "description": "EXPERIMENTAL (undocumented QE DOM): List video transitions. Returns a built-in hint set on PPro 2026 where the registry list is empty even though by-name lookup works; the hint set is not exhaustive."
     },
     {
       "name": "list_clip_effects",
       "surface": "default",
       "modes": "Single operation",
-      "description": "List all effects/components on a clip with their properties and current values. Essential for debugging effect issues."
+      "description": "List effects/components exposed by the clip's standard DOM collection, with properties and current values. Some hosts omit QE-applied effects from this collection; absence here does not prove an effect is absent. get_effect_properties uses the same collection. Inspect Premiere's Effect Controls UI when complete QE effect presence must be confirmed."
     },
     {
       "name": "list_markers",
@@ -1602,6 +1608,12 @@
       "description": "List all sequences in the project"
     },
     {
+      "name": "list_stock_titles",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "List the Essential Graphics title templates that ship with the installed Premiere Pro (Basic Title, Lower Thirds, Credits, Social Media, and more), with each template's text fields in order and their default text. Reads the local .mogrt files only; does not contact Premiere. Use the names with add_title."
+    },
+    {
       "name": "list_video_transitions_uxp",
       "surface": "uxp",
       "modes": "Single operation",
@@ -1611,7 +1623,7 @@
       "name": "lock_track",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Lock or unlock a video track"
+      "description": "Set a video track's lock state and read it back to verify the change."
     },
     {
       "name": "maintain_media_health_uxp",
@@ -1635,7 +1647,7 @@
       "name": "manage_clip_effects_uxp",
       "surface": "uxp",
       "modes": "catalog, inspect, add, remove",
-      "description": "List native audio/video effects, inspect one clip's component chain, or add/remove one effect in a locked Premiere UXP transaction."
+      "description": "List native audio/video effects, inspect one clip's component chain, or add/remove one effect in a locked Premiere UXP transaction. Mutation verification covers the component chain only; inspect playback or exported output to confirm rendering."
     },
     {
       "name": "manage_color_conformance_uxp",
@@ -1791,7 +1803,7 @@
       "name": "move_clip",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Move a clip to a new position on the timeline"
+      "description": "EXPERIMENTAL (undocumented QE DOM for track changes): Move a clip to a new position on the timeline; optional track moves use Premiere's QE API and may not work on every version."
     },
     {
       "name": "move_clip_to_track",
@@ -1803,7 +1815,7 @@
       "name": "move_item_to_bin",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Move a project item to a different bin"
+      "description": "Move a project item to a different bin and confirm where it landed"
     },
     {
       "name": "move_items_to_bin",
@@ -1821,7 +1833,7 @@
       "name": "multiple_undo",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Unavailable: Premiere exposes no supported, observable undo-stack API for multiple scripted undo steps."
+      "description": "EXPERIMENTAL (undocumented QE DOM: qe.project.undo / undoStackIndex). Undo several Premiere project actions through QE, checking each step against Premiere's undo-stack position (stackVerified; the timeline itself is not read back) and reporting how many were undone. Only actions Premiere records are undoable: QE edits such as razor, insert, lift and extract report undoSteps (and undoStackIndex) in their results; pass that undoSteps as count to reverse exactly that call. A marker receipt with undoTracked:false recorded no undo step: calling Undo for it would reverse an earlier action. Only CEP tool results carry undoSteps; UXP tools and workflows that send several commands are not counted. Always pass expected_undo_stack_index to check the stack position, but matching position alone does not prove which action is on top. Observed marker boundaries refuse the entire request before any step unless acknowledge_untracked_markers:true explicitly permits prior non-marker actions. The barrier persists through server/helper reloads while the CEP engine remains alive; it cannot account for marker writes before observation, after an engine reset, or through UXP, the manual UI, or other clients. Matching the QE index verifies stack position only."
     },
     {
       "name": "mute_track",
@@ -1851,13 +1863,13 @@
       "name": "open_in_source",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Open a project item in the Source Monitor for preview and trimming."
+      "description": "Open a project item in the Source Monitor for preview and trimming, and confirm it is the clip now showing."
     },
     {
       "name": "open_project",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Open a Premiere Pro project file"
+      "description": "Open a Premiere Pro project file and make it the active project, verifying it is open. Other open projects stay open."
     },
     {
       "name": "organize_project_items_uxp",
@@ -1875,7 +1887,7 @@
       "name": "overwrite_from_source",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Overwrite the clip from the Source Monitor at the playhead position (overwrite edit — replaces existing clips)."
+      "description": "Overwrite the clip from the Source Monitor at the playhead position (overwrite edit — replaces existing clips) and verify a new placement on the requested tracks."
     },
     {
       "name": "paste_clip_attributes",
@@ -2043,7 +2055,7 @@
       "name": "preview_edit_plan",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Validate and preview a compound timeline edit without changing Premiere. Returns a confirmation token required by apply_edit_plan."
+      "description": "Inspect sequence, project item, clip and requested track targets before previewing a compound timeline edit without changing Premiere. Returns a single-use confirmation token bound to stable project, sequence and target identities; it expires after 30 minutes and is required by apply_edit_plan."
     },
     {
       "name": "preview_editorial_plan",
@@ -2145,7 +2157,7 @@
       "name": "redo",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Unavailable: Premiere exposes no supported, observable redo-stack API, so a scripted redo cannot be performed or verified."
+      "description": "EXPERIMENTAL (undocumented QE DOM: qe.project.redo / undoStackIndex). Redo the most recently undone Premiere project action(s) through QE, checked step by step against Premiere's undo-stack position (stackVerified; the timeline itself is not read back). To restore a tool call undone with undo, pass the same count. Observed marker boundaries refuse before any step; acknowledge_untracked_markers:true permits prior non-marker actions, without proving marker reversal."
     },
     {
       "name": "refresh_media",
@@ -2157,7 +2169,7 @@
       "name": "relink_media",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Relink an offline media item to a new file path"
+      "description": "Legacy CEP relink can block Premiere indefinitely, even for an existing file on Premiere 26.5.2. Prefer relink_offline_media_uxp, which checks capability and reads the result back. This CEP route refuses by default; allow_unsafe_cep_relink must be explicitly true to attempt it, and its result is never reported as verified."
     },
     {
       "name": "relink_offline_media_uxp",
@@ -2169,37 +2181,37 @@
       "name": "remove_all_effects",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Remove ALL effects from a clip. Uses QE DOM."
+      "description": "Remove every effect from a clip, keeping its built-in components (Opacity, Motion, Volume, Channel Volume, Panner), and verify the result. EXPERIMENTAL: when Premiere has no Component.remove() (25.2), it removes through the undocumented QE DOM's targeted qeClip.getComponentAt(i).remove(). Every matching component's removal path is checked before any is removed; it returns a capability error, with nothing changed, when neither path is available."
     },
     {
       "name": "remove_effect",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Remove an effect from a clip by its index or name. Returns a capability error when the host cannot remove an individual component."
+      "description": "Remove one effect from a clip by its index or name (the last instance when names repeat) and verify the clip's components afterwards. Built-in components (Opacity, Motion, Volume, Channel Volume, Panner) cannot be removed. EXPERIMENTAL: when Premiere has no Component.remove() (25.2), it removes through the undocumented QE DOM's targeted qeClip.getComponentAt(i).remove(). Every matching component's removal path is checked before any is removed; it returns a capability error, with nothing changed, when neither path is available."
     },
     {
       "name": "remove_effect_by_name",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Remove all instances of a specific effect from a clip by display name. Returns a capability error when the host cannot remove individual components."
+      "description": "Remove all instances of a specific effect from a clip by display name and verify the clip's components afterwards. EXPERIMENTAL: when Premiere has no Component.remove() (25.2), it removes through the undocumented QE DOM's targeted qeClip.getComponentAt(i).remove(). Every matching component's removal path is checked before any is removed; it returns a capability error, with nothing changed, when neither path is available."
     },
     {
       "name": "remove_from_timeline",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Remove a clip from the timeline"
+      "description": "Remove a clip from the timeline. By default its linked audio/video partners go with it, as with Premiere's Clear on a linked clip. With ripple: true the gap is closed through the same explicit, verified ripple delete as ripple_delete (Premiere's own ripple flag does nothing on current builds), shifting sync-locked tracks so audio stays in sync."
     },
     {
       "name": "remove_keyframe",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Remove a keyframe at a specific time from an effect property"
+      "description": "Remove the keyframe at a time from an effect property and read the remaining keys back. Refuses, changing nothing, when no key is within 0.01s of that time."
     },
     {
       "name": "remove_keyframe_range",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Remove all keyframes in a time range from an effect property"
+      "description": "Remove every keyframe in a time range (inclusive) from an effect property and read the remaining keys back. Refuses, changing nothing, when the range holds no key."
     },
     {
       "name": "remove_selected_clips",
@@ -2223,7 +2235,7 @@
       "name": "rename_clip",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Rename a clip on the timeline. Uses QE DOM."
+      "description": "Rename a clip on the timeline and verify the new name."
     },
     {
       "name": "rename_project_item",
@@ -2265,7 +2277,7 @@
       "name": "ripple_delete",
       "surface": "default",
       "modes": "scope: sync_locked, own_track; range_content: refuse, delete",
-      "description": "Remove a clip and close the gap it leaves, shifting later clips earlier on the clip's own track and on every sync-locked track so audio stays in sync. Premiere's QE rippleDelete() and the DOM's rippleEdit flag are both non-functional on 26.x, so this is done explicitly and verified. Refuses without changing anything if a clip on a participating track straddles the ripple point or sits inside the range being closed."
+      "description": "Remove a clip and close the gap it leaves, shifting later clips earlier on the clip's own track and on every sync-locked track so audio stays in sync. With the default scope the clip's linked audio/video partners are removed with it and their tracks close up too, even when not sync-locked; with scope 'own_track' the partners stay in place (reported as linkedPartnersKept). Premiere's QE rippleDelete() and the DOM's rippleEdit flag are both non-functional on 26.x, so this is done explicitly and verified. Refuses without changing anything if a clip on a participating track straddles the ripple point or sits inside the range being closed."
     },
     {
       "name": "ripple_delete_track_item_uxp",
@@ -2277,19 +2289,19 @@
       "name": "roll_edit",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Perform a verified roll edit at the outgoing cut of a clip using the public timeline DOM, moving both visible edges and their source in/out points and verifying all four."
+      "description": "Perform a verified roll edit at the outgoing cut of a clip using the public timeline DOM, moving both visible edges and their source in/out points and verifying all four. Linked audio/video partners get the same edit by default (include_linked); every clip is checked before any is changed. Requires readable finite media and ffprobe duration evidence for every edited source; refuses unknown duration, stills, and nonunit/reversed speed before mutation."
     },
     {
       "name": "save_project",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Save the current Premiere Pro project"
+      "description": "Save the current Premiere Pro project to its existing path. Fails when the project has never been saved (use save_project_as) or when Premiere writes no non-empty file. Fresh disk metadata verifies a save; unchanged or unreadable metadata reports committed_unverified."
     },
     {
       "name": "save_project_as",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Save the current project to a new location"
+      "description": "Save the current project to a new .prproj path. Premiere then has the NEW copy open and closes the original, so later edits go to the copy; the result reports both paths. Fails when Premiere writes no file or leaves a pre-existing path unchanged. Use open_project to return to the original."
     },
     {
       "name": "save_project_uxp",
@@ -2301,7 +2313,7 @@
       "name": "scene_edit_detection",
       "surface": "default",
       "modes": "CreateMarkers, ApplyCuts",
-      "description": "Perform scene edit detection on the selected clips in the active sequence. Defaults to creating markers rather than cutting."
+      "description": "Perform Premiere's scene edit detection on the selected clips in the active sequence (it analyses the footage and can take minutes on long clips). CreateMarkers (default) puts Segmentation markers on the selected clips' source project items (shared by every sequence that uses them), removes duplicates this run created (markers that were already there are never deleted), and reports each detected cut in source and timeline seconds; it is verified only when at least one new marker was added. ApplyCuts razors the selected clips and verifies the clip count grew. EXPERIMENTAL QE: CreateMarkers records an observed marker boundary for guarded Undo/Redo; crossing it is refused by default, and unreadable history records unknown protection. This boundary does not verify native marker reversal."
     },
     {
       "name": "search_clip_transcript_uxp",
@@ -2390,8 +2402,8 @@
     {
       "name": "set_blend_mode",
       "surface": "default",
-      "modes": "blend_mode: Normal, Dissolve, Darken, Multiply, Color Burn, Linear Burn, Darker Color, Lighten, Screen, Color Dodge, Linear Dodge, Lighter Color, Overlay, Soft Light, Hard Light, Vivid Light, Linear Light, Pin Light, Hard Mix, Difference, Exclusion, Subtract, Divide, Hue, Saturation, Color, Luminosity",
-      "description": "Set the blend mode on a video clip. Uses the Opacity effect's Blend Mode property."
+      "modes": "blend_mode: Color, Color Burn, Color Dodge, Darken, Darker Color, Difference, Dissolve, Exclusion, Hard Light, Hard Mix, Hue, Lighten, Lighter Color, Linear Burn, Linear Dodge, Linear Light, Luminosity, Multiply, Normal, Overlay, Pin Light, Saturation, Screen, Soft Light, Vivid Light, Subtract, Divide",
+      "description": "Set a video clip's blend mode through its Opacity effect and read the stored mode back. Premiere stores the mode as an index into its modes in alphabetical order, with Subtract and Divide last (mapped on Premiere 25.2.3 by rendering every index over a known background)."
     },
     {
       "name": "set_clip_anchor_point",
@@ -2403,13 +2415,13 @@
       "name": "set_clip_duration",
       "surface": "default",
       "modes": "keyframe_policy: reject, preserve",
-      "description": "Set one timeline clip's visible duration by moving only its timeline end (TrackItem.end) while keeping its start fixed. Pass exactly one of duration_seconds or end_seconds. Works for extending still images past their import length. Refuses to overlap the next clip on the same track, rejects shortening that would strand effect keyframes unless keyframe_policy is preserve, reads start/end back, and restores the original end if Premiere clamps or ignores the write (for example when video media has no handle left). Linked audio/video partners are not adjusted. Use this instead of speed changes, which Premiere does not expose to scripting."
+      "description": "Set one timeline clip's visible duration by moving only its timeline end (TrackItem.end) while keeping its start fixed. Pass exactly one of duration_seconds or end_seconds. Works for extending still images past their import length. Refuses to overlap the next clip on the same track, rejects shortening that would strand effect keyframes unless keyframe_policy is preserve, reads start/end back, and restores the original end if Premiere clamps or ignores the write (for example when video media has no handle left). Linked audio/video partners get the same change by default (include_linked), applied as the same end offset so partners with a J/L cut keep their offset; every clip is checked before any is changed. Use this instead of speed changes, which Premiere does not expose to scripting."
     },
     {
       "name": "set_clip_opacity",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the opacity of a video clip (0-100)."
+      "description": "Set the opacity of a video clip (0-100) using English or measured Spanish built-in names, then read it back."
     },
     {
       "name": "set_clip_pan",
@@ -2421,13 +2433,13 @@
       "name": "set_clip_position",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the Position property on a video clip's Motion effect. Values are in pixels."
+      "description": "Set the Position property on a video clip's Motion effect using English or measured Spanish built-in names, then read it back. Values are in pixels."
     },
     {
       "name": "set_clip_properties",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set supported clip properties (opacity, scale, position, rotation). Clip speed is unsupported and fails before mutation; use set_clip_duration to change a clip's timeline length."
+      "description": "Set supported clip properties (opacity, scale, position, rotation) and read each requested value back. Clip speed is unsupported and fails before mutation; use set_clip_duration to change a clip's timeline length."
     },
     {
       "name": "set_clip_properties_batch",
@@ -2439,13 +2451,13 @@
       "name": "set_clip_rotation",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the Rotation property on a video clip's Motion effect."
+      "description": "Set the Rotation property on a video clip's Motion effect using English or measured Spanish built-in names, then read it back."
     },
     {
       "name": "set_clip_scale",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the Scale property on a video clip's Motion effect."
+      "description": "Scale a video clip evenly through its Motion effect using English or measured Spanish built-in names, and read the result back. With Uniform Scale off, both Scale (height) and Scale Width are set, so the picture is not stretched; use set_scale_width_height for different values."
     },
     {
       "name": "set_clip_selection",
@@ -2481,7 +2493,7 @@
       "name": "set_color_label",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the color label on a project item or clip"
+      "description": "Set the color label on a project item or clip and read it back"
     },
     {
       "name": "set_color_value",
@@ -2499,7 +2511,7 @@
       "name": "set_footage_interpretation",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set footage interpretation settings for a project item"
+      "description": "Set footage interpretation settings for a project item and read them back, including fields that were not meant to change"
     },
     {
       "name": "set_frame_blend",
@@ -2523,13 +2535,13 @@
       "name": "set_keyframe_interpolation",
       "surface": "default",
       "modes": "interpolation: linear, hold, bezier",
-      "description": "Set the interpolation type of a keyframe (Linear, Hold, or Bezier)"
+      "description": "Set the interpolation type of an existing keyframe (Linear, Hold, or Bezier). Premiere exposes no interpolation readback, so a write is reported as committed_unverified."
     },
     {
       "name": "set_metadata",
       "surface": "default",
       "modes": "packet: project, xmp",
-      "description": "Update project metadata on a project item. Supply complete metadata_xml plus updated_fields, or field_name and value to read-modify-write one XMP/project property through AdobeXMPScript with field readback."
+      "description": "Update project metadata on a project item. Supply complete metadata_xml plus updated_fields, or field_name and value to read-modify-write one XMP/project property through AdobeXMPScript with field readback. The project packet (default) stays in the project; packet 'xmp' is written by Premiere into the source media file on disk and requires the filesystem capability."
     },
     {
       "name": "set_offline",
@@ -2541,25 +2553,25 @@
       "name": "set_override_frame_rate",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Override the frame rate of a project item (useful for image sequences or misinterpreted media)"
+      "description": "Override the frame rate of a project item (useful for image sequences or misinterpreted media) and read it back"
     },
     {
       "name": "set_override_pixel_aspect_ratio",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Override the pixel aspect ratio of a project item"
+      "description": "Override the pixel aspect ratio of a project item and read it back"
     },
     {
       "name": "set_playhead_position",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the playhead (CTI) position in the active sequence"
+      "description": "Set the playhead (CTI) position, clamp it to the active sequence's end, and read the stored position back."
     },
     {
       "name": "set_poster_frame",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the poster frame (thumbnail) for a project item at a specific time."
+      "description": "Unavailable: Premiere's scripting API cannot set a project item's poster frame. Fails without changing the item; set it in the Project panel (Shift+P)."
     },
     {
       "name": "set_project_item_audio_channel_mapping",
@@ -2577,7 +2589,7 @@
       "name": "set_project_scratch_disk",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the project's scratch disk paths for captured video, audio, and previews."
+      "description": "Set the project's scratch disks for captured video, captured audio, video previews and audio previews in one call. Each path must be an existing folder or \"SameAsProject\"; any rejected path fails the call."
     },
     {
       "name": "set_scale_to_frame_size",
@@ -2594,8 +2606,8 @@
     {
       "name": "set_scratch_disk_path",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Set the scratch disk path for a specific media type"
+      "modes": "scratch_disk_type: capturedVideo, capturedAudio, videoPreview, audioPreview, autoSave, ccLibraries, motionGraphicsTemplateMedia",
+      "description": "Set one project scratch disk (captured media, previews, auto-save, CC Libraries or Motion Graphics template media) to an existing folder or \"SameAsProject\", using Premiere's ScratchDiskType constants."
     },
     {
       "name": "set_sequence_audio_settings",
@@ -2625,7 +2637,7 @@
       "name": "set_sequence_in_out_points",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the sequence in and out points (for export range, etc.)"
+      "description": "Set the sequence in and out points (for an export range, etc.) and read them back. out_seconds must be after in_seconds and not past the sequence end."
     },
     {
       "name": "set_sequence_pixel_aspect_ratio",
@@ -2679,7 +2691,7 @@
       "name": "set_transcode_on_ingest",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Enable or disable transcoding on ingest for the project"
+      "description": "Request enabling or disabling project transcoding on ingest. Premiere exposes no getter for independent verification, so dispatch is reported as requested_unverified."
     },
     {
       "name": "set_uniform_scale",
@@ -2703,7 +2715,7 @@
       "name": "set_xmp_metadata",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Merge a raw XMP XML patch into a project item's existing XMP metadata without removing unrelated fields."
+      "description": "Merge a raw XMP XML patch into a project item's existing XMP metadata without removing unrelated fields. WARNING: Premiere writes XMP into the source media file on disk (the file's metadata block and modification time change; picture and sound are untouched). Requires the filesystem capability."
     },
     {
       "name": "set_zero_point",
@@ -2721,7 +2733,7 @@
       "name": "slide_edit",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Perform a verified slide edit on a clip using adjacent clips from the public timeline DOM."
+      "description": "Perform a verified slide edit on a clip using adjacent clips from the public timeline DOM. Linked audio/video partners get the same edit by default (include_linked); every clip is checked before any is changed. Requires readable finite media and ffprobe duration evidence for every edited source; refuses unknown duration, stills, and nonunit/reversed speed before mutation."
     },
     {
       "name": "slide_track_item_uxp",
@@ -2733,7 +2745,7 @@
       "name": "slip_edit",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Perform a verified slip edit on a clip using public source in/out properties."
+      "description": "Perform a verified slip edit on a clip using public source in/out properties. Requires accessible physical media duration from ffprobe; unknown duration or linked partners using different source files refuse before mutation. Linked audio/video partners get the same edit by default (include_linked); every clip is checked before any is changed."
     },
     {
       "name": "slip_track_item_uxp",
@@ -2751,7 +2763,7 @@
       "name": "split_clip",
       "surface": "default",
       "modes": "track_type: video, audio",
-      "description": "Split every clip on one track that spans a timeline time, then verify both resulting boundaries. Requires QE DOM; effect-keyframe redistribution remains unverified."
+      "description": "EXPERIMENTAL (undocumented QE DOM): Split every clip on one track that spans a timeline time, then verify both resulting boundaries. Effect-keyframe redistribution remains unverified."
     },
     {
       "name": "stabilize_clip",
@@ -2768,14 +2780,14 @@
     {
       "name": "stop_playback",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Request that active-sequence timeline playback stop through QE. The legacy API does not provide a same-call playhead readback, so stopped state is not reported as verified."
+      "modes": "target: timeline, source",
+      "description": "Request that active-sequence timeline playback stop through QE. The legacy API does not provide a same-call playhead readback, so stopped state is not reported as verified. Only the timeline can be stopped: Premiere's scripting APIs have no documented call that stops the Source Monitor alone, so target \"source\" returns an error instead of stopping the timeline."
     },
     {
       "name": "toggle_track_visibility",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Toggle a video track's visibility (eye icon)"
+      "description": "Set video track visibility using Premiere's track mute state (eye icon) and read the mute state back. Premiere's scripting API exposes mute, not a separate video visibility setter."
     },
     {
       "name": "transcribe_clip_uxp",
@@ -2793,13 +2805,13 @@
       "name": "trim_clip",
       "surface": "default",
       "modes": "keyframe_policy: reject, preserve",
-      "description": "Trim exactly one source in/out point and verify the corresponding visible timeline edge. Refuses retimed clips and, by default, trims that would leave effect keyframes outside the visible clip. To set a clip's timeline length or extend a still image, use set_clip_duration."
+      "description": "Trim exactly one source in/out point and verify the corresponding visible timeline edge. Requires accessible physical media duration from ffprobe; unknown duration or linked partners using different source files refuse before mutation. Refuses retimed clips, extensions that would overlap the neighbouring clip on the same track, and, by default, trims that would leave effect keyframes outside the visible clip. Linked audio/video partners get the same trim by default (include_linked), applied as the same offset from each partner's own source point so a J/L cut or slipped audio stays in sync; every clip is checked before any is changed. To set a clip's timeline length or extend a still image, use set_clip_duration."
     },
     {
       "name": "undo",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Unavailable: Premiere exposes no supported, observable undo-stack API, so a scripted undo cannot be performed or verified."
+      "description": "EXPERIMENTAL (undocumented QE DOM: qe.project.undo / undoStackIndex). Undo the most recent Premiere project action(s) through QE, checked step by step against Premiere's undo-stack position (stackVerified; the timeline itself is not read back). Undo history is project-wide. Only actions Premiere records are undoable: QE edits such as razor, insert, lift and extract report undoSteps (and undoStackIndex) in their results; pass that undoSteps as count to reverse exactly that call. A marker receipt with undoTracked:false recorded no undo step: calling Undo for it would reverse an earlier action. Only CEP tool results carry undoSteps; UXP tools and workflows that send several commands are not counted. Always pass expected_undo_stack_index to check the stack position, but matching position alone does not prove which action is on top. Observed marker boundaries refuse the entire request before any step unless acknowledge_untracked_markers:true explicitly permits prior non-marker actions. The barrier persists through server/helper reloads while the CEP engine remains alive; it cannot account for marker writes before observation, after an engine reset, or through UXP, the manual UI, or other clients. Matching the QE index verifies stack position only."
     },
     {
       "name": "unlink_selection",
@@ -2817,7 +2829,7 @@
       "name": "update_marker",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Update an existing marker's properties"
+      "description": "Update the name, comments or color of the sequence marker at a time and read them back. EXPERIMENTAL (QE DOM): the receipt reports undoStackIndex movement, which does not prove QE can reverse the marker. Every marker attempt protects an engine undo boundary; undoTracked:false means the marker did not observably advance the QE index."
     },
     {
       "name": "validate_cmx3600_edl",
@@ -2847,7 +2859,7 @@
       "name": "validate_project_for_export",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Run a non-mutating export readiness audit for an active or named sequence. It reports blocking offline media, empty timelines, inaccessible preset/output paths, duration, and optional timeline gaps without queuing an export."
+      "description": "Run a non-mutating export preflight for an active or named sequence. It reports blocking offline media, empty timelines, inaccessible preset/output paths, duration, and optional timeline gaps without queuing an export. readyForExport means these preflight checks passed; it does not test exporter initialization, encoder availability, or whether the host can render. Require an actual output file from export_sequence and verify_delivery_file before claiming delivery."
     },
     {
       "name": "verify_after_effects_connection",
@@ -2871,7 +2883,7 @@
       "name": "verify_fcpxml_media_references",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Verify FCPXML file:// media references only inside caller-approved existing roots. References outside those roots are never statted or exposed as local paths."
+      "description": "Verify the file:// media references of an FCPXML or FCP7 XML (xmeml) document, only inside caller-approved existing roots. References outside those roots are never statted or exposed as local paths."
     },
     {
       "name": "verify_mogrt_artifact",
