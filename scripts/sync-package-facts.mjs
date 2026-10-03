@@ -196,16 +196,34 @@ export async function readPackument(requested, waitSeconds, { fetchJson, sleep }
   }
 }
 
+/** Metadata and tarballs propagate separately; retry only a not-yet-visible tarball. */
+export async function readTarball(url, waitSeconds, { fetchResponse, sleep } = {}) {
+  const get = fetchResponse ?? (() => fetch(url, { headers: { accept: "application/octet-stream", "user-agent": "premiere-pro-mcp-site facts sync" } }));
+  const pause = sleep ?? ((ms) => new Promise((resolveSleep) => setTimeout(resolveSleep, ms)));
+  const attempts = Math.floor(waitSeconds / 20) + 1;
+  for (let attempt = 1; ; attempt++) {
+    const response = await get();
+    if (response.ok) return response;
+    await response.body?.cancel();
+    if (response.status !== 404 || attempt >= attempts) throw new Error(`GET ${url} failed with HTTP ${response.status}`);
+    console.log(`Published tarball is not available yet (attempt ${attempt}); retrying in 20s.`);
+    await pause(20_000);
+  }
+}
+
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const current = await readCurrentRelease();
   if (options.pinned) options.version = current.version;
-  const { packument, version } = await readPackument(options.version, options.pinned ? 0 : registryWaitSeconds());
+  const waitSeconds = options.version && !options.pinned ? registryWaitSeconds() : 0;
+  const startedAt = Date.now();
+  const { packument, version } = await readPackument(options.version, waitSeconds);
   const metadata = packument.versions[version];
   const { tarball, integrity } = metadata.dist ?? {};
   if (!String(tarball).startsWith(`${REGISTRY}/`)) throw new Error(`Unexpected tarball URL: ${tarball}`);
 
-  const tarballResponse = await fetchOk(tarball, "application/octet-stream");
+  const remainingWait = Math.max(0, waitSeconds - Math.ceil((Date.now() - startedAt) / 1000));
+  const tarballResponse = await readTarball(tarball, remainingWait);
   const bytes = Buffer.from(await tarballResponse.arrayBuffer());
   if (bytes.length > MAX_TARBALL_BYTES) throw new Error("Tarball is larger than expected");
   verifyIntegrity(bytes, integrity);
