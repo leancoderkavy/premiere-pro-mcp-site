@@ -21,6 +21,8 @@ Use Node.js 24 for local work (Node.js 20.19+ is the floor for the scripts).
 | Check committed facts against their own npm version | `npm run facts:check:pinned` |
 | Regenerate references from committed inputs | `npm run facts:generate` |
 | Validate rendered SEO, social cards, links and AI references | `npm run seo:check` |
+| Preview IndexNow submission after production deployment | `npm run seo:submit -- --dry-run` |
+| Submit validated production sitemap to IndexNow | `npm run seo:submit` |
 | Validate deployed production with same read-only gate | `SEO_ORIGIN=https://premiere-pro-mcp.com npm run seo:check` |
 | Verify references match committed inputs (offline) | `npm run facts:verify` |
 
@@ -97,3 +99,17 @@ Runtime behavior carried over from the former Fly server:
 
 Checks after `next build`: `npm run performance:check` (runs as part of `npm run build`) and
 `npm run seo:check` start `next start` on a free port and inspect the rendered HTML.
+
+## IndexNow notifications
+
+Production serves the configured `INDEXNOW_KEY` at `/indexnow-key.txt` as required
+ownership proof. The token is stored in Vercel production environment configuration,
+not committed to Git. It is intentionally public through that route and grants no
+application access. The endpoint is noindex and outside the page sitemap.
+
+After a production deployment is ready and the live SEO gate passes, run
+`npm run seo:submit -- --dry-run` to validate the sitemap, ownership proof, indexable
+HTML and canonical URLs; then `npm run seo:submit` to notify participating engines.
+HTTP 200 means received; 202 means ownership verification is pending. Neither is
+proof of indexing or ranking. The script fails for foreign hosts, preview parameters,
+redirects, noindex pages, missing proof or rejected requests. It does not retry blindly.

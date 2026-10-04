@@ -21,7 +21,7 @@ const geistMono = Geist_Mono({
 const siteUrl = "https://premiere-pro-mcp.com";
 const title = "Adobe Premiere Pro MCP | Free, Independent & Local";
 const description =
-  "Independent Adobe Premiere Pro MCP server for supported, local-first editing workflows. Connect Claude, Cursor, Codex, and other compatible AI assistants; preview edits and confirm changes.";
+  "Connect Claude, Cursor and Codex to supported Adobe Premiere Pro workflows with the free, independent premiere-pro-mcp server and local connector.";
 const googleAnalyticsId =
   process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID ?? "G-XSH74T16E4";
 const posthogProjectToken =

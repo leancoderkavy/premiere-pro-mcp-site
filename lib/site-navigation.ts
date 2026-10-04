@@ -20,6 +20,7 @@ export const siteNavigation = [
   {
     label: "Workflows",
     links: [
+      { label: "Automation guide", href: "/blog/premiere-pro-workflow-automation/", description: "Match repeatable tasks to tools and verification steps." },
       { label: "Workflow starter kit", href: "/workflows/", description: "Try a reviewable workflow with sample media." },
       { label: "Project intake", href: "/project-intake/", description: "Prepare a project for a clear handoff." },
       { label: "Workflow fit guide", href: "/premiere-pro-collaboration-workflow/", description: "Choose the right collaboration context." },

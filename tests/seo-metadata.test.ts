@@ -8,6 +8,9 @@ describe("route-specific search and social metadata", () => {
     expect(result.openGraph).toMatchObject({ title: "Compare servers", description: "Choose a bridge", url: "/compare/", images: ["/marketing/premiere-pro-mcp-social-square-v1.png"] })
     expect(result.twitter).toMatchObject({ title: "Compare servers", description: "Choose a bridge", card: "summary_large_image" })
   })
+  it("uses an absolute route title for social metadata without an Open Graph override", () => {
+    expect(pageMetadata({ title: { absolute: "Route title" }, description: "Route summary" }).openGraph).toMatchObject({ title: "Route title", description: "Route summary" })
+  })
   it("preserves custom artwork and resolves canonical descriptors", () => {
     const result = pageMetadata({ title: { absolute: "Demo" }, alternates: { canonical: { url: "/demo/" } }, openGraph: { title: "Recorded demo", images: ["/demo.webp"] } })
     expect(result.openGraph?.url).toBe("/demo/")

@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url"
 // Generate delivery derivatives without changing the original artwork.
 const publicDirectory = new URL("../public/", import.meta.url)
 const images = [
+  ["marketing/premiere-pro-mcp-workflow-v1.png", "marketing/premiere-pro-mcp-workflow-1280.webp", 1280],
   ["marketing/premiere-pro-mcp-mark-v1.png", "marketing/premiere-pro-mcp-mark-96.webp", 96],
   ["premiere-pro-mcp-demo-poster.png", "premiere-pro-mcp-demo-poster-640.webp", 640],
   ["premiere-pro-mcp-demo-poster.png", "premiere-pro-mcp-demo-poster-1280.webp", 1280],

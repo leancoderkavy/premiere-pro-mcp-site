@@ -1,7 +1,7 @@
 import { faqItems } from "@/components/sections/faq"
 import { product } from "@/lib/product"
 
-const structuredData = {
+export const homeStructuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -43,7 +43,7 @@ const structuredData = {
       description: `Open-source Model Context Protocol server with ${product.coreToolCount} tools for AI-assisted editing and automation in Adobe Premiere Pro.`,
       url: "https://premiere-pro-mcp.com/",
       downloadUrl: "https://www.npmjs.com/package/premiere-pro-mcp",
-      codeRepository: "https://github.com/leancoderkavy/premiere-pro-mcp",
+      subjectOf: { "@id": "https://premiere-pro-mcp.com/#source" },
       sameAs: [
         "https://github.com/leancoderkavy/premiere-pro-mcp",
         "https://www.npmjs.com/package/premiere-pro-mcp"
@@ -72,6 +72,15 @@ const structuredData = {
       }
     },
     {
+      "@type": "SoftwareSourceCode",
+      "@id": "https://premiere-pro-mcp.com/#source",
+      name: "premiere-pro-mcp source code",
+      codeRepository: product.links.repository,
+      programmingLanguage: "TypeScript",
+      license: "https://opensource.org/license/mit",
+      targetProduct: { "@id": "https://premiere-pro-mcp.com/#software" },
+    },
+    {
       "@type": "FAQPage",
       "@id": "https://premiere-pro-mcp.com/#faq",
       mainEntity: faqItems.map((item) => ({
@@ -90,7 +99,7 @@ export function HomeStructuredData() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredData) }}
     />
   )
 }

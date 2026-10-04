@@ -5,12 +5,12 @@ export const faqItems = [
   {
     question: "What is Premiere Pro MCP?",
     answer:
-      "Premiere Pro MCP (Model Context Protocol for Adobe Premiere Pro) is a free, open-source server that connects AI assistants like Claude, Cursor, and ChatGPT to Adobe Premiere Pro. It provides structured tools for automating timeline edits, applying effects, managing media, and exporting—all with explicit confirmation and local-first privacy.",
+      "MCP for Adobe Premiere Pro is the independent, MIT-licensed local server published as premiere-pro-mcp. It connects compatible clients such as Claude, Cursor, and Codex to supported editing, inspection, media, and export tools. Check each tool contract before authorizing changes.",
   },
   {
     question: "Is Premiere Pro MCP free?",
     answer:
-      "Yes, Premiere Pro MCP is completely free and open-source under the MIT license. There are no subscription fees, usage limits, or hidden costs. You can use it for personal or commercial projects without restrictions.",
+      "The MCP server and connector are free under the MIT license. Adobe Premiere Pro and your chosen AI client have separate requirements and costs.",
   },
   {
     question: "Which AI assistants work with Premiere Pro MCP?",
@@ -20,7 +20,7 @@ export const faqItems = [
   {
     question: "What can I automate in Premiere Pro with AI?",
     answer:
-      "You can automate timeline editing (insert, trim, split clips), apply effects and color correction, manage audio levels, create captions, organize project bins, import media, export sequences with Adobe Media Encoder presets, and inspect project metadata. Every action requires explicit confirmation before being applied.",
+      "You can automate timeline editing (insert, trim, split clips), apply effects and color correction, manage audio levels, create captions, organize project bins, import media, export sequences with Adobe Media Encoder presets, and inspect project metadata. Preview, approval, and undo behavior depend on the tool and host. Save a duplicate project and review returned outcome states before continuing.",
   },
   {
     question: "Which Premiere Pro versions are supported?",
@@ -30,7 +30,7 @@ export const faqItems = [
   {
     question: "Does Premiere Pro MCP upload my footage or project files?",
     answer:
-      "No. The recommended setup is local-first: Premiere Pro, the MCP server, and the bridge all run on your machine. No project media is automatically uploaded. The bridge exchanges structured commands and results locally via private temp files. Your AI assistant's separate privacy settings still apply to the prompts you send.",
+      "No. The recommended setup is local-first: Premiere Pro, the MCP server, and the bridge all run on your machine. No project media is automatically uploaded. The bridge exchanges structured commands and results locally via private temp files. Your AI client's handling of prompts and tool results still applies. The optional UXP bridge uses an authenticated WebSocket.",
   },
   {
     question: "How do I install Premiere Pro MCP?",
@@ -44,26 +44,9 @@ export const faqItems = [
   },
 ]
 
-const faqStructuredData = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqItems.map((item) => ({
-    "@type": "Question",
-    name: item.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: item.answer,
-    },
-  })),
-}
-
 export function FaqSection() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
-      />
       <section id="faq" className="reveal-section bg-black px-5 py-24 md:py-32">
         <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
           <div>

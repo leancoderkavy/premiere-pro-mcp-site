@@ -9,6 +9,7 @@ const publicDirectory = path.join(siteRoot, "public");
 const staticDirectory = path.join(buildDirectory, "static");
 
 for (const [asset, budget] of [
+  ["marketing/premiere-pro-mcp-workflow-1280.webp", 200_000],
   ["marketing/premiere-pro-mcp-mark-96.webp", 6_000],
   ["premiere-pro-mcp-demo-poster-640.webp", 16_000],
   ["premiere-pro-mcp-demo-poster-1280.webp", 35_000],

@@ -62,6 +62,13 @@ try {
     for (const match of html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>(.*?)<\/script>/gs)) JSON.parse(match[1]);
   }
   const homepage = pages.get("/");
+  const homeNodes = [...homepage.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>(.*?)<\/script>/gs)].flatMap(match => {
+    const data = JSON.parse(match[1]);
+    return data["@graph"] ?? [data];
+  });
+  assert.equal(homeNodes.filter(node => node["@type"] === "FAQPage").length, 1, "Homepage must expose one FAQ entity");
+  assert(homeNodes.some(node => node["@type"] === "SoftwareSourceCode" && node.codeRepository === "https://github.com/leancoderkavy/premiere-pro-mcp"), "Missing source-code entity");
+  assert(!homeNodes.some(node => node["@type"] === "SoftwareApplication" && node.codeRepository), "codeRepository belongs on SoftwareSourceCode");
   const treatment = await fetchPage(server.origin, "/design-preview/");
   const titleOf = (html) => html.match(/<title>(.*?)<\/title>/s)?.[1];
   const descriptionOf = (html) => attr(tags(html, "meta").find((tag) => attr(tag, "name") === "description") ?? "", "content");

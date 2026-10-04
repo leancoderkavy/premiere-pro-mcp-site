@@ -95,7 +95,7 @@ const structuredData = {
       description:
         "Technical deep-dive into how Premiere Pro MCP connects AI assistants to Adobe Premiere Pro using local-first architecture, file-based IPC, and explicit confirmation.",
       url: "https://premiere-pro-mcp.com/how-premiere-pro-mcp-works/",
-      dateModified: "2026-10-03",
+      dateModified: "2026-10-04",
       inLanguage: "en-US",
       author: { "@type": "Organization", name: "MCP for Adobe Premiere Pro contributors", url: product.links.repository },
       citation: [product.links.readme, "https://premiere-pro-mcp.com/tools/"],
@@ -154,7 +154,7 @@ export default function HowPremiereProMcpWorksPage() {
               </h2>
               <figure className="mt-8 overflow-hidden rounded-xl border border-site-line bg-black">
                 <Image
-                  src="/marketing/premiere-pro-mcp-workflow-v1.png"
+                  src="/marketing/premiere-pro-mcp-workflow-1280.webp"
                   alt="Local-first workflow: an AI assistant sends a request through the MCP bridge to Premiere, which returns a verified result."
                   width={1672}
                   height={941}

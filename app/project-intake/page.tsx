@@ -12,7 +12,7 @@ const pageUrl = "https://premiere-pro-mcp.com/project-intake/"
 export const metadata: Metadata = pageMetadata({
   title: { absolute: "Premiere Pro Project Intake: Checklist & Starter Templates" },
   description:
-    "Prepare a bounded, read-only Premiere Pro Project Intake preview with a safe connection check, a schema-valid starter or approved template, and a path-redacted review report.",
+    "Review Premiere Pro project intake with a read-only connection check, an approved template, and a path-redacted report before organizing media.",
   alternates: { canonical: "/project-intake/" },
   keywords: [
     "Premiere Pro project intake workflow",
@@ -75,7 +75,7 @@ const structuredData = {
       "@id": `${pageUrl}#webpage`,
       name: "Premiere Pro Project Intake: Run a Read-Only Workflow Review",
       description:
-        "Prepare a bounded, read-only Premiere Pro Project Intake preview with a safe connection check, a schema-valid starter or approved template, and a path-redacted review report.",
+        "Review Premiere Pro project intake with a read-only connection check, an approved template, and a path-redacted report before organizing media.",
       url: pageUrl,
       isPartOf: { "@id": "https://premiere-pro-mcp.com/#website" },
       about: { "@id": "https://premiere-pro-mcp.com/#software" },
