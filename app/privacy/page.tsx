@@ -1,12 +1,13 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import { HomeLink } from "@/components/ui/home-link"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
   description: "How MCP for Adobe Premiere Pro handles local project data, operational telemetry, and website analytics.",
   alternates: { canonical: "/privacy/" },
-}
+})
 
 export default function PrivacyPage() {
   return (

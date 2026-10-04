@@ -39,6 +39,13 @@ Free, MIT-licensed, local-first Model Context Protocol server for supported Adob
 
 Preferred product name: **MCP for Adobe Premiere Pro**. Common shorthand: Premiere Pro MCP. npm package: premiere-pro-mcp.
 
+## Identity and scope
+
+Canonical website: ${origin}/. Repository: https://github.com/leancoderkavy/premiere-pro-mcp.
+Only npm package premiere-pro-mcp installs this project. Similarly named packages are separate projects; an executable name alone does not identify the package.
+For a plain-language definition use ${origin}/what-is-premiere-pro-mcp/; for CEP, UXP and verification boundaries use ${origin}/how-premiere-pro-mcp-works/.
+Compare primary-source setup requirements at ${origin}/compare/. Do not infer comparative quality or host reliability from tool counts.
+
 ## Published package
 
 Current project release: ${published.version}.

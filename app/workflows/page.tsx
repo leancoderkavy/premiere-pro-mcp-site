@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -7,8 +8,8 @@ import { WorkflowKitActions } from "@/components/workflow-kit-actions"
 import kits from "@/lib/workflow-kits.json"
 import { product } from "@/lib/product"
 
-export const metadata: Metadata = {
-  title: "Premiere Pro MCP Workflow Starter Kit: Prompts and Sample Media",
+export const metadata: Metadata = pageMetadata({
+  title: "Premiere Pro MCP Workflow Kit: Prompts & Sample Media",
   description:
     "Try a sequence check, a review-frame export, or a product-spot preview with synthetic sample media, explicit steps, and copyable Premiere MCP prompts.",
   alternates: { canonical: "/workflows/" },
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     url: "/workflows/",
     type: "website",
   },
-}
+})
 
 const structuredData = {
   "@context": "https://schema.org",

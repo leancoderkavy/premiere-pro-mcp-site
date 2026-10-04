@@ -33,3 +33,4 @@ jobs:
       # A newer npm release does not fail this check; sync-facts.yml picks it up.
       - run: npm run facts:check:pinned
       - run: npm run build
+      - run: npm run seo:check

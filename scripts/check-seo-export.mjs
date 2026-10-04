@@ -4,7 +4,10 @@ import { fetchPage, startSiteServer } from "./lib/site-server.mjs";
 // Checks the HTML the production server renders (run after `next build`).
 // Pages render per request for the CSP nonce, so there is no static export.
 const origin = "https://premiere-pro-mcp.com";
-const server = await startSiteServer();
+// SEO_ORIGIN runs the same read-only gate against an already deployed site.
+const server = process.env.SEO_ORIGIN
+  ? { origin: new URL(process.env.SEO_ORIGIN).origin, close: async () => {} }
+  : await startSiteServer();
 const local = (pathname) => new URL(pathname, server.origin);
 const text = async (pathname) => {
   const response = await fetch(local(pathname));
@@ -45,6 +48,13 @@ try {
     assert(description && !descriptions.has(description), `Missing or duplicate description: ${url}`);
     descriptions.add(description);
     assert(!metadata.some((tag) => ["robots", "googlebot"].includes(attr(tag, "name")) && /noindex/i.test(attr(tag, "content") ?? "")), `Noindex: ${url}`);
+    const property = (name) => attr(metadata.find((tag) => attr(tag, "property") === name) ?? "", "content");
+    const named = (name) => attr(metadata.find((tag) => attr(tag, "name") === name) ?? "", "content");
+    assert.equal(property("og:url"), url.href, `Wrong Open Graph URL: ${url}`);
+    assert(property("og:title") && property("og:description") && property("og:image"), `Incomplete Open Graph card: ${url}`);
+    assert.equal(named("twitter:title"), property("og:title"), `Twitter title differs from page social title: ${url}`);
+    assert.equal(named("twitter:description"), property("og:description"), `Twitter description differs from page social description: ${url}`);
+    assert(named("twitter:image"), `Missing Twitter image: ${url}`);
     const canonical = tags(html, "link").filter((tag) => attr(tag, "rel") === "canonical");
     assert.equal(canonical.length, 1, `Expected one canonical: ${url}`);
     assert.equal(attr(canonical[0], "href"), url.href, `Wrong canonical: ${url}`);
@@ -86,6 +96,16 @@ try {
   }
   assert.equal(tags(toolsHtml, "article").length, toolCatalog.tools.length, "Tool reference must render every tool without JavaScript");
   assert(robots.includes(`Sitemap: ${origin}/sitemap.xml`), "robots.txt must reference the canonical sitemap");
+  const facts = JSON.parse(await text("/marketing-facts.json"));
+  assert.equal(facts.name, "MCP for Adobe Premiere Pro");
+  assert.equal(facts.canonicalUrl, `${origin}/facts/`);
+  for (const path of ["/llms.txt", "/llms-full.txt"]) {
+    const reference = await text(path);
+    assert(reference.includes("npm package: premiere-pro-mcp"), `Missing package identity: ${path}`);
+    assert(reference.includes(`${origin}/what-is-premiere-pro-mcp/`), `Definition absent from AI reference: ${path}`);
+    assert(reference.includes(`${origin}/how-premiere-pro-mcp-works/`), `Architecture absent from AI reference: ${path}`);
+    assert(reference.includes(facts.publishedRelease.version), `AI reference release drift: ${path}`);
+  }
   console.log(`SEO output verified: ${pages.size} canonical pages, unique titles/descriptions, indexable metadata, valid JSON-LD, ${checkedLinks} internal links and anchors.`);
 } finally {
   await server.close();

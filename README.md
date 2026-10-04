@@ -20,6 +20,8 @@ Use Node.js 24 for local work (Node.js 20.19+ is the floor for the scripts).
 | Check committed facts against npm `latest` | `npm run facts:check` |
 | Check committed facts against their own npm version | `npm run facts:check:pinned` |
 | Regenerate references from committed inputs | `npm run facts:generate` |
+| Validate rendered SEO, social cards, links and AI references | `npm run seo:check` |
+| Validate deployed production with same read-only gate | `SEO_ORIGIN=https://premiere-pro-mcp.com npm run seo:check` |
 | Verify references match committed inputs (offline) | `npm run facts:verify` |
 
 ## How product facts flow

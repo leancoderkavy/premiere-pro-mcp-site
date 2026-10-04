@@ -1,13 +1,14 @@
+import { pageMetadata } from "@/lib/seo"
 import type { Metadata } from "next"
 import { PublicPage } from "@/components/site/public-page"
 import { HomeLink } from "@/components/ui/home-link"
 
 const title = "Premiere Pro MCP demo: three clips to an editable timeline"
 const description = "Watch a recorded Premiere Pro workflow: import three clips, assemble a 15-second sequence, add review markers, inspect the timeline, and save the project."
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title, description, alternates: { canonical: "/demo/" },
   openGraph: { title, description, url: "/demo/", type: "video.other", images: ["/premiere-pro-mcp-demo-live-v2-poster-1280.webp"] },
-}
+})
 const transcript = [
   ["00:00–00:04", "Request: assemble three coastal shots into a 15-second edit. Add a review marker at each cut. Save the project."],
   ["00:04–00:09", "Import three original sample clips into Premiere Pro. Each clip is five seconds long."],

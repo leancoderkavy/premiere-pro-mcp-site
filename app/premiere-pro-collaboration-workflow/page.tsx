@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -7,7 +8,7 @@ import { WorkflowChooser } from "./workflow-chooser"
 
 const pageUrl = "https://premiere-pro-mcp.com/premiere-pro-collaboration-workflow/"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: { absolute: "Premiere Pro Collaboration: Productions vs. Team Projects" },
   description: "Choose a cautious first step for a local Premiere project, a shared-storage Production, or a remote Team Project before evaluating a reviewable MCP workflow.",
   alternates: { canonical: "/premiere-pro-collaboration-workflow/" },
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     description: "Start with the right collaboration context, then verify a local MCP connection without changing a project.",
     images: ["/marketing/premiere-pro-mcp-social-square-v1.png"],
   },
-}
+})
 
 const faqs = [
   { question: "Does this guide choose an Adobe collaboration model for me?", answer: "No. It explains the boundary between a local project, Adobe Productions, and Adobe Team Projects, then points to the relevant Adobe guidance. Your team decides its storage, permissions, and workflow policy." },
