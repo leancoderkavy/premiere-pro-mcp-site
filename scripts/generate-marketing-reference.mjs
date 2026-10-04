@@ -67,6 +67,7 @@ The hosted endpoint does not automatically pair a visitor to their local Premier
 - Source-linked Premiere MCP comparison: ${origin}/compare/
 - Canonical facts: ${origin}/facts/
 - Versioned evidence data: ${origin}/marketing-facts.json
+- Task-to-tool automation guide: ${origin}/blog/premiere-pro-workflow-automation/
 - Workflow starter kit: ${origin}/workflows/
 - Searchable tool reference for the published package: ${origin}/tools/
 - Tool reference JSON: ${origin}/tool-catalog.json

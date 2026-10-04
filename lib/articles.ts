@@ -38,10 +38,10 @@ export const articles: Article[] = [
     title: "How to Use Claude Fable 5.1 with Premiere Pro MCP",
     seoTitle: "Claude Fable 5.1 Premiere Pro MCP",
     description:
-      "Select Claude Fable 5.1 in Cursor or another compatible client after the local Premiere Pro MCP connection is verified. Discover tools, serialize timeline changes, and keep image review separate from playback proof.",
+      "Use Claude Fable 5.1 with a verified local Premiere MCP connection. Discover tools, serialize edits, and check image review and playback separately.",
     eyebrow: "Claude Fable 5.1 workflows",
     publishedAt: "2026-09-18",
-    modifiedAt: "2026-09-18",
+    modifiedAt: "2026-10-04",
     readingTime: "7 min read",
     workflowKit: "project-check",
     keywords: [
@@ -148,7 +148,7 @@ export const articles: Article[] = [
   {
     slug: "install-premiere-pro-mcp-npm",
     title: "How to Install premiere-pro-mcp from npm (Package Name Check)",
-    seoTitle: "Install premiere-pro-mcp from npm — Package Name Verification",
+    seoTitle: "Install premiere-pro-mcp: Verify Package & Connect",
     description: `Install premiere-pro-mcp@${product.version} from npm, verify its package identity, connect the local CEP panel, and run a read-only Premiere connection check.`,
     eyebrow: "npm install guide",
     publishedAt: "2026-09-15",
@@ -658,10 +658,10 @@ export const articles: Article[] = [
     workflowKit: "review-frames",
     title: "Premiere Pro Review Frames and Scene Detection: Build a Faster Human Review Pass",
     description:
-      "Create a bounded Premiere Pro review pass with file-verified sequence frames, clip midpoint samples, and source-relative scene-change candidates—without mistaking samples for editorial approval.",
+      "Build a Premiere Pro review pass with file-verified stills, clip midpoint samples, and scene candidates. Keep playback and editorial approval separate.",
     eyebrow: "Visual review workflow",
     publishedAt: "2026-08-23",
-    modifiedAt: "2026-09-04",
+    modifiedAt: "2026-10-04",
     readingTime: "7 min read",
     keywords: [
       "Premiere Pro review frames",
@@ -736,10 +736,10 @@ export const articles: Article[] = [
     seoTitle: "Delivery QC & Loudness Checklist",
     title: "Premiere Pro Delivery QC and Loudness Checklist: Inspect the Exact File Before Handoff",
     description:
-      "Use a practical delivery checklist for black and freeze findings, loudness measurement, and non-overwriting normalization—while keeping subjective mix and editorial approval with a human reviewer.",
+      "Check Premiere Pro delivery files for black or frozen sections and loudness. Review the mix and editorial quality separately before handoff.",
     eyebrow: "Delivery QC checklist",
     publishedAt: "2026-08-23",
-    modifiedAt: "2026-08-23",
+    modifiedAt: "2026-10-04",
     readingTime: "8 min read",
     keywords: [
       "Premiere Pro delivery QC checklist",
@@ -821,10 +821,10 @@ export const articles: Article[] = [
     workflowKit: "project-check",
     title: "Premiere Pro AI Workflow Checklist: Evaluate Automation Before It Touches a Project",
     description:
-      "Use this practical checklist to evaluate an AI-assisted Adobe Premiere Pro workflow: define the boundary, verify the connection, preview the change, and inspect the result.",
+      "Evaluate an AI-assisted Premiere Pro workflow: bound the task, check the connection, review available previews, and inspect the result before continuing.",
     eyebrow: "Premiere Pro AI workflow checklist",
     publishedAt: "2026-08-22",
-    modifiedAt: "2026-09-04",
+    modifiedAt: "2026-10-04",
     readingTime: "6 min read",
     keywords: ["Premiere Pro AI workflow checklist", "Premiere Pro automation checklist", "AI-assisted video editing workflow"],
     sections: [
@@ -1070,10 +1070,29 @@ export const articles: Article[] = [
       "See which Adobe Premiere Pro tasks are good candidates for workflow automation, how to keep edits reviewable, and how to verify an AI-assisted result.",
     eyebrow: "Premiere Pro automation",
     publishedAt: "2026-08-19",
-    modifiedAt: "2026-09-04",
+    modifiedAt: "2026-10-04",
     readingTime: "7 min read",
     keywords: ["Premiere Pro workflow automation", "Premiere Pro automation", "automate video editing workflow"],
     sections: [
+      {
+        heading: "Match an automation task to its tool and proof",
+        paragraphs: ["These examples refer to the published premiere-pro-mcp tool catalog. They are planning routes, not a claim that the workflow has run on your host. Inspect the connection first; approve project changes and filesystem writes separately."],
+        bullets: [
+          "Inspect the project: verify_premiere_connection, then get_project_info and get_timeline_summary. Start read-only and stop if the bridge or project is unavailable.",
+          "Organize incoming media: review file paths and target bins before import_media or create_bin. Confirm the intended items and bins in Premiere afterward.",
+          "Prepare a marker review: use add_markers_batch only after reviewing the target and timecodes. Read markers back; a marker list is not proof of rendered timing.",
+          "Produce review stills: export_sequence_review_frames writes approved image files. Check the returned paths and review the files; stills do not prove playback or audio quality.",
+          "Check a finished delivery: analyze_video_qc reads a local video through FFmpeg for black or frozen sections. Inspect the exact delivery file; this scan is not proof of every player or platform requirement.",
+        ],
+        links: [
+          { label: "Read the connection check contract", href: "/tools/#tool-verify_premiere_connection" },
+          { label: "Read media import and readback behavior", href: "/tools/#tool-import_media" },
+          { label: "Inspect batch marker limits", href: "/tools/#tool-add_markers_batch" },
+          { label: "Inspect review-frame export limits", href: "/tools/#tool-export_sequence_review_frames" },
+          { label: "Inspect local delivery QC requirements", href: "/tools/#tool-analyze_video_qc" },
+        ],
+        codeBlocks: [{ label: "Read-only first prompt", code: "Run verify_premiere_connection. If ready, summarize the active project and timeline. Do not change Premiere or write files. Report missing capabilities and verification limits." }],
+      },
       { heading: "Try this with disposable sample media", paragraphs: ["The downloadable workflow starter kit contains two synthetic video clips, a caption sample, and step-by-step evaluation prompts. Build a disposable sequence and compare the result with the checklist. The kit is not a recorded demonstration or a verified Premiere project; report any failed or unsupported check accurately."], bullets: ["Install the server and separate Premiere connector before trying the kit.", "Start with a read-only connection check and stop if it is not ready.", "Keep file exports and project changes behind their own explicit confirmation."] },
       {
         heading: "Automate the repeated parts of post-production",

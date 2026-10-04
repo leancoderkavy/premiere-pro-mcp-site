@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     return {}
   }
 
-  return {
+  return pageMetadata({
     title: article.seoTitle ?? article.title,
     description: article.description,
     keywords: article.keywords,
@@ -58,7 +59,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       description: article.description,
       images: [socialImage],
     },
-  }
+  })
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {

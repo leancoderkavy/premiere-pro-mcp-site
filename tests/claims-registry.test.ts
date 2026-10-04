@@ -12,7 +12,7 @@ describe("site claim guards", () => {
   });
 
   it("keeps search landing pages free of universal privacy, undo and freshness promises", () => {
-    for (const path of ["app/what-is-premiere-pro-mcp/page.tsx", "app/how-premiere-pro-mcp-works/page.tsx"]) {
+    for (const path of ["app/what-is-premiere-pro-mcp/page.tsx", "app/how-premiere-pro-mcp-works/page.tsx", "components/sections/faq.tsx"]) {
       const content = read(path);
       expect(content, path).not.toMatch(/never leave your computer|No project data or media is uploaded|Every (?:edit|action).*?(?:confirmation|undo)|All changes go through.*undo|new Date\(\)\.toISOString/);
     }

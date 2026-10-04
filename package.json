@@ -21,7 +21,8 @@
     "facts:check": "node scripts/sync-package-facts.mjs --check",
     "facts:generate": "node scripts/generate-marketing-reference.mjs",
     "facts:verify": "node scripts/generate-marketing-reference.mjs --check",
-    "facts:check:pinned": "node scripts/sync-package-facts.mjs --check --pinned"
+    "facts:check:pinned": "node scripts/sync-package-facts.mjs --check --pinned",
+    "seo:submit": "node scripts/submit-indexnow.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
