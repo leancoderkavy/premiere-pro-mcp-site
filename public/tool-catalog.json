@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.19.0",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.19.0",
-  "sourceSha256": "065a18724d7a723f97f2a2d74a8a95d4f9e4b948f274680da4cbee45b6fe77d8",
+  "packageVersion": "1.19.1",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.19.1",
+  "sourceSha256": "9cc9afca737395a9833a9f04cd2981b9a7aa9b60bf6ae9e50037d1bb995573ef",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
     "default": 384,
@@ -171,7 +171,7 @@
       "name": "apply_edit_plan",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Apply a previously previewed compound edit after revalidating stable project, sequence and target identities before activation or mutation. Requires the edit capability and exact preview confirmation token; changed targets require a fresh preview."
+      "description": "Apply a previously previewed compound edit after revalidating stable project, sequence and target identities before activation or mutation. Requires the edit capability and exact preview confirmation token; changed targets require a fresh preview. Ripple plans require the reviewed sequence to be active for the read-only QE sync-lock preflight."
     },
     {
       "name": "apply_editorial_organization_plan",
@@ -237,7 +237,7 @@
       "name": "automate_effect_parameters_uxp",
       "surface": "uxp",
       "modes": "inspect, inspect_point_value, inspect_point_displacement, set_point_value, inspect_color_value, set_color_value, inspect_keyframe, set_value, add_keyframe, remove_keyframe, remove_keyframe_range, set_interpolation, inspect_time_varying, set_time_varying",
-      "description": "Inspect or transactionally set scalar effect parameters; inspect or guardedly set static PointF x/y and Color RGBA parameters; locate individual keyframes including a bounded native nearest-range lookup; adjust keyframes/interpolation; and control explicit time-varying animation mode through documented UXP actions. Disabling animation requires a complete inspected keyframe-time snapshot and confirmation."
+      "description": "Inspect or transactionally set scalar effect parameters; inspect or guardedly set static PointF x/y and Color RGBA parameters; locate individual keyframes including a bounded native nearest-range lookup; adjust keyframes/interpolation; and control explicit time-varying animation mode through documented UXP actions. Interpolation verification covers the stored mode only, not rendering; Premiere 26.5.2 Windows has a reported temporal-curve render gap. Inspect playback or exported pixels. Disabling animation requires a complete inspected keyframe-time snapshot and confirmation."
     },
     {
       "name": "batch_add_transitions",
@@ -285,7 +285,7 @@
       "name": "capture_frame",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Capture the current frame and return it as inline image data for the LLM to see. This lets the AI visually inspect the current state of the timeline."
+      "description": "Capture the current frame and return it as inline image data for the LLM to see. This supports still-image review only; QE capture may differ from actual video exports and cannot verify temporal animation."
     },
     {
       "name": "check_caption_safe_zone",
@@ -675,7 +675,7 @@
       "name": "encode_file",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Request an Adobe Media Encoder encode for an external file. The returned job ID is an unverified handoff; verify queue presence or the output file independently."
+      "description": "Request an Adobe Media Encoder encode for an external file. Requires a saved project. The returned job ID is an unverified handoff; verify queue presence or the output file independently. Optional start_batch requests processing of every ready AME queue job, including unrelated jobs."
     },
     {
       "name": "encode_media_uxp",
@@ -687,7 +687,7 @@
       "name": "encode_project_item",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Request an Adobe Media Encoder encode for a project item. The returned job ID is an unverified handoff; verify queue presence or the output file independently."
+      "description": "Request an Adobe Media Encoder encode for a project item. Requires a saved project. The returned job ID is an unverified handoff; verify queue presence or the output file independently. Optional start_batch requests processing of every ready AME queue job, including unrelated jobs."
     },
     {
       "name": "enqueue_after_effects_render",
@@ -735,7 +735,7 @@
       "name": "export_frame",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export the current frame as an image file"
+      "description": "Export a file-verified still image. QE frame capture may not evaluate keyframed animation like an actual video export; it does not verify temporal curves or playback."
     },
     {
       "name": "export_frame_uxp",
@@ -765,7 +765,7 @@
       "name": "export_sequence_clip_review_frames",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export one file-verified composite frame at the midpoint of each clip on a chosen video track in one bridge request. Read-only in Premiere; it does not mute tracks or claim visual quality."
+      "description": "Export one file-verified still frame at the midpoint of each clip on a chosen video track in one bridge request. Read-only in Premiere; it does not mute tracks or claim visual quality."
     },
     {
       "name": "export_sequence_edl",
@@ -777,13 +777,13 @@
       "name": "export_sequence_marker_review_frames",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export up to 24 file-verified composite frames at active-sequence marker positions in one bridge request for marker-driven review. It reads markers and writes image files only; it does not add, update, or remove Premiere markers."
+      "description": "Export up to 24 file-verified still frames at active-sequence marker positions in one bridge request for marker-driven review. It reads markers and writes image files only; it does not add, update, or remove Premiere markers."
     },
     {
       "name": "export_sequence_review_frames",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export 2-24 evenly spaced, file-verified frames from an active-sequence range in one bridge round trip for visual review. This samples rendered output; it does not prove playback, audio, or editorial quality."
+      "description": "Export 2-24 evenly spaced, file-verified frames from an active-sequence range in one bridge round trip for visual review. Still capture does not verify temporal animation, playback, audio, or editorial quality; QE frames can differ from actual video exports."
     },
     {
       "name": "extract_selection",
@@ -818,8 +818,8 @@
     {
       "name": "get_active_sequence",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Get detailed information about the currently active sequence"
+      "modes": "track_type: video, audio, both",
+      "description": "Get bounded, paged information about the currently active sequence (50 clips by default). Follow pagination.nextOffset for more"
     },
     {
       "name": "get_advanced_feature_support",
@@ -974,8 +974,8 @@
     {
       "name": "get_full_sequence_info",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Get exhaustive information about a sequence: settings, all tracks with lock/mute/target state, all clips with positions/effects/speed/enabled state, all markers, transitions, in/out points, and work area."
+      "modes": "track_type: video, audio, both",
+      "description": "Get bounded information about a sequence (50 clips by default; follow pagination.nextOffset; markers and transitions capped at 50 per collection): settings, all tracks with lock/mute/target state, paged clips with positions/effects/speed/enabled state, bounded markers, transitions, in/out points, and work area."
     },
     {
       "name": "get_graphics_white_luminance",
@@ -1112,8 +1112,8 @@
     {
       "name": "get_sequence_structure",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Get a complete structural overview of the active sequence: all tracks, all clips with positions, gaps, and clip metadata. Essential for understanding timeline state before making edits."
+      "modes": "track_type: video, audio, both",
+      "description": "Get a bounded structural page of the active sequence (50 clips by default; follow pagination.nextOffset): all track counts, paged clips with positions, gaps, and clip metadata. Essential for understanding timeline state before making edits."
     },
     {
       "name": "get_source_monitor_info",
@@ -1137,7 +1137,7 @@
       "name": "get_timeline_gaps",
       "surface": "default",
       "modes": "track_type: video, audio, both",
-      "description": "Find all gaps (empty spaces) on the timeline between clips. Useful for identifying where content is missing or where clips can be tightened."
+      "description": "Find a bounded page of gaps (50 by default; follow pagination.nextOffset) on the timeline between clips. Useful for identifying where content is missing or where clips can be tightened."
     },
     {
       "name": "get_timeline_summary",
@@ -1299,7 +1299,7 @@
       "name": "import_transcript_uxp",
       "surface": "uxp",
       "modes": "Single operation",
-      "description": "Import native transcript JSON onto one untranscribed source media clip through documented Premiere 26.3+ UXP APIs. Check has_transcript_uxp first and omit expected_transcript_revision (or pass null). Importing over an existing transcript is refused (UXP_TRANSCRIPT_OVERWRITE_REFUSED): on Premiere 26.5.1 a failed import cleared an existing transcript that could not be restored. This destructive import requires explicit confirmation and an operation_id, serializes competing imports for the same project item, runs one undoable transaction, and reports exact bounded export SHA-256 readback rather than claiming a licensed-host result."
+      "description": "Import native transcript JSON onto one untranscribed source media clip through documented Premiere 26.3+ UXP APIs. Check has_transcript_uxp first and omit expected_transcript_revision (or pass null). Importing over an existing transcript is refused (UXP_TRANSCRIPT_OVERWRITE_REFUSED): on Premiere 26.5.1 a failed import cleared an existing transcript that could not be restored. This destructive import requires explicit confirmation and an operation_id, serializes competing imports for the same project item, runs one undoable transaction, and reports bounded exact or canonical full-content export readback; JSON key order and numeric spelling may change while timings, speakers and text must match. Host-attached empty transcripts permit import, but nonempty transcripts still refuse overwrite."
     },
     {
       "name": "insert_from_source",
@@ -1701,7 +1701,7 @@
       "name": "manage_proxies",
       "surface": "default",
       "modes": "create, attach, toggle",
-      "description": "Create, attach, or toggle proxies for a project item. Note: 'create' only requests a proxy encode from Adobe Media Encoder and returns an unverified handoff. Independently verify the AME queue or output file before calling this tool again with action 'attach' and proxy_path set to the output_path you passed here. There is no single-call create-and-attach in Premiere's ExtendScript API."
+      "description": "Create, attach, or toggle proxies for a project item. Note: 'create' only requests a proxy encode from Adobe Media Encoder and returns an unverified handoff. Independently verify the AME queue or output file before calling this tool again with action 'attach' and proxy_path set to the output_path you passed here. Optional start_batch requests processing of every ready AME queue job, including unrelated jobs. There is no single-call create-and-attach in Premiere's ExtendScript API."
     },
     {
       "name": "manage_proxy_ingest_uxp",
@@ -2139,7 +2139,7 @@
       "name": "razor_all_tracks",
       "surface": "default",
       "modes": "track_type: video, audio, both",
-      "description": "Razor (split) all clips at the playhead position across all tracks, or at a specific time."
+      "description": "Razor (split) all clips at the playhead position across all tracks, or at a specific time. A read-only preflight counts eligible track cuts; the host wait scales by that count (400 ms per cut plus 30 seconds headroom, capped at 15 minutes)."
     },
     {
       "name": "read_sequence_captions",
@@ -2535,7 +2535,7 @@
       "name": "set_keyframe_interpolation",
       "surface": "default",
       "modes": "interpolation: linear, hold, bezier",
-      "description": "Set the interpolation type of an existing keyframe (Linear, Hold, or Bezier). Premiere exposes no interpolation readback, so a write is reported as committed_unverified."
+      "description": "Set the interpolation type of an existing keyframe (Linear, Hold, or Bezier). Premiere exposes no interpolation readback, so a write is reported as committed_unverified. Stored curves do not establish rendering; A 26.5.2 Windows capture report shows identical modes; 25.2.3 macOS evidence distinguishes a QE still-capture artifact from correctly rendered video curves."
     },
     {
       "name": "set_metadata",
