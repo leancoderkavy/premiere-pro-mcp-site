@@ -42,7 +42,9 @@ SEO_ORIGIN=https://premiere-pro-mcp.com npm run seo:check
 The existing npm audit gate reports a high-severity braces advisory
 [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm), propagated through
 dev tooling. At audit time npm reports no patched braces release (latest 3.0.3).
-Do not downgrade Next.js tooling or disable the audit to hide this finding.
+Do not downgrade Next.js tooling or disable the audit to hide this finding. CI runs
+the failing audit as a separate job so functional checks still execute; audit failure
+remains a failure of the overall workflow.
 
 No new Premiere runtime claims, package release, fabricated reviews, keyword doorway
 pages, or ranking guarantee. The site already provides robots.txt, sitemap.xml,
