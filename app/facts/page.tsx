@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -6,8 +7,8 @@ import { product, safeFirstPrompt } from "@/lib/product"
 
 const pageUrl = "https://premiere-pro-mcp.com/facts/"
 
-export const metadata: Metadata = {
-  title: "Premiere Pro MCP Facts, Compatibility & AI Search Reference",
+export const metadata: Metadata = pageMetadata({
+  title: "Premiere Pro MCP Facts: Version, Compatibility & Sources",
   description:
     "Canonical facts about MCP for Adobe Premiere Pro: what it is, how it connects, compatibility, privacy boundaries, pricing, and how it differs from Adobe AI Assistant.",
   keywords: [
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
     url: "/facts/",
     type: "article",
   },
-}
+})
 
 const facts = [
   {

@@ -11,6 +11,13 @@ describe("site claim guards", () => {
     expect(read("components/sections/hero.tsx")).not.toMatch(/editor approved/i);
   });
 
+  it("keeps search landing pages free of universal privacy, undo and freshness promises", () => {
+    for (const path of ["app/what-is-premiere-pro-mcp/page.tsx", "app/how-premiere-pro-mcp-works/page.tsx"]) {
+      const content = read(path);
+      expect(content, path).not.toMatch(/never leave your computer|No project data or media is uploaded|Every (?:edit|action).*?(?:confirmation|undo)|All changes go through.*undo|new Date\(\)\.toISOString/);
+    }
+  });
+
   it("does not publish development-source counts next to published-package facts", () => {
     for (const path of ["lib/product.ts", "lib/articles.ts", "app/facts/page.tsx", "app/tools/page.tsx", "public/llms.txt", "public/llms-full.txt", "public/marketing-facts.json"]) {
       const content = read(path);

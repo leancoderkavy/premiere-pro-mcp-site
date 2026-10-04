@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -6,8 +7,8 @@ import { product, safeFirstPrompt } from "@/lib/product"
 import Image from "next/image"
 import { ArrowRight, CheckCircle2, AlertTriangle, ShieldCheck, Zap } from "lucide-react"
 
-export const metadata: Metadata = {
-  title: "How Premiere Pro MCP Works | Technical Architecture & Workflow",
+export const metadata: Metadata = pageMetadata({
+  title: "How Premiere Pro MCP Works: CEP, UXP & Verification",
   description: "Learn how Premiere Pro MCP connects AI assistants to Adobe Premiere Pro using a local-first architecture with CEP bridges, file-based IPC, and explicit confirmation.",
   alternates: { canonical: "/how-premiere-pro-mcp-works/" },
   openGraph: {
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     url: "/how-premiere-pro-mcp-works/",
     type: "article",
   },
-}
+})
 
 const workflowSteps = [
   {
@@ -47,13 +48,13 @@ const workflowSteps = [
     number: "5",
     title: "MCP server returns the result",
     description:
-      "The server reads the result file, verifies the operation succeeded, and returns structured data to your AI assistant showing what changed (or what went wrong).",
+      "The server reads the result file and reports the tool outcome. A verified result requires host readback; unavailable or incomplete readback is reported separately.",
   },
   {
     number: "6",
-    title: "AI presents the result and waits for confirmation",
+    title: "Inspect the outcome before continuing",
     description:
-      "Your AI assistant shows you a preview of what happened or what will happen, and asks for explicit confirmation before applying destructive changes.",
+      "Review the returned outcome and inspect Premiere. A committed_unverified or uncertain mutation needs host inspection before any retry; a successful tool call is not proof of rendered output.",
   },
 ]
 
@@ -62,13 +63,13 @@ const securityPrinciples = [
     icon: ShieldCheck,
     title: "Local-first architecture",
     description:
-      "Everything runs on your machine. The MCP server, Premiere Pro, and the bridge all communicate through private temp files. No project data or media is uploaded to the internet.",
+      "The recommended server and Premiere bridge run locally. CEP uses private temp files; UXP uses an authenticated WebSocket. Your AI client's handling of prompts and results still applies.",
   },
   {
     icon: CheckCircle2,
-    title: "Explicit confirmation required",
+    title: "Review tool approval requirements",
     description:
-      "Mutating operations (edits, exports) require preview and explicit confirmation. You see exactly what will change before it happens. Read-only inspection tools don't require confirmation.",
+      "Some workflows provide preview and explicit confirmation. Other editing tools may mutate directly when called. Review the tool contract and authorize scope before making changes.",
   },
   {
     icon: AlertTriangle,
@@ -94,8 +95,10 @@ const structuredData = {
       description:
         "Technical deep-dive into how Premiere Pro MCP connects AI assistants to Adobe Premiere Pro using local-first architecture, file-based IPC, and explicit confirmation.",
       url: "https://premiere-pro-mcp.com/how-premiere-pro-mcp-works/",
-      dateModified: new Date().toISOString().split("T")[0],
+      dateModified: "2026-10-03",
       inLanguage: "en-US",
+      author: { "@type": "Organization", name: "MCP for Adobe Premiere Pro contributors", url: product.links.repository },
+      citation: [product.links.readme, "https://premiere-pro-mcp.com/tools/"],
       about: { "@id": "https://premiere-pro-mcp.com/#software" },
     },
     {
@@ -244,7 +247,7 @@ export default function HowPremiereProMcpWorksPage() {
               </ul>
               <div className="mt-6 rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-5">
                 <p className="text-sm leading-6 text-site-muted">
-                  <span className="font-semibold text-amber-200">Why files instead of HTTP?</span> File-based IPC avoids exposing Premiere Pro to network connections and keeps all communication inspectable on disk. It also works across user sessions and survives Premiere Pro restarts.
+                  <span className="font-semibold text-amber-200">Why files instead of HTTP?</span> The CEP bridge uses a user-owned directory and avoids a network listener for command exchange. Keep the panel running in the same user session; reconnect and verify the bridge after restarting Premiere.
                 </p>
               </div>
             </section>

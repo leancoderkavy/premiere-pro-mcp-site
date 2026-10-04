@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -5,7 +6,7 @@ import { HomeLink } from "@/components/ui/home-link"
 import { TrackedLink } from "@/components/ui/tracked-link"
 import { articles } from "@/lib/articles"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Premiere Pro MCP Setup & AI Editing Guides",
   description:
     "Practical guides to setting up Premiere Pro MCP, AI-assisted editing, and Claude, ChatGPT, or Codex workflows without giving up creative control.",
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     url: "/blog/",
     type: "website",
   },
-}
+})
 
 const structuredData = {
   "@context": "https://schema.org",

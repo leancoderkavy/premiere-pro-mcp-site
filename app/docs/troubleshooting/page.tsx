@@ -1,10 +1,11 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { HomeLink } from "@/components/ui/home-link"
 import { product, safeFirstPrompt } from "@/lib/product"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Premiere Pro MCP Not Connecting? Setup and Recovery",
   description:
     "Diagnose a missing Premiere connector, unavailable MCP tools, missing active sequence, or unsupported workflow. Separate local setup from a verified Premiere connection.",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
     url: "/docs/troubleshooting/",
     type: "article",
   },
-}
+})
 const problems = [
   {
     title: "My assistant cannot see Premiere tools",

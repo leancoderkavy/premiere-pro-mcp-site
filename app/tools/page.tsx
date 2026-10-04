@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -7,12 +8,12 @@ import { TrackedLink } from "@/components/ui/tracked-link"
 import catalog from "@/public/tool-catalog.json"
 import { product, safeFirstPrompt } from "@/lib/product"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: { absolute: "Premiere Pro MCP Tools: Search Actions & Availability" },
   description: "Find Premiere Pro MCP tools for media, captions, timelines, exports, and review workflows. Search source descriptions, action modes, and CEP or UXP availability.",
   alternates: { canonical: "/tools/" },
   openGraph: { title: "Premiere Pro MCP Tool Reference", description: "Search tools and inspect availability before planning a Premiere workflow.", url: "/tools/", type: "website" },
-}
+})
 
 const structuredData = {
   "@context": "https://schema.org",

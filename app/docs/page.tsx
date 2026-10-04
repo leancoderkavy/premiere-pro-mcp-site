@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -6,7 +7,7 @@ import { product, safeFirstPrompt } from "@/lib/product"
 import { SetupGuides } from "@/components/sections/setup-guides"
 import { connectorSetup, localMcpConfig } from "@/lib/client-setup"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: { absolute: "MCP for Adobe Premiere Pro: Setup & Troubleshooting" },
   description: "Install the local Premiere connector, connect Claude or Codex, verify the bridge, and troubleshoot setup on Windows and macOS. Includes client-specific guides.",
   alternates: { canonical: "/docs/" },
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     url: "/docs/",
     type: "article",
   },
-}
+})
 
 const categories = [
   ["Timeline editing", "Insert, overwrite, move, trim, split, ripple-delete, target tracks, and inspect sequence structure."],

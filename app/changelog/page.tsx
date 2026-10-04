@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import { HomeLink } from "@/components/ui/home-link"
@@ -1077,7 +1078,7 @@ const releases = [
   },
 ] as const
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Changelog | premiere-pro-mcp",
   description:
     "Release notes for premiere-pro-mcp, including new Premiere Pro automation tools, connector improvements, fixes, and compatibility updates.",
@@ -1090,7 +1091,7 @@ export const metadata: Metadata = {
     url: "https://premiere-pro-mcp.com/changelog/",
     type: "website",
   },
-}
+})
 
 const structuredData = {
   "@context": "https://schema.org",

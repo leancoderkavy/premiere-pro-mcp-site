@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -5,17 +6,17 @@ import { HomeLink } from "@/components/ui/home-link"
 import { product } from "@/lib/product"
 import { Package, ShieldCheck, Zap, Code, CheckCircle2, ArrowRight } from "lucide-react"
 
-export const metadata: Metadata = {
-  title: "What is Premiere Pro MCP? | AI Automation for Adobe Premiere Pro",
-  description: "Premiere Pro MCP is a free, open-source bridge that connects AI assistants like Claude, Cursor, and ChatGPT to Adobe Premiere Pro for automated video editing with local-first privacy.",
+export const metadata: Metadata = pageMetadata({
+  title: "What Is Premiere Pro MCP? Setup, Uses & Limits",
+  description: "Learn what the premiere-pro-mcp package does, how Claude, Cursor and Codex connect to Adobe Premiere Pro, and which workflow and privacy limits to check.",
   alternates: { canonical: "/what-is-premiere-pro-mcp/" },
   openGraph: {
-    title: "What is Premiere Pro MCP? | AI Automation for Adobe Premiere Pro",
+    title: "What Is Premiere Pro MCP? Setup, Uses & Limits",
     description: "Learn what Premiere Pro MCP is, how it works, and why editors use it for AI-assisted video editing workflows.",
     url: "/what-is-premiere-pro-mcp/",
     type: "article",
   },
-}
+})
 
 const keyFeatures = [
   {
@@ -26,17 +27,17 @@ const keyFeatures = [
   {
     icon: ShieldCheck,
     title: "Local-First Privacy",
-    description: "All processing happens on your machine. Your footage, projects, and media never leave your computer.",
+    description: "The recommended server and Premiere bridge run on your computer. Your AI client may send prompts and tool results to its provider; review its data settings.",
   },
   {
     icon: CheckCircle2,
     title: "Preview Before Apply",
-    description: "Every edit is previewed and requires explicit confirmation. You see exactly what will change before it happens.",
+    description: "Use preview and confirmation flows where the tool provides them. Check action modes and approval requirements before authorizing an edit.",
   },
   {
     icon: Package,
     title: "Free & Open Source",
-    description: "MIT licensed with no usage limits, subscription fees, or hidden costs. Use it for any project, commercial or personal.",
+    description: "The server and connector are free under the MIT license. Adobe Premiere Pro and your chosen AI client have separate requirements and costs.",
   },
 ]
 
@@ -57,10 +58,12 @@ const structuredData = {
       "@id": "https://premiere-pro-mcp.com/what-is-premiere-pro-mcp/#article",
       headline: "What is Premiere Pro MCP?",
       description:
-        "Premiere Pro MCP is a free, open-source Model Context Protocol server that connects AI assistants to Adobe Premiere Pro for automated video editing with local-first privacy and explicit confirmation.",
+        "MCP for Adobe Premiere Pro is an independent local MCP server, published as premiere-pro-mcp, for supported inspection, editing and export workflows.",
       url: "https://premiere-pro-mcp.com/what-is-premiere-pro-mcp/",
-      dateModified: new Date().toISOString().split("T")[0],
+      dateModified: "2026-10-03",
       inLanguage: "en-US",
+      author: { "@type": "Organization", name: "MCP for Adobe Premiere Pro contributors", url: product.links.repository },
+      citation: [product.links.readme, "https://premiere-pro-mcp.com/facts/", "https://premiere-pro-mcp.com/tools/"],
       mainEntityOfPage: "https://premiere-pro-mcp.com/what-is-premiere-pro-mcp/",
       about: {
         "@type": "SoftwareApplication",
@@ -92,35 +95,7 @@ const structuredData = {
         },
       ],
     },
-    {
-      "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "What does MCP stand for?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "MCP stands for Model Context Protocol, an open standard for connecting AI assistants to external tools and data sources. Premiere Pro MCP implements this protocol specifically for Adobe Premiere Pro.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Is Premiere Pro MCP free?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes, Premiere Pro MCP is completely free and open-source under the MIT license. There are no subscription fees, usage limits, or hidden costs.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Do I need coding experience to use Premiere Pro MCP?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "No coding experience is required. Once installed, you interact with Premiere Pro through natural language prompts with your AI assistant (like Claude or ChatGPT). The AI handles the technical implementation.",
-          },
-        },
-      ],
-    },
+
   ],
 }
 
@@ -148,9 +123,9 @@ export default function WhatIsPremiereProMcpPage() {
               <p className="mt-6 max-w-3xl text-lg leading-8 text-site-muted">
                 Premiere Pro MCP (Model Context Protocol for Adobe Premiere Pro) is a{" "}
                 <strong className="text-site-text">free, open-source bridge</strong> that connects AI
-                assistants like Claude, Cursor, and ChatGPT to Adobe Premiere Pro. It enables automated
-                video editing through natural language while keeping your footage and projects completely
-                local and private.
+                assistants like Claude, Cursor, and Codex to supported Adobe Premiere Pro workflows.
+                This independent project is published as premiere-pro-mcp. The recommended bridge runs
+                locally; your AI client has its own data handling settings.
               </p>
             </header>
 
@@ -161,8 +136,8 @@ export default function WhatIsPremiereProMcpPage() {
               <p className="mt-5 leading-8 text-site-muted">
                 Instead of manually clicking through Adobe Premiere Pro to edit videos, you can describe
                 what you want to your AI assistant in plain English. Premiere Pro MCP translates those
-                requests into precise Premiere Pro actions, shows you a preview of what will change, and
-                waits for your confirmation before applying anything.
+                requests into structured tool calls. Review the tool contract, request a preview where
+                available, and approve the proposed changes before starting an editing workflow.
               </p>
               <div className="mt-8 rounded-xl border border-site-line bg-site-panel p-6">
                 <p className="text-sm font-semibold text-site-accent">Example workflow:</p>
@@ -177,7 +152,7 @@ export default function WhatIsPremiereProMcpPage() {
                   <li className="flex gap-3">
                     <span className="font-bold text-site-accent">2.</span>
                     <span>
-                      Premiere Pro MCP generates a preview showing exactly which clips will be affected
+                      Ask the assistant to inspect clip positions and show a plan before calling editing tools
                     </span>
                   </li>
                   <li className="flex gap-3">
@@ -227,8 +202,8 @@ export default function WhatIsPremiereProMcpPage() {
                 ))}
               </ul>
               <p className="mt-6 leading-8 text-site-muted">
-                Every action requires explicit confirmation and supports undo. You maintain full control
-                over your project at all times.
+                Tool availability, preview support, and undo behavior depend on the operation and host.
+                Save a duplicate project, inspect returned outcome states, and confirm changes in Premiere.
               </p>
             </section>
 
@@ -266,8 +241,9 @@ export default function WhatIsPremiereProMcpPage() {
                 </div>
               </div>
               <p className="mt-6 leading-8 text-site-muted">
-                All communication happens locally through private temporary files on your machine. No
-                project data or media is uploaded to the internet.
+                The production CEP bridge uses private temporary files on your machine. The optional UXP
+                bridge uses an authenticated WebSocket. AI client prompts and tool results follow your
+                chosen provider&apos;s privacy settings.
               </p>
               <Link
                 href="/how-premiere-pro-mcp-works/"
@@ -398,8 +374,8 @@ export default function WhatIsPremiereProMcpPage() {
                   </summary>
                   <p className="mt-3 leading-7 text-site-muted">
                     No, Premiere Pro MCP is an independent open-source project and is not affiliated with,
-                    endorsed by, or supported by Adobe. It uses Adobe&apos;s public APIs (CEP and UXP) to
-                    communicate with Premiere Pro.
+                    endorsed by, or supported by Adobe. It uses CEP/ExtendScript and documented UXP APIs. Some CEP tools use the
+                    undocumented QE DOM and are marked experimental in the tool reference.
                   </p>
                 </details>
                 <details className="group rounded-xl border border-site-line bg-site-panel p-5">
@@ -417,9 +393,9 @@ export default function WhatIsPremiereProMcpPage() {
                     Can I use it with my existing Premiere Pro projects?
                   </summary>
                   <p className="mt-3 leading-7 text-site-muted">
-                    Yes. Premiere Pro MCP works with any Premiere Pro project (versions{" "}
-                    {product.premiereCompatibility} supported). It operates on your active sequence just
-                    like manual editing would. All changes go through Premiere Pro&apos;s native undo system.
+                    Use a duplicate project on a supported host ({product.premiereCompatibility}) and verify
+                    the connection first. Individual operations and undo behavior depend on the host
+                    and tool; filesystem writes and exports are not universally reversible.
                   </p>
                 </details>
               </div>

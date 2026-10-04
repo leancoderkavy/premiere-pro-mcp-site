@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo"
 import { PublicPage } from "@/components/site/public-page"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -8,7 +9,7 @@ import { ProjectIntakeTemplateBuilder } from "./project-intake-template-builder"
 
 const pageUrl = "https://premiere-pro-mcp.com/project-intake/"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: { absolute: "Premiere Pro Project Intake: Checklist & Starter Templates" },
   description:
     "Prepare a bounded, read-only Premiere Pro Project Intake preview with a safe connection check, a schema-valid starter or approved template, and a path-redacted review report.",
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
       "Start with a safe connection check, then preview a path-redacted Project Intake report before anyone changes a Premiere project.",
     images: ["/marketing/premiere-pro-mcp-social-square-v1.png"],
   },
-}
+})
 
 const faqs = [
   {
