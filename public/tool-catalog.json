@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.20.0",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.20.0",
-  "sourceSha256": "280fe159756e7da91f0f3ab424f2ef1a99c8165c0d08cd32391f311859a06763",
+  "packageVersion": "1.21.0",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.21.0",
+  "sourceSha256": "7f620069874c0933fdb3dcd2024375417133c1e51fcea42bc4092d5f54ff5cd8",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
     "default": 391,
@@ -309,7 +309,7 @@
       "name": "clear_sequence_in_out",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Clear the in and/or out points on the active sequence."
+      "description": "Clear the in and/or out points on the active sequence so they read back as unset, and leave the other point unchanged."
     },
     {
       "name": "close_all_source_clips",
@@ -789,7 +789,7 @@
       "name": "extract_selection",
       "surface": "default",
       "modes": "Single operation",
-      "description": "EXPERIMENTAL (undocumented QE DOM: extract()). Extract (remove and close the gap) the content between the sequence in/out points on every targeted, unlocked track, then verify each targeted track lost exactly the range and its later clips moved up by the range. Requires sequence in/out marks that do not span the whole sequence. Premiere can also change untargeted tracks (for example the linked audio of targeted video, or sync-locked tracks); those are not verified but are listed in otherTracksChanged."
+      "description": "EXPERIMENTAL (undocumented QE DOM: extract()). Extract (remove and close the gap) the content between the sequence in/out points on every targeted, unlocked track, then verify each targeted track lost exactly the range and its later clips moved up by the range. Marks that Premiere stored just off a frame are first re-written on that exact frame through QE (marksRewritten). Requires sequence in/out marks that do not span the whole sequence. Premiere can also change untargeted tracks (for example the linked audio of targeted video, or sync-locked tracks); those are not verified but are listed in otherTracksChanged."
     },
     {
       "name": "find_items_by_media_path",
@@ -1527,7 +1527,7 @@
       "name": "lift_selection",
       "surface": "default",
       "modes": "Single operation",
-      "description": "EXPERIMENTAL (undocumented QE DOM: the sequence lift command, exposed as left() on 25.2). Lift (remove without closing the gap) the content between the sequence in/out points on every targeted, unlocked track, then verify the range is empty on those tracks and nothing else on them moved. Requires sequence in/out marks that do not span the whole sequence. Untargeted tracks are not verified; any that changed are listed in otherTracksChanged."
+      "description": "EXPERIMENTAL (undocumented QE DOM: the sequence lift command, exposed as left() on 25.2). Lift (remove without closing the gap) the content between the sequence in/out points on every targeted, unlocked track, then verify the range is empty on those tracks and nothing else on them moved. Marks that Premiere stored just off a frame are first re-written on that exact frame through QE (marksRewritten). Requires sequence in/out marks that do not span the whole sequence. Untargeted tracks are not verified; any that changed are listed in otherTracksChanged."
     },
     {
       "name": "lift_selection_uxp",
@@ -1539,7 +1539,7 @@
       "name": "link_selection",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Link the currently selected video and audio clips in the active sequence"
+      "description": "Link the currently selected video and audio clips in the active sequence, then read the links back. Needs at least two selected clips; verified only when every selected clip is linked to every other."
     },
     {
       "name": "list_available_audio_effects",
@@ -2265,7 +2265,7 @@
       "name": "replace_clip",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Replace one timeline clip with a different project item on the same track, keeping the exact timeline start and end. The replacement plays from its own In mark for the original clip's duration; neighbouring clips do not ripple, and a linked partner clip on another track is left in place. Refuses without changing anything when the track is locked. Reads the track back: verified when the new clip covers the same span, committed_unverified when the span holds but the source In point cannot be confirmed, otherwise failure with Undo guidance."
+      "description": "Replace one timeline clip with a different project item on the same track, keeping the exact timeline start and end. The replacement plays from its own In mark for the original clip's duration; neighbouring clips do not ripple, and a linked partner clip on another track is left in place. The replacement must carry only the track's media type (for example a still or video-only item on a video track): Premiere's overwrite would also place an item's other media on another track. Checks the replacement accepts the source range before removing anything. Refuses without changing anything when the track is locked. Reads the track back: verified when the new clip covers the same span, committed_unverified when the span holds but the source In point cannot be confirmed, otherwise failure with Undo guidance."
     },
     {
       "name": "replace_clip_media",
@@ -2559,7 +2559,7 @@
       "name": "set_frame_blend",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Enable or disable frame blending on a clip. Uses QE DOM."
+      "description": "Request frame blending on a clip through QE DOM. Premiere exposes no frame-blend readback, so the result is committed_unverified and must be checked in Effect Controls."
     },
     {
       "name": "set_graphics_white_luminance",
@@ -2571,7 +2571,7 @@
       "name": "set_item_in_out",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set in and/or out points on a project item in the project panel (marks source range for editing)."
+      "description": "Set in and/or out points on a project item in the project panel (marks source range for editing). Premiere snaps video marks to the media's own frame grid, so a mark is verified within one media frame and the result reports requested and applied seconds."
     },
     {
       "name": "set_keyframe_interpolation",
@@ -2727,7 +2727,7 @@
       "name": "set_time_interpolation",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set time interpolation type for a clip (Frame Sampling, Frame Blending, Optical Flow). Uses QE DOM."
+      "description": "Request time interpolation for a clip (Frame Sampling, Frame Blending, Optical Flow) through QE DOM. Premiere exposes no interpolation readback, so the result is committed_unverified and must be checked in Effect Controls."
     },
     {
       "name": "set_transcode_on_ingest",
@@ -2745,7 +2745,7 @@
       "name": "set_work_area",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the work area (bar) in and out points"
+      "description": "Set and verify the work-area points, turning the bar on first through the public Sequence API when it is off. Fails when Premiere leaves the points unchanged (26.5.2 ignores these CEP writes; use the UXP set_work_area there) and turns the bar back off if this call turned it on. Unreadable or partial writes report committed_unverified."
     },
     {
       "name": "set_workspace",
@@ -2763,7 +2763,7 @@
       "name": "set_zero_point",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the starting timecode (zero point) of a sequence"
+      "description": "Set the starting timecode (zero point) of a sequence and read it back. The value is snapped to the sequence frame grid; for drop-frame 29.97, 01;00;00;00 is 3599.9964 s, and for non-drop 29.97 it is 3603.6 s."
     },
     {
       "name": "setup_ducking",
@@ -2859,7 +2859,7 @@
       "name": "unlink_selection",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Unlink the currently selected video and audio clips in the active sequence"
+      "description": "Unlink the currently selected video and audio clips in the active sequence, then read the links back. Premiere only unlinks when every clip of a linked group is selected, so a selection missing a linked partner is refused before anything changes."
     },
     {
       "name": "unnest_sequence",
