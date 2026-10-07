@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.19.1",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.19.1",
-  "sourceSha256": "9cc9afca737395a9833a9f04cd2981b9a7aa9b60bf6ae9e50037d1bb995573ef",
+  "packageVersion": "1.20.0",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.20.0",
+  "sourceSha256": "280fe159756e7da91f0f3ab424f2ef1a99c8165c0d08cd32391f311859a06763",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
-    "default": 384,
+    "default": 391,
     "uxp": 96,
     "restricted": 2
   },
@@ -63,7 +63,7 @@
       "name": "add_title",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Add an on-screen title from plain text using a stock Essential Graphics template that ships with Premiere (default: Basic Title). Pass text for one line, or lines to fill the template's text fields in order (for example a lower third's name and role). Premiere-built templates (kind 'premiere') get the text baked into a verified copy of the template before import, because Premiere exposes no writable text for them (textVerification 'template_verified'; confirm the render with export_frame). After Effects-built templates (kind 'after_effects') are imported and their text fields written by position and read back from Premiere (textVerification 'verified', 'mismatch', 'missing_property', or 'committed_unverified'). The graphic is trimmed to duration_seconds and its length read back. Use list_stock_titles to see templates, their kind, and how many lines each takes."
+      "description": "Add an on-screen title from plain text using a stock Essential Graphics template that ships with Premiere (default: Basic Title). Pass text for one line, or lines to fill the template's text fields in order (for example a lower third's name and role). Premiere-built templates (kind 'premiere') get the text baked into a verified copy before import, because Premiere exposes no writable text for them (textVerification 'template_verified'; confirm the render with export_frame). The baked copy path is returned as templateFile and saved under the application support premiere-pro-mcp/titles folder (macOS: ~/Library/Application Support/premiere-pro-mcp/titles). Do not delete copies automatically; remove one manually only after confirming no project references it. After Effects-built templates (kind 'after_effects') are imported and their text fields written by position and read back from Premiere (textVerification 'verified', 'mismatch', 'missing_property', or 'committed_unverified'). The graphic is trimmed to duration_seconds and its length read back. Use list_stock_titles to see templates, their kind, and how many lines each takes."
     },
     {
       "name": "add_to_render_queue",
@@ -285,7 +285,7 @@
       "name": "capture_frame",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Capture the current frame and return it as inline image data for the LLM to see. This supports still-image review only; QE capture may differ from actual video exports and cannot verify temporal animation."
+      "description": "Capture the current frame and return it as inline image data for the LLM to see. This supports still-image review only. The PNG keeps the sequence's transparency (hasAlpha); transparent areas may display as white or a checkerboard rather than the black a video render shows."
     },
     {
       "name": "check_caption_safe_zone",
@@ -375,13 +375,13 @@
       "name": "copy_effect_values",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Copy verified scalar effect-property values from one effect to the matching effect on another clip. Both clips must already have the same effect applied. Legacy CEP deliberately refuses Blend Mode because Premiere can corrupt its enum value on cross-clip writes."
+      "description": "Copy verified scalar and colour effect-property values from one effect to the matching effect on another clip. Both clips must already have the same effect applied. Properties are matched by position, then by unique display name, because effects such as Lumetri Color repeat names across sections. Legacy CEP deliberately refuses Blend Mode because Premiere can corrupt its enum value on cross-clip writes."
     },
     {
       "name": "copy_effects_between_clips",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Copy all effects (or a specific effect) from one clip to another. Does not copy intrinsic properties like Motion/Opacity unless specified."
+      "description": "Copy all effects (or a specific effect) from one clip to another, including parameter values and keyframes, and read every written value back. A missing effect is added through the experimental legacy QE DOM; when the target already has that effect, its values are updated instead of stacking a second default-valued instance. Intrinsic components such as Motion and Opacity are skipped unless named. Uses the same component matching and per-property receipts as paste_clip_attributes."
     },
     {
       "name": "create_bars_and_tone",
@@ -723,7 +723,7 @@
       "name": "export_as_fcp_xml",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export the active sequence as a Final Cut Pro XML file. Fails when Premiere writes no file or leaves a pre-existing output unchanged."
+      "description": "Export the active sequence as a Final Cut Pro XML file. Sequences with effects FCP XML cannot represent can make Premiere show a Translation Report modal after writing the XML; dismiss it in Premiere before any queued command can run. Detects the written XML and fresh report if the modal blocks the host. Default wait is 60 minutes for long sequences."
     },
     {
       "name": "export_as_project",
@@ -735,7 +735,7 @@
       "name": "export_frame",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export a file-verified still image. QE frame capture may not evaluate keyframed animation like an actual video export; it does not verify temporal curves or playback."
+      "description": "Export a file-verified still image. PNG stills keep the sequence's transparency (straight alpha, reported as hasAlpha); composite them over black before measuring brightness or comparing with a video render. A single still does not verify motion over time, playback or audio."
     },
     {
       "name": "export_frame_uxp",
@@ -753,7 +753,7 @@
       "name": "export_omf",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export the active sequence as an OMF file (Open Media Framework, for audio post-production)"
+      "description": "Export the active sequence as an OMF file (Open Media Framework, for audio post-production). Long sequences can use a longer wait (default 60 minutes); if Premiere writes the file but times out, the receipt includes its size as committed_unverified."
     },
     {
       "name": "export_sequence",
@@ -771,7 +771,7 @@
       "name": "export_sequence_edl",
       "surface": "default",
       "modes": "track_type: video, audio; frame_rate: 24, 25, 29.97, 30, 50, 59.94, 60; reel_mode: clip_name, tape_name, numbered",
-      "description": "Generate a CMX 3600 EDL for one video or audio track of a sequence from Premiere timeline readback (cuts, reels, source/record timecode, M2 lines for retimed clips), self-validate it, and return it inline or write it inside an approved workspace. Premiere is only read; this is not a Premiere-native export."
+      "description": "Generate a CMX 3600 EDL for one video or audio track of a sequence from Premiere timeline readback (cuts, reels, source/record timecode, M2 lines for retimed clips), self-validate it, and return it inline or write it inside an approved workspace. Premiere is only read; this is not a Premiere-native export. Long sequences can use a longer timeout (default 30 minutes)."
     },
     {
       "name": "export_sequence_marker_review_frames",
@@ -783,7 +783,7 @@
       "name": "export_sequence_review_frames",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export 2-24 evenly spaced, file-verified frames from an active-sequence range in one bridge round trip for visual review. Still capture does not verify temporal animation, playback, audio, or editorial quality; QE frames can differ from actual video exports."
+      "description": "Export 2-24 evenly spaced, file-verified frames from an active-sequence range in one bridge round trip for visual review. Still capture does not verify temporal animation, playback, audio, or editorial quality; PNG frames keep the sequence's transparency (straight alpha), so composite them over black before comparing with a video export."
     },
     {
       "name": "extract_selection",
@@ -1011,7 +1011,7 @@
       "name": "get_metadata",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Get metadata for a project item. Use parse_fields to return named XMP/project fields instead of raw XML. Project metadata XML and file/clip XMP are separate packets; disable either when identity/path is enough. Prefer inspect_project_panel_metadata_uxp item_columns or manage_metadata_uxp inspect_fields for visible columns. This is not the premiere://project/metadata resource. GPS and serials are omitted from parse_fields unless include_sensitive is true."
+      "description": "Get metadata for a project item. Returns bounded parsed fields by default; GPS, serials, and personal contact/author fields are omitted. Raw packets require explicit include_project_metadata/include_xmp_metadata and include_sensitive true. Media paths require include_media_path true. Project metadata XML and file/clip XMP are separate packets; disable either when identity/path is enough. Prefer inspect_project_panel_metadata_uxp item_columns or manage_metadata_uxp inspect_fields for visible columns. This is not the premiere://project/metadata resource. GPS and serials are omitted from parse_fields unless include_sensitive is true."
     },
     {
       "name": "get_mogrt_component",
@@ -1221,7 +1221,7 @@
       "name": "get_xmp_metadata",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Get the raw file/clip XMP packet for a project item (Dublin Core, EXIF, IPTC, xmpDM, and other namespaces). Distinct from Premiere-private project metadata. Omit GPS and camera serials from user-facing reports unless requested."
+      "description": "Inspect bounded file/clip XMP fields with GPS, serials, author and contact data omitted by default. Raw XMP requires include_raw and include_sensitive true; it can disclose personal data to the connected client. Distinct from Premiere-private project metadata."
     },
     {
       "name": "has_proxy",
@@ -1250,8 +1250,8 @@
     {
       "name": "import_fcp_xml",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Open a Final Cut Pro XML file as a new Premiere project. app.openFCPXML(path, projPath) requires a destination project path; it does not merge the XML into the currently open project. verified is true only when that destination exists as a file and Premiere has that exact path open."
+      "modes": "mode: new_project, into_open_project",
+      "description": "Import a Final Cut Pro XML file. Default mode new_project opens it as a new Premiere project: app.openFCPXML(path, projPath) requires a destination project path, and verified is true only when that destination exists as a file and Premiere has that exact path open. Mode into_open_project instead imports the XML into the currently open project with project.importFiles and succeeds only when the sequence count grew; the XML also brings its own clips, which can duplicate existing items."
     },
     {
       "name": "import_folder",
@@ -1575,7 +1575,7 @@
       "name": "list_markers",
       "surface": "default",
       "modes": "Single operation",
-      "description": "List markers on the active sequence, or on a source project item that exposes a marker collection. A timeline-clip node_id returns a clean error instead of a raw TypeError."
+      "description": "List markers on the active sequence, or on a source project item that exposes a marker collection, including marker GUID and color when readable. A timeline-clip node_id returns a clean error instead of a raw TypeError."
     },
     {
       "name": "list_markers_uxp",
@@ -1794,6 +1794,12 @@
       "description": "Read or transactionally write small, namespaced workflow checkpoints on the active project or a targeted sequence. Persistent values may sync with cloud projects; never store secrets, native paths, transcripts, or media names."
     },
     {
+      "name": "map_source_ranges_to_timeline",
+      "surface": "default",
+      "modes": "track_type: video, audio",
+      "description": "Read-only mapping from source-media time ranges to placements on one sequence track. Reads the selected track once, maps only normal-speed forward clips, reports source portions not present on the track as unplaced, and returns bounded pages. This inspects timeline placement; it does not prove rendered or audible content."
+    },
+    {
       "name": "match_frame",
       "surface": "default",
       "modes": "track_type: video, audio",
@@ -1941,7 +1947,7 @@
       "name": "plan_filler_word_removal",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Plan word-level filler removal (um, uh, you know...) from a revision-bound word timeline. Returns frame-snapped removal and keep ranges plus apply routes. Local-only; never changes Premiere."
+      "description": "Plan word-level filler removal (um, uh, you know...) from a revision-bound word timeline. Hesitation-sound removal requires a transcript that preserves disfluencies, such as Premiere transcription or verbatim ASR; Whisper's default output omits them. Returns frame-snapped removal and keep ranges plus apply routes. Local-only; never changes Premiere."
     },
     {
       "name": "plan_multicam_angle_switches",
@@ -2274,6 +2280,36 @@
       "description": "Unavailable: Premiere does not expose a supported scripting API for reversing a timeline clip's playback direction."
     },
     {
+      "name": "review_broll_placements",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Review caller-proposed owned-footage B-roll picks with matched quote, reason, alternatives, source/sequence revisions and explicit decisions. Reject overlapping approved placements. Does not infer visual content, search stock, inspect track occupancy or insert clips."
+    },
+    {
+      "name": "review_dialogue_candidates",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Review revision-bound dialogue candidates with surrounding words, silence padding, explicit keep/reject decisions and unioned source-time removal duration. Recomputed review revisions reject stale selections. Local-only; no timeline mapping, transcription or mutation."
+    },
+    {
+      "name": "review_quote_paper_edit",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Review a transcript quote library, explicitly order approved quotes, and return running timings and a formula-neutralized CSV paper edit inline. Local-only; no files, provider calls or multi-source timeline assembly."
+    },
+    {
+      "name": "review_sync_evidence",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Review caller-supplied camera/recorder offset estimates for independent-method agreement, confidence and conflicting alternatives. All matches require selection; conflicting matches cannot be approved. Does not analyze audio, calibrate confidence or synchronize Premiere."
+    },
+    {
+      "name": "review_text_changes",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Preview literal replacements or supplied copy changes for inspected MOGRT text and supplied caption artifacts. Preserve original text and evidence revisions with explicit approve/reject decisions. Does not translate, access native graphics/caption text or apply changes."
+    },
+    {
       "name": "ripple_delete",
       "surface": "default",
       "modes": "scope: sync_locked, own_track; range_content: refuse, delete",
@@ -2283,7 +2319,13 @@
       "name": "ripple_delete_track_item_uxp",
       "surface": "uxp",
       "modes": "inspect, apply",
-      "description": "Inspect or perform one guarded ripple delete on an audio or video timeline item using documented UXP SequenceEditor actions. Apply requires complete target and contiguous-successor snapshots, explicit confirmation, and an operation ID; it serializes with guarded slips, slides, and append duplicates on that track, commits one transaction, and reads back the successor at the removed coordinate. It intentionally cannot ripple a final item, a gap, another track, or a linked A/V pair. It does not prove media handles, linked A/V synchronization, rendered frames, playback, persistence, or Undo behavior."
+      "description": "Inspect or perform one guarded ripple delete on an audio or video timeline item using documented UXP SequenceEditor actions. Apply requires complete target and contiguous-successor snapshots, explicit confirmation, and an operation ID; it serializes with guarded slips, slides, and append duplicates on that track, commits one transaction, and reads back the successor at the removed coordinate. It refuses before any change when it cannot ripple: a final item, a gap, or any item on another track over the deleted range (such as a linked audio partner or a spanning layer), because Premiere then deletes without closing the gap. It does not prove media handles, linked A/V synchronization, rendered frames, playback, persistence, or Undo behavior."
+    },
+    {
+      "name": "ripple_remove_timeline_ranges",
+      "surface": "default",
+      "modes": "scope: sync_locked; range_content: delete",
+      "description": "Preview or apply a single-pass ripple removal for up to 50 sorted, non-overlapping timeline ranges on all unlocked, sync-locked tracks. Requires a preview confirmation token to apply. Integer frame rates only. The preview returns per-track counts and at most 50 planned-clip samples; clips fully inside ranges are removed. Large edits need allow_large_ripple: true."
     },
     {
       "name": "roll_edit",
@@ -2505,7 +2547,7 @@
       "name": "set_effect_property",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the value of a specific effect property on a clip. Accepts scalar, boolean, string, array-shaped vector values (for example Motion > Position as [x, y]), and MOGRT JSON objects or strings, and verifies the readback component by component."
+      "description": "Set one effect property. Duplicate names require property_index from get_effect_properties. Colour values use [alpha, red, green, blue] and the lossless colour API; keyframed colour writes are refused."
     },
     {
       "name": "set_footage_interpretation",
@@ -2535,7 +2577,7 @@
       "name": "set_keyframe_interpolation",
       "surface": "default",
       "modes": "interpolation: linear, hold, bezier",
-      "description": "Set the interpolation type of an existing keyframe (Linear, Hold, or Bezier). Premiere exposes no interpolation readback, so a write is reported as committed_unverified. Stored curves do not establish rendering; A 26.5.2 Windows capture report shows identical modes; 25.2.3 macOS evidence distinguishes a QE still-capture artifact from correctly rendered video curves."
+      "description": "Set the interpolation type of an existing keyframe (Linear, Hold, or Bezier). Premiere exposes no interpolation readback, so a write is reported as committed_unverified. Stored curves do not establish rendering; verify with a short video export, or with PNG stills composited over black (they carry straight alpha)."
     },
     {
       "name": "set_metadata",
