@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.21.0",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.21.0",
-  "sourceSha256": "7f620069874c0933fdb3dcd2024375417133c1e51fcea42bc4092d5f54ff5cd8",
+  "packageVersion": "1.22.0",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.22.0",
+  "sourceSha256": "3dd84212f7e73aa50b9fc914011fabee06416b0da6a82832eaed658a39889fd1",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
     "default": 391,
@@ -63,7 +63,7 @@
       "name": "add_title",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Add an on-screen title from plain text using a stock Essential Graphics template that ships with Premiere (default: Basic Title). Pass text for one line, or lines to fill the template's text fields in order (for example a lower third's name and role). Premiere-built templates (kind 'premiere') get the text baked into a verified copy before import, because Premiere exposes no writable text for them (textVerification 'template_verified'; confirm the render with export_frame). The baked copy path is returned as templateFile and saved under the application support premiere-pro-mcp/titles folder (macOS: ~/Library/Application Support/premiere-pro-mcp/titles). Do not delete copies automatically; remove one manually only after confirming no project references it. After Effects-built templates (kind 'after_effects') are imported and their text fields written by position and read back from Premiere (textVerification 'verified', 'mismatch', 'missing_property', or 'committed_unverified'). The graphic is trimmed to duration_seconds and its length read back. Use list_stock_titles to see templates, their kind, and how many lines each takes."
+      "description": "Add an on-screen title from plain text using a stock Essential Graphics template that ships with Premiere (default: Basic Title). Pass text for one line, or lines to fill the template's text fields in order (for example a lower third's name and role). Premiere-built templates (kind 'premiere') get the text baked into a verified copy before import, because Premiere exposes no writable text for them (textVerification 'template_verified'; confirm the render with export_frame). The baked copy path is returned as templateFile and saved under the application support premiere-pro-mcp/titles folder (macOS: ~/Library/Application Support/premiere-pro-mcp/titles). The cache keeps the newest 50 baked copies by modification time; export or copy templates elsewhere if a project needs older copies retained. After Effects-built templates (kind 'after_effects') are imported and their text fields written by position and read back from Premiere (textVerification 'verified', 'mismatch', 'missing_property', or 'committed_unverified'). The graphic is trimmed to duration_seconds and its length read back. Use list_stock_titles to see templates, their kind, and how many lines each takes."
     },
     {
       "name": "add_to_render_queue",
@@ -303,7 +303,7 @@
       "name": "clear_item_in_out",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Clear in and/or out points on a project item (reset to full duration)."
+      "description": "Clear in and/or out points on a project item (reset to full duration). Still-image Out is independently verified only when its own duration is readable; otherwise the result explains that limit."
     },
     {
       "name": "clear_sequence_in_out",
@@ -471,7 +471,7 @@
       "name": "create_sequence_from_clips",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Create a new sequence by automatically placing project items in order"
+      "description": "Create a new sequence from project items, then verify its registered identity, name and source-item placements. clipCount reports observed track items; requestedClipCount reports requested source items."
     },
     {
       "name": "create_sequence_from_preset",
@@ -495,13 +495,13 @@
       "name": "create_smart_bin",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Create a smart bin (search bin) in the project panel"
+      "description": "Create a smart bin (search bin) and inspect its new identity and name. The stored search query has no getter, so creation reports committed_unverified with identity verification separately."
     },
     {
       "name": "create_subclip",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Create a subclip from a project item with in/out points"
+      "description": "Create a subclip from a project item with in/out points. Returns the new item's nodeId and reads its stored range back from Premiere project metadata: outcome verified when the observed in/out seconds are within one media frame of the request, otherwise committed_unverified."
     },
     {
       "name": "create_subclip_uxp",
@@ -573,7 +573,7 @@
       "name": "detach_proxy",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Detach/remove the proxy from a project item"
+      "description": "Detach/remove the proxy from a project item and read hasProxy back; unavailable readback reports committed_unverified."
     },
     {
       "name": "detect_active_picture_bounds",
@@ -1257,7 +1257,7 @@
       "name": "import_folder",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Import an entire folder of media into the project"
+      "description": "Import the media files directly inside a folder and read the destination tree back. Reports observed new media items; unreadable or unmatched imports are committed_unverified."
     },
     {
       "name": "import_image_sequence",
@@ -1701,7 +1701,7 @@
       "name": "manage_proxies",
       "surface": "default",
       "modes": "create, attach, toggle",
-      "description": "Create, attach, or toggle proxies for a project item. Note: 'create' only requests a proxy encode from Adobe Media Encoder and returns an unverified handoff. Independently verify the AME queue or output file before calling this tool again with action 'attach' and proxy_path set to the output_path you passed here. Optional start_batch requests processing of every ready AME queue job, including unrelated jobs. There is no single-call create-and-attach in Premiere's ExtendScript API."
+      "description": "Create or attach proxies for a project item, or set Premiere's proxy display. 'toggle' is application-wide, not per item: it changes app.getEnableProxies()/setEnableProxies() for every sequence and monitor, and item_id is only checked to exist. Pass enabled: true or false to set a known state; omitting enabled flips the current state, so two calls undo each other. The result reports previousEnabled and proxiesEnabled read back from Premiere. Note: 'create' only requests a proxy encode from Adobe Media Encoder and returns an unverified handoff. Independently verify the AME queue or output file before calling this tool again with action 'attach' and proxy_path set to the output_path you passed here. Optional start_batch requests processing of every ready AME queue job, including unrelated jobs. There is no single-call create-and-attach in Premiere's ExtendScript API."
     },
     {
       "name": "manage_proxy_ingest_uxp",
@@ -2223,7 +2223,7 @@
       "name": "remove_selected_clips",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Remove all currently selected clips from the timeline."
+      "description": "Remove all currently selected clips and verify their absence. Ripple requests are refused because the CEP removal call cannot reliably close gaps; use a guarded ripple-range tool instead."
     },
     {
       "name": "remove_video_transition_uxp",
@@ -2391,7 +2391,7 @@
       "name": "select_clips_by_color",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Select all clips whose source project item has a specific color label."
+      "description": "Select clips by their source project item color label. CEP exposes no timeline track-item label getter, so timeline-specific labels cannot be matched."
     },
     {
       "name": "select_clips_by_name",
@@ -2505,7 +2505,7 @@
       "name": "set_clip_selection",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Select or deselect a clip in the active sequence"
+      "description": "Select or deselect a clip in the active sequence and read its selection state back."
     },
     {
       "name": "set_clip_speed_qe",
@@ -2517,7 +2517,7 @@
       "name": "set_clip_start_time",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the start time (timecode offset) of a project item. This shifts where timecode begins for the source media."
+      "description": "Alias of set_start_time: set and verify the source project item start timecode offset."
     },
     {
       "name": "set_clip_volume",
@@ -2547,7 +2547,7 @@
       "name": "set_effect_property",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set one effect property. Duplicate names require property_index from get_effect_properties. Colour values use [alpha, red, green, blue] and the lossless colour API; keyframed colour writes are refused."
+      "description": "Set one effect property. Duplicate names require property_index from get_effect_properties. Colour values use [alpha, red, green, blue] and the lossless colour API; keyframed writes are refused. Readback reports verified, failed or committed_unverified; unreadable values are never reported as applied."
     },
     {
       "name": "set_footage_interpretation",
@@ -2661,7 +2661,7 @@
       "name": "set_sequence_display_format",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set the timecode display format for the active sequence."
+      "description": "Set the timecode display format for the active sequence and read it back. Uses Premiere's display codes (video 100-113, audio 200-201); the older 0-11 and 0-1 values are mapped onto them."
     },
     {
       "name": "set_sequence_field_type",
@@ -2673,7 +2673,7 @@
       "name": "set_sequence_frame_rate",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Change the frame rate of the active sequence."
+      "description": "Change the frame rate of the active sequence and verify it. Premiere re-snaps every clip to the new frame grid, so clips off that grid move by up to a frame; the result lists them (clipsMoved, movedClips) and changing back does not restore them."
     },
     {
       "name": "set_sequence_in_out_points",
@@ -2811,7 +2811,7 @@
       "name": "stabilize_clip",
       "surface": "default",
       "modes": "method: Subspace Warp, Position, Position, Scale, Rotation",
-      "description": "Apply the Warp Stabilizer effect to a clip for video stabilization. Uses QE DOM."
+      "description": "Apply Warp Stabilizer using the experimental QE DOM. Verifies component addition and readable parameter values, never analysis completion. Numeric or unreadable Method popup values remain unverified because no documented label mapping is available."
     },
     {
       "name": "start_batch_encode",
