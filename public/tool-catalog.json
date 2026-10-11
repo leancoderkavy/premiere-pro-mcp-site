@@ -1,16 +1,22 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.22.0",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.22.0",
-  "sourceSha256": "3dd84212f7e73aa50b9fc914011fabee06416b0da6a82832eaed658a39889fd1",
+  "packageVersion": "1.23.0",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.23.0",
+  "sourceSha256": "241f9a1dfd8dc25401c96ce092095ca5d2cf2cbdb3a363c1eaba410ccb35bef4",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
-    "default": 391,
+    "default": 432,
     "uxp": 96,
     "restricted": 2
   },
   "tools": [
+    {
+      "name": "acknowledge_operation_recovery",
+      "surface": "default",
+      "modes": "backend: cep, uxp",
+      "description": "Acknowledge user-reviewed reconciliation of uncertain execution after current-state inspection. Requires the exact latest recovery and host-state revisions. Consumed operation IDs remain unavailable for replay; acknowledgement does not undo or retry a host edit."
+    },
     {
       "name": "add_adjustment_layer",
       "surface": "default",
@@ -186,6 +192,12 @@
       "description": "Apply a video effect to a clip. Experimental QE DOM catalog lookup includes an exact-name probe when enumeration is empty. A component-list readback does not verify rendered pixels."
     },
     {
+      "name": "apply_extended_edit_plan",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Consume a reviewed compound CEP token once and invoke only its existing typed tools with same-command project/sequence/clip/effect guards. Stops at first failed or unverified receipt, reports completed and unknown steps, and never retries or rolls back partial work. Rendering and audible synchronization remain separate evidence."
+    },
+    {
       "name": "apply_lut",
       "surface": "default",
       "modes": "Single operation",
@@ -198,10 +210,22 @@
       "description": "Import exactly one previewed MOGRT into the empty track of the explicit disposable Premiere verification sequence, then read back insertion and control descriptors. Requires explicit confirmation; no rendered-frame claim is made."
     },
     {
+      "name": "apply_scene_review_workflow",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Consume approved source-scene preview once, create reviewed source markers and/or subclips requesting audio in a new verified bin using existing typed CEP tools. Same-command source/project guards refuse relinks or project changes. Stops on failed/unverified receipt and retains bounded partial results; no rollback or false-positive correctness claim."
+    },
+    {
       "name": "apply_spot_workflow_plan",
       "surface": "default",
       "modes": "Single operation",
       "description": "Apply one exact previewed motion-demo, product-spot, or brand-spot plan. Requires edit authority, requires filesystem authority for a MOGRT, and only targets empty explicitly named tracks. Host readback is not playback or render verification."
+    },
+    {
+      "name": "apply_stacked_camera_edit",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Apply one single-use reviewed ordinary stacked-camera plan to a newly cloned sequence. Reads actual track locks, linked partners, source identity, forward1x speed and nest/reverse state before clone and before writes; unavailable getters refuse. Verifies exact enabled states and master-audio ranges. Sequential partial completion is reported; no rollback or audible sync claim."
     },
     {
       "name": "attach_custom_property",
@@ -270,16 +294,46 @@
       "description": "Inspect the current timeline selection or apply one native effect add/remove across up to 64 same-type selected clips as a single compound transaction. Effect readback verifies component-chain changes only, not rendered output."
     },
     {
+      "name": "bind_media_provenance",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Bind approved source/proxy content hashes and original availability to an analysis provider and timeline revision. Proxy flags do not prove delivery provider; caller-evidenced full-resolution export remains distinct from artifact validation."
+    },
+    {
       "name": "build_caption_artifact",
       "surface": "default",
       "modes": "format: srt, vtt; style_preset: clean, bold_pop, karaoke, podcast, lecture",
       "description": "Build a CapCut/Submagic-style SRT or VTT caption artifact from a caller-supplied word timeline: balanced word groups, sentence-aware breaks, min/max cue durations, optional karaoke word timestamps (VTT), emphasis and speaker markup. Local-only; returns the artifact inline or writes it inside an approved workspace and never changes Premiere."
     },
     {
+      "name": "build_edit_review_evidence",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Create new before/after contact sheets, optional bounded MP4 excerpts, and checksum receipts from two reviewed rendered videos. Supports visual review of cuts, transitions, titles and masks; still grids do not verify temporal behavior or authenticate host lineage."
+    },
+    {
+      "name": "build_project_handoff_manifest",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Inspect explicitly listed dependencies inside an approved consolidated workspace. Reports observed bytes, missing files, expected source identity and unresolved nests/image sequences/AE/template dependencies. A copied project alone cannot pass completeness."
+    },
+    {
       "name": "calculate_tick_time_uxp",
       "surface": "uxp",
       "modes": "operation: add, subtract, multiply, divide",
       "description": "Calculate one bounded add, subtract, multiply, or divide operation using Premiere's documented native TickTime arithmetic over canonical tick integers. It returns native ticks and seconds readback only. It deliberately does not accept seconds or frame rates, align to frames, infer timecode, inspect any Premiere project object, mutate Premiere, or prove a licensed host."
+    },
+    {
+      "name": "can_execute",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Validate an exact tool invocation, authority, live backend and bounded CEP targets without applying it. Returns named refusal/unknown reasons and evidence age; preflight is advisory and must be revalidated at dispatch."
+    },
+    {
+      "name": "cancel_workflow_job",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Request cancellation of an owned local process or undispatched local job. Native Premiere/AME cancellation is unsupported; no queue is cleared and no output file is deleted."
     },
     {
       "name": "capture_frame",
@@ -372,6 +426,12 @@
       "description": "Consolidate duplicate project items and report success only when duplicate media groups decrease."
     },
     {
+      "name": "convert_timeline_time",
+      "surface": "default",
+      "modes": "from: ticks, frames, samples, seconds, timecode; to: ticks, frames, timecode; rounding: floor, ceil, nearest",
+      "description": "Convert exact Premiere tick strings, rational frames, samples, decimal seconds and signed/drop-frame timecode locally. Nearest ties round away from zero; intervals use inclusive start and exclusive end. No floating-point tick parsing or host dispatch."
+    },
+    {
       "name": "copy_effect_values",
       "surface": "default",
       "modes": "Single operation",
@@ -399,7 +459,7 @@
       "name": "create_caption_track",
       "surface": "default",
       "modes": "import, plan_lecture_workflow",
-      "description": "Import an already reviewed caption artifact into the active sequence, or create a local lecture-caption timing and review workflow plan. Import reports structural success only when the host exposes a caption-track readback; the planning action never contacts Premiere or changes an artifact."
+      "description": "Import an already reviewed caption artifact into the active sequence, or create a local lecture-caption timing and review workflow plan. Import rejects unsupported formats before host dispatch and reports structural success only when valid count readback shows exactly one new caption track. Unreadable or unexpected results preserve committed_unverified diagnostics; inspect before retrying. The planning action never contacts Premiere or changes an artifact."
     },
     {
       "name": "create_context_edit_plan",
@@ -720,6 +780,12 @@
       "description": "Export the active sequence as AAF through Premiere 26.3+ UXP with bounded, typed AAF options. Premiere confirms the request, but arbitrary native output paths cannot be statted by the panel."
     },
     {
+      "name": "export_and_verify",
+      "surface": "default",
+      "modes": "range: entire, in_to_out, work_area",
+      "description": "Preflight and directly render a guarded CEP sequence, then independently hash and probe the exact output against a delivery contract and optional decoded QC. Refuses existing destinations; never treats queue acceptance as completion."
+    },
+    {
       "name": "export_as_fcp_xml",
       "surface": "default",
       "modes": "Single operation",
@@ -730,6 +796,12 @@
       "surface": "default",
       "modes": "Single operation",
       "description": "Export a sequence as a standalone Premiere Pro project file. Fails when Premiere writes no file or leaves a pre-existing output unchanged."
+    },
+    {
+      "name": "export_facility_metadata_table",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Create a new bounded ALE facility metadata table from reviewed named field rows. Rejects duplicate columns, unknown row fields and tabs/newlines that ALE cannot safely represent. No project metadata is read or changed; verify downstream facility import separately."
     },
     {
       "name": "export_frame",
@@ -747,13 +819,19 @@
       "name": "export_interchange_uxp",
       "surface": "uxp",
       "modes": "format: otio, fcpxml",
-      "description": "Export the active sequence as OpenTimelineIO or Final Cut Pro XML with explicit verification."
+      "description": "Export the active sequence through its documented format-specific OpenTimelineIO or Final Cut Pro XML UXP method. Host acceptance is committed_unverified. Opt-in local artifact inspection requires filesystem authority and distinguishes fresh parsed bytes from host/destination/round-trip proof."
     },
     {
       "name": "export_omf",
       "surface": "default",
       "modes": "Single operation",
       "description": "Export the active sequence as an OMF file (Open Media Framework, for audio post-production). Long sequences can use a longer wait (default 60 minutes); if Premiere writes the file but times out, the receipt includes its size as committed_unverified."
+    },
+    {
+      "name": "export_review_markers",
+      "surface": "default",
+      "modes": "format: csv, json",
+      "description": "Create a new bounded review-marker CSV or JSON from caller-reviewed marker readback. Includes exact ticks, rational rate, source/sequence identity and display timecodes with explicit start offset/drop-frame policy. CSV text escapes spreadsheet formula prefixes, quotes and newlines. Existing files are never overwritten."
     },
     {
       "name": "export_sequence",
@@ -1032,6 +1110,12 @@
       "description": "Find all offline/missing media in the project with their expected file paths. Essential for diagnosing broken links."
     },
     {
+      "name": "get_operation_performance",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Read content-free local median/p95 stage timing, payload sizes, and bounded analysis cache occupancy. Missing measurements remain unknown."
+    },
+    {
       "name": "get_playhead_position",
       "surface": "default",
       "modes": "Single operation",
@@ -1257,7 +1341,7 @@
       "name": "import_folder",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Import the media files directly inside a folder and read the destination tree back. Reports observed new media items; unreadable or unmatched imports are committed_unverified."
+      "description": "Import the media files directly inside a folder and read the destination tree back. Refuses an unreadable baseline before importing. Reports observed new media items; unreadable or unmatched imports are committed_unverified. Host errors retain partial-change diagnostics; inspect the destination before retrying."
     },
     {
       "name": "import_image_sequence",
@@ -1374,6 +1458,18 @@
       "description": "Inspect whether Premiere exposes its documented installed MOGRT directory. The native path is redacted unless include_path is explicitly true. This tool never enumerates the directory, reads its files, imports a template, or changes Premiere; a returned path is not proof that templates are usable or compatible."
     },
     {
+      "name": "inspect_interchange_artifact",
+      "surface": "default",
+      "modes": "format: otio, fcp7xml, fcpxml, edl, aaf, omf",
+      "description": "Read caller-selected artifact bytes, hash them and identify actual OTIO/FCP7 xmeml/FCPXML/EDL structure. AAF/OMF are bounded opaque-byte evidence only. File existence, parsed structure, round-trip and licensed-host/destination evidence remain distinct."
+    },
+    {
+      "name": "inspect_interchange_loss_report",
+      "surface": "default",
+      "modes": "format: otio, fcp7xml, fcpxml, edl, aaf, omf",
+      "description": "Build per-feature inspected/approximated/dropped/unknown loss evidence for OTIO, FCP7 XML, FCPXML, CMX EDL, AAF or OMF. Optional artifact inspection identifies its actual root. Source inventory is caller evidence; this never infers destination acceptance from exporter success."
+    },
+    {
       "name": "inspect_media_streams",
       "surface": "default",
       "modes": "Single operation",
@@ -1384,6 +1480,18 @@
       "surface": "default",
       "modes": "Single operation",
       "description": "List bounded top-level template names and version directories in an existing workspace-contained local MOGRT library. It never reads MOGRT contents or changes the library."
+    },
+    {
+      "name": "inspect_operation_recovery",
+      "surface": "default",
+      "modes": "backend: cep, uxp",
+      "description": "Inspect unknown execution outcomes and a bounded current host-state revision. Inspection remains available while dependent mutations are blocked. No edit is replayed."
+    },
+    {
+      "name": "inspect_otio_interchange",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Parse a bounded local OTIO Timeline.1 into exact-tick offline tracks/clips/gaps/transitions. Reports missing media, opaque nests/effects/metadata and unsupported timing. Synthetic IDs never authorize Premiere writes; this tool never imports a project."
     },
     {
       "name": "inspect_premiere_environment_uxp",
@@ -1440,6 +1548,12 @@
       "description": "Read a compact, revisioned project and sequence snapshot through documented Premiere UXP APIs."
     },
     {
+      "name": "inspect_rendered_video_scopes",
+      "surface": "default",
+      "modes": "color_range: limited, full, unknown",
+      "description": "Sample a caller-owned exported video using existing decoded RGB scopes and declare range/transfer/primaries evidence. Refuses HDR legal-range claims from an 8-bit RGB proxy; does not prove Premiere render lineage."
+    },
+    {
       "name": "inspect_sequence_av_settings",
       "surface": "default",
       "modes": "Single operation",
@@ -1488,6 +1602,12 @@
       "description": "Read Warp Stabilizer presence, exposed status properties, and conservative analysis state for one clip or every video clip in the active sequence. Read-only: unknown or localized host values remain unknown rather than being reported as solved."
     },
     {
+      "name": "inspect_timeline_snapshot",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Inspect one exact CEP sequence into version1 canonical snapshot preserving raw tick strings, source/link identities, bounded clips and explicit unknown fields. Host missing lock/effect/transition/marker state remains incomplete; this inspection never implies atomic host state. Re-query from zero after change or truncation."
+    },
+    {
       "name": "inspect_track_item_identity_uxp",
       "surface": "uxp",
       "modes": "media_type: video, audio",
@@ -1504,6 +1624,18 @@
       "surface": "uxp",
       "modes": "position: start, end",
       "description": "Read one bounded native video-transition target, including the active sequence GUID, source item ID, timeline edges, and presence at one requested edge. Copy this snapshot unchanged into add_video_transition_uxp or remove_video_transition_uxp."
+    },
+    {
+      "name": "inspect_workflow_checkpoint",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Read one private saved workflow checkpoint after restart. Unsupported versions reject; pending and unknown operations require reconciliation. Loading never dispatches mutations or restores projects."
+    },
+    {
+      "name": "inspect_workflow_job",
+      "surface": "default",
+      "modes": "origin: local, uxp",
+      "description": "Inspect exact local or UXP job identity. Host terminal events do not verify an output artifact; an absent job is unknown, never completed."
     },
     {
       "name": "invert_selection",
@@ -1794,10 +1926,22 @@
       "description": "Read or transactionally write small, namespaced workflow checkpoints on the active project or a targeted sequence. Persistent values may sync with cloud projects; never store secrets, native paths, transcripts, or media names."
     },
     {
+      "name": "map_keyframe_time_domain",
+      "surface": "default",
+      "modes": "domain: source, clip_relative, sequence",
+      "description": "Translate source, clip-relative and sequence ticks from an inspected snapshot. Warns outside visible range; refuses nested, reverse or retimed clips until a measured mapping exists. No keyframe write or rendering claim."
+    },
+    {
       "name": "map_source_ranges_to_timeline",
       "surface": "default",
       "modes": "track_type: video, audio",
       "description": "Read-only mapping from source-media time ranges to placements on one sequence track. Reads the selected track once, maps only normal-speed forward clips, reports source portions not present on the track as unplaced, and returns bounded pages. This inspects timeline placement; it does not prove rendered or audible content."
+    },
+    {
+      "name": "map_word_timeline_occurrences",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Map revision-bound transcript words to every forward1x source placement, with occurrence IDs and exact snapshot placement ticks. Refuses missing pages, nonlinear retiming, reverse and ambiguous nests."
     },
     {
       "name": "match_frame",
@@ -1914,6 +2058,12 @@
       "description": "Plan an active-speaker vertical reframe (Motion Scale/Position keyframes that follow whoever is talking) or a static stacked/split layout from a word timeline and static speaker regions. Returns framings, switches, keyframes, and apply routes. Local-only; never changes Premiere."
     },
     {
+      "name": "plan_audio_post_turnover",
+      "surface": "default",
+      "modes": "format: aaf, omf; sample_rate: 44100, 48000, 88200, 96000, 192000; gain_automation: preserve_requested, render_requested, unsupported",
+      "description": "Preview a bounded AAF/OMF audio-post turnover contract: exact exclusive range, handles, rational rate, channels, requested gain automation, media hashes and reference picture. Routes to existing native exporters. Caller manifests and exporter settings are not DAW acceptance or audible-alignment proof."
+    },
+    {
       "name": "plan_beat_montage",
       "surface": "default",
       "modes": "order: as_given, priority, round_robin",
@@ -1950,10 +2100,22 @@
       "description": "Plan word-level filler removal (um, uh, you know...) from a revision-bound word timeline. Hesitation-sound removal requires a transcript that preserves disfluencies, such as Premiere transcription or verbatim ASR; Whisper's default output omits them. Returns frame-snapped removal and keep ranges plus apply routes. Local-only; never changes Premiere."
     },
     {
+      "name": "plan_media_synchronization",
+      "surface": "default",
+      "modes": "method: audio, anchors",
+      "description": "Plan synchronization locally from bounded normalized mono PCM correlation or caller-matched marker/timecode tick anchors. Returns confidence, ambiguous alternatives or silent/noise refusal. Placement offset application is separately reviewed."
+    },
+    {
       "name": "plan_multicam_angle_switches",
       "surface": "default",
       "modes": "Single operation",
       "description": "Plan active-speaker camera switching for stacked, synced camera tracks: from speaker segments and a camera-to-speaker map it produces an angle cut list with minimum holds, crosstalk cover shots, optional lead-in cuts and periodic cutaways, plus razor times, per-camera enable/disable ranges, and markers. Local-only and deterministic; never changes Premiere."
+    },
+    {
+      "name": "plan_music_remix",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Plan deterministic music shortening from an approved measured beat grid, protected intro/outro and crossfade handles. Returns exact segments and nearest-beat error for audible review. No DSP render or native Premiere Remix control."
     },
     {
       "name": "plan_pause_tightening",
@@ -1972,6 +2134,12 @@
       "surface": "default",
       "modes": "Single operation",
       "description": "Plan stacked, speaker-colored reaction captions from a word timeline and an explicit speaker palette. Flash-length words merge, overlaps stack, and unknown speakers stay uncolored. Local-only; never changes Premiere."
+    },
+    {
+      "name": "plan_scene_segments",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Turn reviewed source scene candidates into exact nonoverlapping segments with bounded source handles, rejected-candidate report and existing marker/subclip/bin routes. Detection never edits source; linked audio is preserved in the plan."
     },
     {
       "name": "plan_short_export_folder",
@@ -2028,10 +2196,22 @@
       "description": "Request playback of the active sequence timeline through QE. The legacy API does not provide a same-call playhead readback, so movement is not reported as verified."
     },
     {
+      "name": "predict_timeline_edit",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Predict exact affected clips for a conservative supported insert/overwrite/trim/split/move/remove/ripple/enable subset using complete canonical state. Refuses unknown locks, links, source handles and retiming. Local prediction does not execute Premiere or promise native edit semantics."
+    },
+    {
       "name": "preflight_production_storage_uxp",
       "surface": "uxp",
       "modes": "preflight, configure_project",
       "description": "Inspect project/Production scratch disks and ingest state, or set supported project scratch categories to Premiere's symbolic destinations in one undoable transaction."
+    },
+    {
+      "name": "prepare_transcript_workflow",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Inspect native UXP transcript readiness before optionally starting Speech-to-Text once per operation. Returns accepted/pending/ready/failed/unknown with revision, never transcript completion from start acceptance. No CEP fallback; Adobe privacy/service preferences apply to explicitly confirmed start."
     },
     {
       "name": "preview_after_effects_render",
@@ -2070,6 +2250,18 @@
       "description": "Revalidate an exact server-issued editorial plan against the saved project-context revisions and return an opaque confirmation token. This tool is read-only and cannot apply the plan."
     },
     {
+      "name": "preview_extended_edit_plan",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Preview up to100 distinct bound CEP targets for supported trim, experimental QE split, same-track move, enable, scalar effect and keyframe steps. All targets and descriptor identities validate before token issuance; unsupported links/retiming/unknown source handles refuse. Requires exact saved project path and active sequence. No mutation or atomicity claim."
+    },
+    {
+      "name": "preview_facility_metadata_intake",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Read a bounded ALE table and preview explicit column-to-named-field mappings against reviewed source IDs/filenames. Reports duplicate table keys, ambiguous filenames, missing sources and unsupported fields. Never writes Premiere metadata or requires an XMP packet dump."
+    },
+    {
       "name": "preview_mogrt_batch",
       "surface": "default",
       "modes": "Single operation",
@@ -2100,6 +2292,12 @@
       "description": "Preview a contained motion-graphics demo assembly from existing project items. It never creates demo assets, imports files, creates a sequence, or changes Premiere; apply requires an exact confirmation token."
     },
     {
+      "name": "preview_otio_snapshot_export",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Serialize the declared bounded linear offline snapshot subset to OTIO, then parse it back and compare exact supported structure. Refuses unsupported nests/effect parameters/non-frame timing. Returns text for review; does not write files or establish Premiere/destination compatibility."
+    },
+    {
       "name": "preview_product_spot",
       "surface": "default",
       "modes": "motion_style: none, push_in, pull_out, alternate",
@@ -2110,6 +2308,18 @@
       "surface": "default",
       "modes": "Single operation",
       "description": "Inspect a bounded Premiere project against an explicit facility intake template and return a path-redacted report plus a non-mutating organization proposal. It never changes Premiere or persists the template."
+    },
+    {
+      "name": "preview_scene_review_workflow",
+      "surface": "default",
+      "modes": "mode: markers, subclips, both",
+      "description": "Preview reviewed scene candidates against one exact CEP source and measured physical media duration. Binds project document/source path, explicit marker/subclip mode and destination bin name. No mutation; flashes/pans/fades remain in review evidence rather than automatic cuts."
+    },
+    {
+      "name": "preview_stacked_camera_edit",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Preview exact enable states for pre-razored ordinary stacked camera clips and preserve master audio. Refuses unreviewed cuts, retiming/nests, missing lock/link state. Apply creates a duplicate sequence first; no native multicam switch API is claimed."
     },
     {
       "name": "preview_transcript_edit_uxp",
@@ -2350,6 +2560,12 @@
       "surface": "uxp",
       "modes": "Single operation",
       "description": "Save the active project through UXP and require Premiere to confirm success."
+    },
+    {
+      "name": "save_workflow_checkpoint",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Persist version1 project/sequence checkpoint references and bounded operation receipt digests in the private bridge directory. Completed/pending/unknown/failed states survive server restart. No arguments or transcripts stored; no automatic replay or project restoration."
     },
     {
       "name": "scene_edit_detection",
@@ -2820,6 +3036,12 @@
       "description": "Request Adobe Media Encoder to start the render queue; reports only accepted handoff, not queue progress or output-file creation."
     },
     {
+      "name": "start_local_analysis_job",
+      "surface": "default",
+      "modes": "tool_name: inspect_media_streams, detect_audio_transients, detect_motion_peaks, read_video_scopes, analyze_video_interlacing, detect_active_picture_bounds",
+      "description": "Start one allowlisted read-only local media analysis as a bounded cancellable process job. Native Premiere jobs are never cancelled by this tool."
+    },
+    {
       "name": "stop_playback",
       "surface": "default",
       "modes": "target: timeline, source",
@@ -2865,7 +3087,7 @@
       "name": "unnest_sequence",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Unnest a nested sequence clip, replacing it with the nested sequence's clips at their exact source in/out and timeline positions. Refuses without changing anything when the nest is trimmed, retimed, linked to a partner clip, or when the destination range is occupied or locked. Re-reads every placed clip and reports failure with Undo guidance if any start or source range differs. Nested clips are re-placed from their project items, so effects, keyframes, and transitions inside the nest are not carried over."
+      "description": "Unnest a nested sequence clip, replacing it with the nested sequence's clips at their exact source in/out and timeline positions. Refuses without changing anything when the nest is trimmed, retimed, linked to a partner clip, contains items that also carry the other media type (Premiere's Track.overwriteClip would place that media on the matching track and overwrite the clips there), or when the destination range is occupied or locked. Re-reads every placed clip and reports failure with Undo guidance if any start or source range differs. Nested clips are re-placed from their project items, so effects, keyframes, and transitions inside the nest are not carried over."
     },
     {
       "name": "update_marker",
@@ -2910,6 +3132,12 @@
       "description": "Read-only check that the dedicated After Effects CEP connector is running. It never reads project names, media, or paths."
     },
     {
+      "name": "verify_caption_render_evidence",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Check caller-measured caption/title bounds, missing glyphs, line-break and bidirectional-text review against a rendered-artifact SHA256 and target safe zone. Pixel measurement and manual review remain explicit; this tool does not perform OCR or certify unsampled frames."
+    },
+    {
       "name": "verify_delivery_conformance",
       "surface": "default",
       "modes": "Single operation",
@@ -2940,10 +3168,28 @@
       "description": "Run a safe, read-only first-run check. It proves that this MCP server, the selected Premiere bridge, an active project, and an active sequence are connected without returning project names, paths, or media details."
     },
     {
+      "name": "verify_temporal_render_artifact",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Validate actual short exported video at 2–32 times with decoded RGB tolerances and optional decoded-audio RMS windows. Rejects stills and mismatched samples; records fixture/artifact hashes and explicit declared host provenance. This sampled harness does not prove all frames, Undo/reopen, playback, glyphs or destination compatibility."
+    },
+    {
+      "name": "verify_timeline_postconditions",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Compare exact canonical snapshots for source continuity, linked identities, preserved neighbors and unexpected pieces. Reports bounded structural discrepancies. Does not certify audible A/V synchronization or rendering."
+    },
+    {
       "name": "wait_for_host_readiness_uxp",
       "surface": "uxp",
       "modes": "snapshot, analysis, operation",
       "description": "Capture a pre-dispatch readiness revision or wait, without retrying, for video-effect analysis or one documented operation-completion receipt."
+    },
+    {
+      "name": "wait_workflow_job",
+      "surface": "default",
+      "modes": "origin: local, uxp",
+      "description": "Wait up to 60 seconds for an exact native or local job. An uncorrelated native terminal event stops observation with requiresReconciliation, never verified completion. Optional MCP progress reports observed receipt progress. Stopping the wait never cancels accepted native work."
     }
   ]
 }
