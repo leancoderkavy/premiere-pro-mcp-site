@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.23.0",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.23.0",
-  "sourceSha256": "241f9a1dfd8dc25401c96ce092095ca5d2cf2cbdb3a363c1eaba410ccb35bef4",
+  "packageVersion": "1.24.0",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.24.0",
+  "sourceSha256": "fef2b5d35556b58180cf183519954446cdc37b6303203e75dc5817909710c1a3",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
     "default": 432,
@@ -939,7 +939,7 @@
       "name": "get_caption_style_guidance",
       "surface": "default",
       "modes": "preset: clean, bold_pop, karaoke, podcast, lecture",
-      "description": "Returns caption style presets (clean, bold_pop, karaoke, podcast, lecture) with font, position, and styling recommendations, plus Premiere UI steps for applying styles. Read-only guidance; NEVER modifies caption tracks. Use build_caption_artifact for SRT/VTT timing, then import via create_caption_track and apply styles manually in Premiere's UI."
+      "description": "Read-only caption style guidance: a preset (clean, bold_pop, karaoke, podcast, lecture) and/or a custom_style spec (font, size, fill, up to 3 strokes, shadow, zone, offsets) turned into Premiere 2024+ Properties-panel steps that save a reusable whole-track Track Style. NEVER modifies caption tracks; Premiere has no caption style API."
     },
     {
       "name": "get_clip_adjustment_layer",
