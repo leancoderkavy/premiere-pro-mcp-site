@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.24.0",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.24.0",
-  "sourceSha256": "fef2b5d35556b58180cf183519954446cdc37b6303203e75dc5817909710c1a3",
+  "packageVersion": "1.24.1",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.24.1",
+  "sourceSha256": "b78938cebe3dd950f0cc6313d43663d95e6567930cf260b1c3694a887b8a3992",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
     "default": 432,
@@ -885,7 +885,7 @@
       "name": "freeze_frame",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Create a freeze frame from a clip at a specific time. Exports the frame and imports it back as a still image."
+      "description": "Create a freeze frame from a clip at a specific time. Exports the frame, imports it back as a still image, and sets the still's Out mark to duration_seconds so add_to_timeline places it at that length (snapped to the still's frame grid, then to the sequence frame). It does not place the still on the timeline."
     },
     {
       "name": "generate_media_contact_sheet",
@@ -1605,7 +1605,7 @@
       "name": "inspect_timeline_snapshot",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Inspect one exact CEP sequence into version1 canonical snapshot preserving raw tick strings, source/link identities, bounded clips and explicit unknown fields. Host missing lock/effect/transition/marker state remains incomplete; this inspection never implies atomic host state. Re-query from zero after change or truncation."
+      "description": "Inspect one exact CEP sequence into version1 canonical snapshot preserving raw tick strings, source/link identities, bounded clips and explicit unknown fields. Track targeted/muted come from the documented track DOM; sync_locked comes from the experimental QE DOM only when this is the active sequence and stays null otherwise. Host missing lock/effect/transition/marker state remains incomplete; this inspection never implies atomic host state. Re-query from zero after change or truncation."
     },
     {
       "name": "inspect_track_item_identity_uxp",
@@ -2031,13 +2031,13 @@
       "name": "overwrite_clip",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Overwrite a project item onto validated timeline tracks and verify a new source placement at the requested time"
+      "description": "Overwrite a project item onto validated timeline tracks and verify a new source placement at the requested time. Every video/audio stream the item actually has must land on the requested tracks; a picture-only or sound-only placement (for example 5.1 audio that does not fit a stereo track) is committed_unverified, not verified."
     },
     {
       "name": "overwrite_from_source",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Overwrite the clip from the Source Monitor at the playhead position (overwrite edit — replaces existing clips) and verify a new placement on the requested tracks."
+      "description": "Overwrite the clip from the Source Monitor at the playhead position (overwrite edit — replaces existing clips) and verify a new placement on the requested tracks. Every video/audio stream the Source Monitor item actually has must land on those tracks; a picture-only or sound-only placement is committed_unverified, not verified."
     },
     {
       "name": "paste_clip_attributes",
