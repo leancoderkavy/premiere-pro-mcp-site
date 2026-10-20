@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.24.1",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.24.1",
-  "sourceSha256": "b78938cebe3dd950f0cc6313d43663d95e6567930cf260b1c3694a887b8a3992",
+  "packageVersion": "1.24.2",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.24.2",
+  "sourceSha256": "e5945bd4165522539c5a4c744786e7fe027d095dea43c5699d06bc60e80a54e9",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
-    "default": 432,
+    "default": 434,
     "uxp": 96,
     "restricted": 2
   },
@@ -45,19 +45,19 @@
       "name": "add_marker",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Add a marker to the active sequence or a clip and read its name, comments, color and duration back. EXPERIMENTAL (QE DOM): the receipt reports undoStackIndex movement, which does not prove QE can reverse the marker. Every marker attempt protects an engine undo boundary; undoTracked:false means the marker did not observably advance the QE index."
+      "description": "Add a marker to the active sequence or a clip and read its name, comments, color and duration back. EXPERIMENTAL (QE DOM): the receipt reports undoStackIndex movement, which does not prove QE can reverse the marker. Every marker attempt protects an engine undo boundary; undoTracked:false means the marker did not observably advance the QE index. Marker start and end storage are compared at exact integer ticks; unsupported time writes remain unverified with the created marker identity when available."
     },
     {
       "name": "add_marker_to_project_item",
       "surface": "default",
       "modes": "type: Comment, Chapter, Segmentation, WebLink",
-      "description": "Add a marker to a project item (source clip marker). EXPERIMENTAL QE: records an observed marker boundary for guarded Undo/Redo; crossing it is refused by default, and unreadable history records unknown protection. This boundary does not verify native marker reversal."
+      "description": "Add a marker to a project item (source clip marker). EXPERIMENTAL QE: records an observed marker boundary for guarded Undo/Redo; crossing it is refused by default, and unreadable history records unknown protection. This boundary does not verify native marker reversal. Marker start and end storage are compared at exact integer ticks; unsupported time writes remain unverified with the created marker identity when available."
     },
     {
       "name": "add_markers_batch",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Add up to 200 sequence or clip markers in one verified CEP request (beat grids, chapters, silence reviews, client notes). Every marker is validated and range-checked before the first write; the tool reads back the marker count and each created marker's time and fails closed on any mismatch. EXPERIMENTAL QE: records an observed marker boundary for guarded Undo/Redo; crossing it is refused by default, and unreadable history records unknown protection. This boundary does not verify native marker reversal."
+      "description": "Add up to 200 sequence or clip markers in one verified CEP request (beat grids, chapters, silence reviews, client notes). Every marker is validated and range-checked before the first write; the tool reads back the marker count and each created marker's time and fails closed on any mismatch. EXPERIMENTAL QE: records an observed marker boundary for guarded Undo/Redo; crossing it is refused by default, and unreadable history records unknown protection. This boundary does not verify native marker reversal. Marker start and end storage are compared at exact integer ticks; unsupported time writes remain unverified with the created marker identity when available."
     },
     {
       "name": "add_text_overlay",
@@ -375,7 +375,7 @@
       "name": "close_project",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Close an open Premiere Pro project: the active one, or the open project at project_path. Verifies it is no longer open and reports which project is active afterwards."
+      "description": "Close an open Premiere Pro project: the active one, or the open project at project_path. Captures the close reply without reading torn-down project objects, then verifies closure and the active project in a separate read-only call. An unreadable verification remains committed_unverified; a native close that never returns remains unknown."
     },
     {
       "name": "close_sequence",
@@ -585,7 +585,7 @@
       "name": "delete_bin",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Delete a bin (folder) from the project panel"
+      "description": "Delete a bin (folder) and everything inside it from the project panel, and read back that it is gone. Deleting a bin also removes its media's clips from every sequence, so a bin whose contents are used on a timeline is refused unless confirm_remove_from_sequences is true; the refusal lists the sequences and tracks (see find_item_usages). Bins holding offline media are refused unless allow_offline is true."
     },
     {
       "name": "delete_marker",
@@ -602,8 +602,8 @@
     {
       "name": "delete_preview_files",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Delete all preview/render cache files for the project. Uses QE DOM."
+      "modes": "media_type: video, audio, all",
+      "description": "Request preview/render cache deletion through experimental QE DOM. A false return fails; other returns remain committed_unverified because no cache-file readback is available."
     },
     {
       "name": "delete_project_item",
@@ -621,7 +621,7 @@
       "name": "delete_track",
       "surface": "default",
       "modes": "track_type: video, audio",
-      "description": "EXPERIMENTAL (undocumented QE DOM: removeVideoTrack/removeAudioTrack). Delete a video or audio track from the active sequence through QE and verify that exactly that track was removed (the remaining tracks keep their clips, custom names and lock/mute state in order). Refuses a track that still holds clips unless force is true."
+      "description": "EXPERIMENTAL (undocumented QE DOM: removeVideoTrack/removeAudioTrack). Delete a video or audio track from the active sequence through QE and verify that exactly that track was removed (the remaining tracks keep their clips, custom names and lock/mute state in order). Refuses a track that still holds clips unless force is true. Caption tracks cannot be deleted (no host API); a caption track_type is refused with the manual route."
     },
     {
       "name": "deselect_all_clips",
@@ -837,7 +837,7 @@
       "name": "export_sequence",
       "surface": "default",
       "modes": "range: entire, in_to_out, work_area",
-      "description": "Export the active sequence directly (Premiere renders it; blocks until done) with an Adobe Media Encoder preset. The output extension must match what the preset writes (an H.264 preset in AME's QuickTime folder writes .mov); a missing extension is added. Refuses an output_path that already exists unless overwrite is true. Fails if Premiere rejects the render, and verifies a non-empty file was written (for an overwrite, that the file changed). range 'work_area' fails closed unless the work area is enabled and covers only part of the sequence — otherwise Premiere would encode the entire timeline."
+      "description": "Export the active sequence directly (Premiere renders it; blocks until done) with an Adobe Media Encoder preset. The output extension must match what the preset writes (an H.264 preset in AME's QuickTime folder writes .mov); a missing extension is added. Refuses an output_path that already exists unless overwrite is true. Fails if Premiere rejects the render, verifies a non-empty file was written (for an overwrite, that the file changed), and checks its duration with ffprobe within one sequence frame. An unavailable or mismatched duration leaves a written artifact unverified. range 'work_area' fails closed unless the work area is enabled and covers only part of the sequence — otherwise Premiere would encode the entire timeline."
     },
     {
       "name": "export_sequence_clip_review_frames",
@@ -868,6 +868,12 @@
       "surface": "default",
       "modes": "Single operation",
       "description": "EXPERIMENTAL (undocumented QE DOM: extract()). Extract (remove and close the gap) the content between the sequence in/out points on every targeted, unlocked track, then verify each targeted track lost exactly the range and its later clips moved up by the range. Marks that Premiere stored just off a frame are first re-written on that exact frame through QE (marksRewritten). Requires sequence in/out marks that do not span the whole sequence. Premiere can also change untargeted tracks (for example the linked audio of targeted video, or sync-locked tracks); those are not verified but are listed in otherTracksChanged."
+    },
+    {
+      "name": "find_item_usages",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Read-only: list where project items are used on timelines, as sequence name/ID, track type/index and clip count. A bin counts everything inside it, because deleting a bin deletes its contents and their timeline clips. Run this before deleting or reorganizing bins, especially after import_fcp_xml, which can reuse existing project items for its sequences. Also reports offline (missing-media) items inside each target."
     },
     {
       "name": "find_items_by_media_path",
@@ -1077,7 +1083,13 @@
       "name": "get_keyframes",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Get all keyframes for a specific effect property on a clip. Each key's time is in seconds from the clip's start; mediaSeconds is Premiere's stored media time."
+      "description": "Get all keyframes for a specific effect property on a clip. Each key's time is in seconds from the clip's start; mediaSeconds is Premiere's stored media time. mediaTicks returns each native key time as a tick string."
+    },
+    {
+      "name": "get_last_operations",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Read-only: list the most recent state-changing tool calls this MCP server process handled, newest first, with status (running, succeeded, failed), receipt outcome and timing. Use it after a client-side timeout before retrying an edit: a call still running, or one that already succeeded, must not be sent again. Records only tool names, timing and outcomes; it does not prove Premiere state, and it starts empty when the server restarts."
     },
     {
       "name": "get_linked_items",
@@ -1335,7 +1347,7 @@
       "name": "import_fcp_xml",
       "surface": "default",
       "modes": "mode: new_project, into_open_project",
-      "description": "Import a Final Cut Pro XML file. Default mode new_project opens it as a new Premiere project: app.openFCPXML(path, projPath) requires a destination project path, and verified is true only when that destination exists as a file and Premiere has that exact path open. Mode into_open_project instead imports the XML into the currently open project with project.importFiles and succeeds only when the sequence count grew; the XML also brings its own clips, which can duplicate existing items."
+      "description": "Import a Final Cut Pro XML file. Default mode new_project opens it as a new Premiere project: app.openFCPXML(path, projPath) requires a destination project path, and verified is true only when that destination exists as a file and Premiere has that exact path open. Mode into_open_project instead imports the XML into the currently open project with project.importFiles and succeeds only when the sequence count grew; the XML also brings its own clips, which can duplicate existing items, or Premiere can link them to existing items that point at the same media. That mode reports reusedItems (pre-existing project items and their bins that the new sequences use), so a later bin cleanup does not silently empty the new timelines."
     },
     {
       "name": "import_folder",
@@ -1359,7 +1371,7 @@
       "name": "import_mogrt",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Import a Motion Graphics Template (.mogrt) file and add it to the timeline. Pass text_values (for example { \"Headline\": \"...\" }) to write each text control explicitly after insertion and verify it by readback, so a template default or stale value is never left in place silently."
+      "description": "Import a Motion Graphics Template (.mogrt) file and add it to the timeline. Pass text_values (for example { \"Headline\": \"...\" }) to write each text control explicitly after insertion and verify it by readback, so a template default or stale value is never left in place silently. Placement fields contain observed start/end/track values; requested values are separate, and unreadable geometry remains committed_unverified."
     },
     {
       "name": "import_mogrt_from_library",
@@ -2007,7 +2019,7 @@
       "name": "normalize_loudness_file",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Create a new loudness-normalized media derivative with FFmpeg, then remeasure that exact output using EBU R128. Never overwrites the input or an existing output file."
+      "description": "Create a new loudness-normalized media derivative with FFmpeg, then remeasure that exact output using EBU R128. When the remeasured file misses the target or true-peak ceiling (AAC encoding can raise the true peak), it renders again with a lowered ceiling or offset target, up to max_attempts, keeps the best attempt and reports every attempt's measured I and TP. Never overwrites the input or an existing output file."
     },
     {
       "name": "open_in_source",
@@ -2031,13 +2043,13 @@
       "name": "overwrite_clip",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Overwrite a project item onto validated timeline tracks and verify a new source placement at the requested time. Every video/audio stream the item actually has must land on the requested tracks; a picture-only or sound-only placement (for example 5.1 audio that does not fit a stereo track) is committed_unverified, not verified."
+      "description": "Overwrite a project item onto validated timeline tracks and verify a new source placement at the requested time. Every video/audio stream the item actually has must land on the requested tracks; a picture-only or sound-only placement (for example 5.1 audio that does not fit a stereo track) is committed_unverified, not verified. Video-only and audio-only items overwrite only the receiving track, so Sequence.overwriteClip cannot smash V0 or A0 for the unused kind."
     },
     {
       "name": "overwrite_from_source",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Overwrite the clip from the Source Monitor at the playhead position (overwrite edit — replaces existing clips) and verify a new placement on the requested tracks. Every video/audio stream the Source Monitor item actually has must land on those tracks; a picture-only or sound-only placement is committed_unverified, not verified."
+      "description": "Overwrite the clip from the Source Monitor at the playhead position (overwrite edit — replaces existing clips) and verify a new placement on the requested tracks. Every video/audio stream the Source Monitor item actually has must land on those tracks; a picture-only or sound-only placement is committed_unverified, not verified. Video-only and audio-only items overwrite only the receiving track, so Sequence.overwriteClip cannot smash V0 or A0 for the unused kind."
     },
     {
       "name": "paste_clip_attributes",
@@ -2541,7 +2553,7 @@
       "name": "roll_edit",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Perform a verified roll edit at the outgoing cut of a clip using the public timeline DOM, moving both visible edges and their source in/out points and verifying all four. Linked audio/video partners get the same edit by default (include_linked); every clip is checked before any is changed. Requires readable finite media and ffprobe duration evidence for every edited source; refuses unknown duration, stills, and nonunit/reversed speed before mutation."
+      "description": "Perform a verified roll edit at the outgoing cut of a clip using the public timeline DOM, moving both visible edges and their source in/out points and verifying all four. Linked audio/video partners get the same edit by default (include_linked); every clip is checked before any is changed. Requires readable finite media and ffprobe duration evidence for every edited source; refuses unknown duration, stills, and nonunit/reversed speed before mutation. Existing host Out padding below one sequence frame may be preserved or reduced, but never used to create additional padding."
     },
     {
       "name": "save_project",
@@ -2637,7 +2649,7 @@
       "name": "select_item",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Select a project item in the Project panel"
+      "description": "Select a project item and verify its node ID in the current Project-panel selection. Missing or unreadable selection readback remains committed_unverified."
     },
     {
       "name": "set_active_sequence",
@@ -2673,7 +2685,7 @@
       "name": "set_clip_duration",
       "surface": "default",
       "modes": "keyframe_policy: reject, preserve",
-      "description": "Set one timeline clip's visible duration by moving only its timeline end (TrackItem.end) while keeping its start fixed. Pass exactly one of duration_seconds or end_seconds. Works for extending still images past their import length. Refuses to overlap the next clip on the same track, rejects shortening that would strand effect keyframes unless keyframe_policy is preserve, reads start/end back, and restores the original end if Premiere clamps or ignores the write (for example when video media has no handle left). Linked audio/video partners get the same change by default (include_linked), applied as the same end offset so partners with a J/L cut keep their offset; every clip is checked before any is changed. Use this instead of speed changes, which Premiere does not expose to scripting."
+      "description": "Set one timeline clip's visible duration by moving only its timeline end (TrackItem.end) while keeping its start fixed. Pass exactly one of duration_seconds or end_seconds. Works for extending still images past their import length. Refuses to overlap the next clip on the same track, rejects shortening that would strand effect keyframes unless keyframe_policy is preserve, reads start/end back, and restores the original end if Premiere clamps or ignores the write (for example when video media has no handle left). Linked audio/video partners get the same change by default (include_linked), applied as the same end offset so partners with a J/L cut keep their offset; every clip is checked before any is changed. Use this instead of speed changes, which Premiere does not expose to scripting. Existing host Out padding below one sequence frame may be preserved or reduced, but never used to create additional padding. Non-still sources require readable ffprobe duration evidence and a readable sequence frame grid."
     },
     {
       "name": "set_clip_opacity",
@@ -2787,7 +2799,7 @@
       "name": "set_item_in_out",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set in and/or out points on a project item in the project panel (marks source range for editing). Premiere snaps video marks to the media's own frame grid, so a mark is verified within one media frame and the result reports requested and applied seconds."
+      "description": "Set in and/or out points on a project item in the project panel (marks source range for editing). Premiere floors video marks to the media's own frame grid, so a mark is verified when it lands on the frame the request floors to (an exact frame boundary keeps its own frame); the result reports requested and applied seconds."
     },
     {
       "name": "set_keyframe_interpolation",
@@ -2835,7 +2847,7 @@
       "name": "set_project_item_audio_channel_mapping",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Map one output audio channel of a project item to a source channel using Premiere's documented AudioChannelMapping API."
+      "description": "Request one output-to-source audio channel mapping using the documented API. Per-channel mapping has no documented getter, so accepted writes remain committed_unverified."
     },
     {
       "name": "set_project_panel_metadata",
@@ -2967,13 +2979,13 @@
       "name": "set_workspace",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Switch to a specific workspace layout (e.g., 'Editing', 'Color', 'Audio', 'Effects', 'Graphics')"
+      "description": "Request a workspace layout. The documented API has no current-workspace getter; acceptance is committed_unverified and the visible layout must be checked in Premiere."
     },
     {
       "name": "set_xmp_metadata",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Merge a raw XMP XML patch into a project item's existing XMP metadata without removing unrelated fields. WARNING: Premiere writes XMP into the source media file on disk (the file's metadata block and modification time change; picture and sound are untouched). Requires the filesystem capability."
+      "description": "Merge a raw XMP XML patch into a project item's existing XMP metadata without removing unrelated fields. WARNING: Premiere writes XMP into the source media file on disk (the file's metadata block and modification time change; picture and sound are untouched). Each supplied leaf field is compared with host readback (maximum 256); unreadable readback remains committed_unverified. Requires the filesystem capability."
     },
     {
       "name": "set_zero_point",
@@ -2991,7 +3003,7 @@
       "name": "slide_edit",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Perform a verified slide edit on a clip using adjacent clips from the public timeline DOM. Linked audio/video partners get the same edit by default (include_linked); every clip is checked before any is changed. Requires readable finite media and ffprobe duration evidence for every edited source; refuses unknown duration, stills, and nonunit/reversed speed before mutation."
+      "description": "Perform a verified slide edit on a clip using adjacent clips from the public timeline DOM. Linked audio/video partners get the same edit by default (include_linked); every clip is checked before any is changed. Requires readable finite media and ffprobe duration evidence for every edited source; refuses unknown duration, stills, and nonunit/reversed speed before mutation. Existing host Out padding below one sequence frame may be preserved or reduced, but never used to create additional padding."
     },
     {
       "name": "slide_track_item_uxp",
@@ -3003,7 +3015,7 @@
       "name": "slip_edit",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Perform a verified slip edit on a clip using public source in/out properties. Requires accessible physical media duration from ffprobe; unknown duration or linked partners using different source files refuse before mutation. Linked audio/video partners get the same edit by default (include_linked); every clip is checked before any is changed."
+      "description": "Perform a verified slip edit on a clip using public source in/out properties. Requires accessible physical media duration from ffprobe; unknown duration or linked partners using different source files refuse before mutation. Linked audio/video partners get the same edit by default (include_linked); every clip is checked before any is changed. Existing host Out padding below one sequence frame may be preserved or reduced, but never used to create additional padding."
     },
     {
       "name": "slip_track_item_uxp",
@@ -3069,7 +3081,7 @@
       "name": "trim_clip",
       "surface": "default",
       "modes": "keyframe_policy: reject, preserve",
-      "description": "Trim exactly one source in/out point and verify the corresponding visible timeline edge. Requires accessible physical media duration from ffprobe; unknown duration or linked partners using different source files refuse before mutation. Refuses retimed clips, extensions that would overlap the neighbouring clip on the same track, and, by default, trims that would leave effect keyframes outside the visible clip. Linked audio/video partners get the same trim by default (include_linked), applied as the same offset from each partner's own source point so a J/L cut or slipped audio stays in sync; every clip is checked before any is changed. To set a clip's timeline length or extend a still image, use set_clip_duration."
+      "description": "Trim exactly one source in/out point and verify the corresponding visible timeline edge. Requires accessible physical media duration from ffprobe; unknown duration or linked partners using different source files refuse before mutation. Refuses retimed clips, extensions that would overlap the neighbouring clip on the same track, and, by default, trims that would leave effect keyframes outside the visible clip. Linked audio/video partners get the same trim by default (include_linked), applied as the same offset from each partner's own source point so a J/L cut or slipped audio stays in sync; every clip is checked before any is changed. To set a clip's timeline length or extend a still image, use set_clip_duration. Existing host Out padding below one sequence frame may be preserved or reduced, but never used to create additional padding."
     },
     {
       "name": "undo",
