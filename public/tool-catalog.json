@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.24.2",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.24.2",
-  "sourceSha256": "e5945bd4165522539c5a4c744786e7fe027d095dea43c5699d06bc60e80a54e9",
+  "packageVersion": "1.24.3",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.24.3",
+  "sourceSha256": "2696e888545c04f2a579cac8b0ead0b18aac01c0c3eed7d5efea15c974539953",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
     "default": 434,
@@ -843,7 +843,7 @@
       "name": "export_sequence_clip_review_frames",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export one file-verified still frame at the midpoint of each clip on a chosen video track in one bridge request. Read-only in Premiere; it does not mute tracks or claim visual quality."
+      "description": "Export one file-verified still frame at the midpoint of each clip on a chosen video track in one bridge request. If Media Encoder still capture cannot restore sequence In/Out, remaining frames are not attempted and the call fails. Read-only in Premiere; it does not mute tracks or claim visual quality."
     },
     {
       "name": "export_sequence_edl",
@@ -855,13 +855,13 @@
       "name": "export_sequence_marker_review_frames",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export up to 24 file-verified still frames at active-sequence marker positions in one bridge request for marker-driven review. It reads markers and writes image files only; it does not add, update, or remove Premiere markers."
+      "description": "Export up to 24 file-verified still frames at active-sequence marker positions in one bridge request for marker-driven review. If Media Encoder still capture cannot restore sequence In/Out, remaining frames are not attempted and the call fails. It reads markers and writes image files only; it does not add, update, or remove Premiere markers."
     },
     {
       "name": "export_sequence_review_frames",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export 2-24 evenly spaced, file-verified frames from an active-sequence range in one bridge round trip for visual review. Still capture does not verify temporal animation, playback, audio, or editorial quality; PNG frames keep the sequence's transparency (straight alpha), so composite them over black before comparing with a video export."
+      "description": "Export 2-24 evenly spaced, file-verified frames from an active-sequence range in one bridge round trip for visual review. If Media Encoder still capture cannot restore sequence In/Out, remaining frames are not attempted and the call fails. Still capture does not verify temporal animation, playback, audio, or editorial quality; PNG frames keep the sequence's transparency (straight alpha), so composite them over black before comparing with a video export."
     },
     {
       "name": "extract_selection",
