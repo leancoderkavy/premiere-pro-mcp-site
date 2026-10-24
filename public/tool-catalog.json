@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.24.3",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.24.3",
-  "sourceSha256": "2696e888545c04f2a579cac8b0ead0b18aac01c0c3eed7d5efea15c974539953",
+  "packageVersion": "1.24.4",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.24.4",
+  "sourceSha256": "ca2cb2fe952db5af7bebd9f71c0337316d13693d4e05531a3962b462c1e37ef7",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
     "default": 434,
@@ -585,7 +585,7 @@
       "name": "delete_bin",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Delete a bin (folder) and everything inside it from the project panel, and read back that it is gone. Deleting a bin also removes its media's clips from every sequence, so a bin whose contents are used on a timeline is refused unless confirm_remove_from_sequences is true; the refusal lists the sequences and tracks (see find_item_usages). Bins holding offline media are refused unless allow_offline is true."
+      "description": "Delete a bin (folder) and everything inside it from the project panel, and read back that it is gone. Deleting a bin also removes its media's clips from every sequence and deletes sequences stored in the bin, so a bin whose contents are used on a timeline — including a Sequences bin whose media lives elsewhere — is refused unless confirm_remove_from_sequences is true; the refusal lists the sequences and tracks (see find_item_usages). Bins holding offline media are refused unless allow_offline is true."
     },
     {
       "name": "delete_marker",
@@ -597,7 +597,7 @@
       "name": "delete_multiple_project_items",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Delete several project items (bins, sequences, clips or files) and read back that each is gone. Every item is checked before any is deleted. organize_project_items_uxp with action 'remove' (authenticated UXP bridge) is the preferred, documented route; this CEP fallback deletes clips and files through a temporary bin, which cannot be undone here. Items (or bins whose contents are) used on a timeline are refused unless confirm_remove_from_sequences is true."
+      "description": "Delete several project items (bins, sequences, clips or files) and read back that each is gone. Every item is checked before any is deleted. organize_project_items_uxp with action 'remove' (authenticated UXP bridge) is the preferred, documented route; this CEP fallback deletes clips and files through a temporary bin, which cannot be undone here. Items (or bins whose contents are) used on a timeline are refused unless confirm_remove_from_sequences is true. Nested sequences count as in use on the parent timeline."
     },
     {
       "name": "delete_preview_files",
@@ -609,7 +609,7 @@
       "name": "delete_project_item",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Delete a project item (bin, sequence, clip or file) from the project panel and read back that it is gone. organize_project_items_uxp with action 'remove' (authenticated UXP bridge) is the preferred, documented route. This CEP fallback deletes a clip or file by moving it into a temporary bin and deleting that bin, which cannot be undone here. Deleting media also removes its clips from every sequence, so an item (or a bin whose contents are) used on a timeline is refused unless confirm_remove_from_sequences is true."
+      "description": "Delete a project item (bin, sequence, clip or file) from the project panel and read back that it is gone. organize_project_items_uxp with action 'remove' (authenticated UXP bridge) is the preferred, documented route. This CEP fallback deletes a clip or file by moving it into a temporary bin and deleting that bin, which cannot be undone here. Deleting media also removes its clips from every sequence, so an item (or a bin whose contents are) used on a timeline is refused unless confirm_remove_from_sequences is true. A sequence nested on another timeline is refused the same way."
     },
     {
       "name": "delete_sequence",
@@ -873,7 +873,7 @@
       "name": "find_item_usages",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Read-only: list where project items are used on timelines, as sequence name/ID, track type/index and clip count. A bin counts everything inside it, because deleting a bin deletes its contents and their timeline clips. Run this before deleting or reorganizing bins, especially after import_fcp_xml, which can reuse existing project items for its sequences. Also reports offline (missing-media) items inside each target."
+      "description": "Read-only: list where project items are used on timelines, as sequence name/ID, track type/index and clip count. A bin counts everything inside it, including sequences stored there (every clip on those timelines), because deleting a bin deletes those sequences even when their media lives in another bin. Run this before deleting or reorganizing bins, especially after import_fcp_xml, which can reuse existing project items for its sequences. Also reports offline (missing-media) items inside each target."
     },
     {
       "name": "find_items_by_media_path",
@@ -1089,7 +1089,7 @@
       "name": "get_last_operations",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Read-only: list the most recent state-changing tool calls this MCP server process handled, newest first, with status (running, succeeded, failed), receipt outcome and timing. Use it after a client-side timeout before retrying an edit: a call still running, or one that already succeeded, must not be sent again. Records only tool names, timing and outcomes; it does not prove Premiere state, and it starts empty when the server restarts."
+      "description": "Read-only: list the most recent state-changing tool calls this MCP server process handled, newest first, with status (running, succeeded, failed), receipt outcome and timing. Use it after a client-side timeout before retrying an edit: a call still running, or one that already succeeded, must not be sent again. The running count includes all active calls, even outside the history window; runningOperations lists up to limit active calls and runningOperationsTruncated flags omitted entries. Records only tool names, timing and outcomes; it does not prove Premiere state, and it starts empty when the server restarts."
     },
     {
       "name": "get_linked_items",
