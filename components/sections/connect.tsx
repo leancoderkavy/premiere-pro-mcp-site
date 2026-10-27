@@ -22,6 +22,7 @@ import {
 import { product, safeFirstPrompt } from "@/lib/product"
 import { SetupGuides } from "@/components/sections/setup-guides"
 import { trackOnboardingEvent } from "@/lib/onboarding-events"
+import { FirstRunPanel } from "@/components/sections/first-run-panel"
 
 type AssistantRoute = {
   id: "claude" | "cursor" | "vscode" | "other"
@@ -119,6 +120,7 @@ export function ConnectSection() {
   const [activeId, setActiveId] = useState<AssistantRoute["id"]>("claude")
   const [advancedOpen, setAdvancedOpen] = useState(false)
   const [recoveryOpen, setRecoveryOpen] = useState(false)
+  const [showFirstRun, setShowFirstRun] = useState(false)
   const activeRoute = assistantRoutes.find((route) => route.id === activeId) ?? assistantRoutes[0]
 
   function selectRoute(route: AssistantRoute) {
@@ -128,6 +130,7 @@ export function ConnectSection() {
 
   function trackDownload(route: AssistantRoute) {
     trackOnboardingEvent("onboarding_download_started", { route: route.id })
+    setShowFirstRun(true)
   }
 
   return (
@@ -168,21 +171,24 @@ export function ConnectSection() {
           })}
         </div>
 
-        <div className="mt-6 grid gap-6 border-y border-zinc-800 py-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-          <div>
-            <p className="text-sm font-semibold text-zinc-100">{activeRoute.name}</p>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-400">{activeRoute.detail}</p>
+        <div className="mt-6 border-y border-zinc-800 py-7">
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+            <div>
+              <p className="text-sm font-semibold text-zinc-100">{activeRoute.name}</p>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-400">{activeRoute.detail}</p>
+            </div>
+            <a
+              href={activeRoute.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackDownload(activeRoute)}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#8b7cff] to-[#ef76b9] px-5 text-sm font-semibold text-white shadow-[0_12px_40px_rgba(139,124,255,0.2)] transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-200 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
+            >
+              {activeRoute.id === "claude" ? <Download className="h-4 w-4" aria-hidden="true" /> : <ExternalLink className="h-4 w-4" aria-hidden="true" />}
+              {activeRoute.primaryAction}
+            </a>
           </div>
-          <a
-            href={activeRoute.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackDownload(activeRoute)}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#8b7cff] to-[#ef76b9] px-5 text-sm font-semibold text-white shadow-[0_12px_40px_rgba(139,124,255,0.2)] transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-200 focus-visible:ring-offset-4 focus-visible:ring-offset-black"
-          >
-            {activeRoute.id === "claude" ? <Download className="h-4 w-4" aria-hidden="true" /> : <ExternalLink className="h-4 w-4" aria-hidden="true" />}
-            {activeRoute.primaryAction}
-          </a>
+          {showFirstRun && <FirstRunPanel />}
         </div>
 
         <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1fr)_22rem]">
@@ -197,7 +203,10 @@ export function ConnectSection() {
                   href={product.downloads.signedCepConnector}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => trackOnboardingEvent("onboarding_download_started", { route: "cep_connector" })}
+                  onClick={() => {
+                    trackOnboardingEvent("onboarding_download_started", { route: "cep_connector" })
+                    setShowFirstRun(true)
+                  }}
                   className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-purple-200 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 >
                   <Download className="h-4 w-4" aria-hidden="true" /> Get connector on GitHub <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
@@ -232,6 +241,12 @@ export function ConnectSection() {
           </div>
 
           <aside className="space-y-5" aria-label="Setup help and privacy">
+            <div className="rounded-xl border border-blue-400/30 bg-blue-500/[0.06] p-5">
+              <p className="flex items-center gap-2 text-sm font-semibold text-blue-100"><MonitorCog className="h-4 w-4 text-blue-300" aria-hidden="true" /> Local installation path</p>
+              <p className="mt-3 text-sm leading-6 text-zinc-300">Premiere Pro MCP runs locally next to Premiere Pro on your computer. There is no public hosted MCP URL to paste into Claude or Cursor.</p>
+              <p className="mt-3 text-sm leading-6 text-zinc-300">The recommended setup keeps your assistant, the server, the connector, and Premiere on the same machine.</p>
+            </div>
+
             <div className="rounded-xl border border-zinc-800 bg-[#08080a] p-5">
               <p className="flex items-center gap-2 text-sm font-semibold text-zinc-100"><MonitorCog className="h-4 w-4 text-violet-200" aria-hidden="true" /> Compatibility details</p>
               <p className="mt-3 text-sm leading-6 text-zinc-400">The signed CEP connector is the default compatibility route for Premiere Pro {product.premiereCompatibility} on Windows and macOS.</p>

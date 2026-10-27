@@ -986,15 +986,15 @@ export const articles: Article[] = [
   },
   {
     slug: "ai-video-editing-with-premiere-pro",
-    seoTitle: "AI Video Editing Workflows",
-    title: "AI Video Editing with Premiere Pro: Keep Creative Control, Automate the Repetitive Work",
+    seoTitle: "Premiere Pro AI: Keep Creative Control with Structured AI Tools",
+    title: "Premiere Pro AI Workflows: Automate the Repetitive Work, Keep Creative Control",
     description:
-      "A practical approach to AI video editing in Adobe Premiere Pro: inspect first, automate repeatable work with structured tools, and verify every result.",
+      "Use Premiere Pro AI through structured MCP tools. Inspect first, automate repeatable work, and verify every result—without losing editorial control.",
     eyebrow: "AI video editing workflow",
     publishedAt: "2026-08-19",
-    modifiedAt: "2026-08-19",
+    modifiedAt: "2026-10-27",
     readingTime: "8 min read",
-    keywords: ["AI video editing Premiere Pro", "Adobe Premiere Pro AI workflow", "AI assistant video editing"],
+    keywords: ["Premiere Pro AI", "AI video editing Premiere Pro", "Adobe Premiere Pro AI workflow", "AI assistant video editing"],
     sections: [
       {
         heading: "AI editing is most useful when it removes friction, not authorship",
@@ -1063,16 +1063,16 @@ export const articles: Article[] = [
   },
   {
     slug: "premiere-pro-workflow-automation",
-    seoTitle: "Premiere Workflow Automation",
+    seoTitle: "Automate Premiere Pro: Structured Tools for Repeatable Workflows",
     workflowKit: "product-spot",
-    title: "Premiere Pro Workflow Automation: Repeat the Work, Not the Edit",
+    title: "How to Automate Premiere Pro with Local MCP Tools",
     description:
-      "See which Adobe Premiere Pro tasks are good candidates for workflow automation, how to keep edits reviewable, and how to verify an AI-assisted result.",
+      "Automate Premiere Pro workflows with structured MCP tools. Learn which tasks to automate first, how to verify results, and build repeatable editing workflows that stay reviewable.",
     eyebrow: "Premiere Pro automation",
     publishedAt: "2026-08-19",
-    modifiedAt: "2026-10-04",
+    modifiedAt: "2026-10-27",
     readingTime: "7 min read",
-    keywords: ["Premiere Pro workflow automation", "Premiere Pro automation", "automate video editing workflow"],
+    keywords: ["automate Premiere Pro", "Premiere Pro automation", "automate video editing workflow", "Premiere Pro workflow automation"],
     sections: [
       {
         heading: "Match an automation task to its tool and proof",
@@ -1160,19 +1160,20 @@ export const articles: Article[] = [
   },
   {
     slug: "adobe-premiere-ai-assistant-vs-mcp",
-    seoTitle: "Adobe AI Assistant vs. MCP",
-    title: "Adobe Premiere Pro AI Assistant vs. MCP: How to Choose an AI Editing Workflow",
+    seoTitle: "Premiere Pro AI Assistant vs MCP: Compare AI Editing Workflows",
+    title: "Premiere Pro AI Assistant vs. MCP: Which AI Workflow to Choose",
     description:
-      "Compare Adobe’s public-beta in-app AI Assistant with a local MCP workflow: client choice, bounded project context, and reviewable Premiere automation.",
+      "Compare Premiere Pro AI Assistant with MCP workflows. Learn when to use Adobe\'s in-app AI Assistant, when to choose a local MCP workflow, and how to keep edits reviewable.",
     eyebrow: "Choose the right workflow",
     publishedAt: "2026-08-22",
-    modifiedAt: "2026-08-23",
+    modifiedAt: "2026-10-27",
     readingTime: "8 min read",
     keywords: [
+      "Premiere Pro AI Assistant",
       "Adobe Premiere Pro AI Assistant vs MCP",
       "Premiere Pro AI Assistant alternative",
-      "Premiere Pro MCP workflow",
       "AI assistant for Adobe Premiere Pro",
+      "Premiere Pro MCP workflow",
     ],
     sections: [
       {
@@ -1251,7 +1252,7 @@ export const articles: Article[] = [
       "Set up Claude with Adobe Premiere Pro using the local MCP bundle and CEP connector, then verify the bridge before requesting any supported edit.",
     eyebrow: "Claude Premiere Pro setup",
     publishedAt: "2026-08-22",
-    modifiedAt: "2026-09-10",
+    modifiedAt: "2026-10-27",
     readingTime: "9 min read",
     keywords: [
       "Claude Premiere Pro",
