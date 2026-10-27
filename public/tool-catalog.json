@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.25.0",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.25.0",
-  "sourceSha256": "fe30b343ff62bd492565b1cb784e84ad7807f8988d73f20ceaa63d58c3e569fd",
+  "packageVersion": "1.26.0",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.26.0",
+  "sourceSha256": "a9769019f7b8f44d9e6c334754b10b960f1be30a2dd4910eb1612ebf4800720c",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
-    "default": 439,
+    "default": 442,
     "uxp": 96,
     "restricted": 2
   },
@@ -39,7 +39,7 @@
       "name": "add_keyframe",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Add and read back a keyframe on an effect property. The receipt warns when its time is outside the clip's visible range. This verifies stored parameter data only; render/playback verification remains host-dependent."
+      "description": "Add and read back a keyframe on an effect property. The receipt warns when its time is outside the clip's visible range. Two-component numeric values must match the current host value shape; Motion Position and Anchor Point use normalized 0–1 coordinates only. Colour keys refuse because CEP has no lossless time-specific colour setter. This verifies stored parameter data only; render/playback verification remains host-dependent."
     },
     {
       "name": "add_marker",
@@ -68,8 +68,8 @@
     {
       "name": "add_title",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Add an on-screen title from plain text using a stock Essential Graphics template that ships with Premiere (default: Basic Title). Pass text for one line, or lines to fill the template's text fields in order (for example a lower third's name and role). Premiere-built templates (kind 'premiere') get the text baked into a verified copy before import, because Premiere exposes no writable text for them (textVerification 'template_verified'; confirm the render with export_frame). The baked copy path is returned as templateFile and saved under the application support premiere-pro-mcp/titles folder (macOS: ~/Library/Application Support/premiere-pro-mcp/titles). The cache keeps the newest 50 baked copies by modification time; export or copy templates elsewhere if a project needs older copies retained. After Effects-built templates (kind 'after_effects') are imported and their text fields written by position and read back from Premiere (textVerification 'verified', 'mismatch', 'missing_property', or 'committed_unverified'). The graphic is trimmed to duration_seconds and its length read back. Use list_stock_titles to see templates, their kind, and how many lines each takes."
+      "modes": "align: left, center, right",
+      "description": "Add an on-screen title from plain text using a stock Essential Graphics template that ships with Premiere (default: Basic Title). Pass text for one line, or lines to fill the template's text fields in order (for example a lower third's name and role). Premiere-built templates (kind 'premiere') get the text baked into a verified copy before import, because Premiere exposes no writable text for them (textVerification 'template_verified'; confirm the render with export_frame). The baked copy path is returned as templateFile and saved under the application support premiere-pro-mcp/titles folder (macOS: ~/Library/Application Support/premiere-pro-mcp/titles). The cache keeps the newest 50 baked copies by modification time; export or copy templates elsewhere if a project needs older copies retained. After Effects-built templates (kind 'after_effects') are imported and their text fields written by position and read back from Premiere (textVerification 'verified', 'mismatch', 'missing_property', or 'committed_unverified'). The graphic is trimmed to duration_seconds and its length read back. Optional styling: font_family (PostScript name) and font_size write every text run of each AE text control when the template allows font editing (Premiere 26 fontEditValue/fontSizeEditValue runs, or legacy fontName/fontSize keys); fill_color requires one exposed Fill Color control; position moves the whole graphic through intrinsic normalized Motion Position. Each requested field has styleChecks readback. Premiere-authored font/fill styling and align are refused before import: no reliable writable/readable CEP 26.5.2 contract is established. Tracking is unsupported. Font readback confirms the stored name, not installation or rendered glyphs. Use list_stock_titles to see templates, their kind, and how many lines each takes."
     },
     {
       "name": "add_to_render_queue",
@@ -441,7 +441,7 @@
       "name": "copy_effect_values",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Copy verified scalar and colour effect-property values from one effect to the matching effect on another clip. Both clips must already have the same effect applied. Properties are matched by position, then by unique display name, because effects such as Lumetri Color repeat names across sections. Legacy CEP deliberately refuses Blend Mode because Premiere can corrupt its enum value on cross-clip writes."
+      "description": "Copy verified scalar, numeric-array and colour effect-property values from one effect to the matching effect on another clip. Both clips must already have the same effect applied. Properties are matched by position, then by unique display name, because effects such as Lumetri Color repeat names across sections. Legacy CEP deliberately refuses Blend Mode because Premiere can corrupt its enum value on cross-clip writes."
     },
     {
       "name": "copy_effects_between_clips",
@@ -717,7 +717,7 @@
       "name": "duplicate_clip",
       "surface": "default",
       "modes": "Single operation",
-      "description": "EXPERIMENTAL: Duplicate a timeline clip, with its linked audio/video partner, onto the first tracks above it that are empty for the clip's time range. The copy keeps the clip's source in point and visible duration, is placed with an overwrite edit (nothing ripples), and is read back. A post-write mismatch is committed_unverified; inspect the timeline or use Undo. Fails without changes when no free track is available; add one with add_tracks."
+      "description": "EXPERIMENTAL: Duplicate a timeline clip, with its linked audio/video partner, onto the first tracks above it that are empty for the clip's time range. The copy keeps the clip's source in point and visible duration, is placed with an overwrite edit (nothing ripples), and is read back. A post-write mismatch is committed_unverified; inspect the timeline or use Undo. High-rate audio above 48 kHz refuses before writing temporary source marks unless its existing marks already match the copy range; native restore diagnostics are pending. Fails without changes when no free track is available; add one with add_tracks."
     },
     {
       "name": "duplicate_sequence",
@@ -1053,7 +1053,7 @@
       "name": "get_export_file_extension",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Get the export file extension from Premiere. If Premiere returns none, infer it only for an existing .epr in a recognized Adobe Media Encoder format folder; that fallback is marked unconfirmed and should be checked before delivery."
+      "description": "Get the export file extension from Premiere. If Premiere returns none, infer it only for an existing .epr whose real filesystem parent is a recognized Adobe Media Encoder format folder; report that resolved preset path. This fallback is unconfirmed and should be checked before delivery."
     },
     {
       "name": "get_export_job_status",
@@ -1740,6 +1740,12 @@
       "description": "List effects/components exposed by the clip's standard DOM collection, with properties and current values. Some hosts omit QE-applied effects from this collection; absence here does not prove an effect is absent. get_effect_properties uses the same collection. Inspect Premiere's Effect Controls UI when complete QE effect presence must be confirmed."
     },
     {
+      "name": "list_extensions",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "List the CEP extension panels installed in Premiere Pro (id, name, window type, and the isActive flag CEP reports). isActive does not show whether a panel is open: in Premiere 26.3 it stayed false for open panels. Use an id with open_extension. CEP connector only."
+    },
+    {
       "name": "list_markers",
       "surface": "default",
       "modes": "Single operation",
@@ -1989,7 +1995,7 @@
       "name": "move_clip",
       "surface": "default",
       "modes": "Single operation",
-      "description": "EXPERIMENTAL (undocumented QE DOM for track changes): Move a clip to a new position on the timeline; optional track moves use Premiere's QE API and may not work on every version."
+      "description": "Refuses attached transitions or unreadable transition collections before structural edits; inspect transitionsAffected and use remove_transition first. EXPERIMENTAL (undocumented QE DOM for track changes): Move a clip to a new position on the timeline; optional track moves use Premiere's QE API and may not work on every version."
     },
     {
       "name": "move_clip_to_track",
@@ -2044,6 +2050,12 @@
       "surface": "default",
       "modes": "Single operation",
       "description": "Create a new loudness-normalized media derivative with FFmpeg, then remeasure that exact output using EBU R128. When the remeasured file misses the target or true-peak ceiling (AAC encoding can raise the true peak), it renders again with a lowered ceiling or offset target, up to max_attempts, keeps the best attempt and reports every attempt's measured I and TP. Never overwrites the input or an existing output file."
+    },
+    {
+      "name": "open_extension",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Open an installed CEP extension panel in Premiere Pro by its extension id (see list_extensions). CEP has no panel-visibility getter, so success is committed_unverified: check the panel in Premiere. Another extension cannot be closed from here. CEP connector only."
     },
     {
       "name": "open_in_source",
@@ -2289,7 +2301,7 @@
       "name": "preview_extended_edit_plan",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Preview up to100 distinct bound CEP targets for supported trim, experimental QE split, same-track move, enable, scalar effect and keyframe steps. All targets and descriptor identities validate before token issuance; unsupported links/retiming/unknown source handles refuse. Requires exact saved project path and active sequence. No mutation or atomicity claim."
+      "description": "Refuses attached transitions or unreadable transition collections before structural edits; inspect transitionsAffected and use remove_transition first. Preview up to100 distinct bound CEP targets for supported trim, experimental QE split, same-track move, enable, scalar effect and keyframe steps. All targets and descriptor identities validate before token issuance; unsupported links/retiming/unknown source handles refuse. Requires exact saved project path and active sequence. No mutation or atomicity claim."
     },
     {
       "name": "preview_facility_metadata_intake",
@@ -2472,6 +2484,12 @@
       "description": "Remove all currently selected clips and verify their absence. Ripple requests are refused because the CEP removal call cannot reliably close gaps; use a guarded ripple-range tool instead."
     },
     {
+      "name": "remove_transition",
+      "surface": "default",
+      "modes": "track_type: video, audio",
+      "description": "Remove one CEP track transition by exact index or a cut contained in its stored span. Uses TrackTransition.remove(false, false), verifies the complete remaining span list, and refuses ambiguous cuts. No QE fallback. Stored geometry only; rendered appearance remains a separate check."
+    },
+    {
       "name": "remove_video_transition_uxp",
       "surface": "uxp",
       "modes": "position: start, end",
@@ -2565,7 +2583,7 @@
       "name": "ripple_delete",
       "surface": "default",
       "modes": "scope: sync_locked, own_track; range_content: refuse, delete",
-      "description": "Remove a clip and close the gap it leaves, shifting later clips earlier on the clip's own track and on every sync-locked track so audio stays in sync. With the default scope the clip's linked audio/video partners are removed with it and their tracks close up too, even when not sync-locked; with scope 'own_track' the partners stay in place (reported as linkedPartnersKept). Premiere's QE rippleDelete() and the DOM's rippleEdit flag are both non-functional on 26.x, so this is done explicitly and verified. Refuses without changing anything if a clip on a participating track straddles the ripple point or sits inside the range being closed."
+      "description": "Refuses attached transitions or unreadable transition collections before structural edits; inspect transitionsAffected and use remove_transition first. Remove a clip and close the gap it leaves, shifting later clips earlier on the clip's own track and on every sync-locked track so audio stays in sync. With the default scope the clip's linked audio/video partners are removed with it and their tracks close up too, even when not sync-locked; with scope 'own_track' the partners stay in place (reported as linkedPartnersKept). Premiere's QE rippleDelete() and the DOM's rippleEdit flag are both non-functional on 26.x, so this is done explicitly and verified. Refuses without changing anything if a clip on a participating track straddles the ripple point or sits inside the range being closed."
     },
     {
       "name": "ripple_delete_track_item_uxp",
@@ -2577,7 +2595,7 @@
       "name": "ripple_remove_timeline_ranges",
       "surface": "default",
       "modes": "scope: sync_locked; range_content: delete",
-      "description": "Preview or apply a single-pass ripple removal for up to 50 sorted, non-overlapping timeline ranges on all unlocked, sync-locked tracks. Requires a preview confirmation token to apply. Integer frame rates only. The preview returns per-track counts and at most 50 planned-clip samples; clips fully inside ranges are removed. Large edits need allow_large_ripple: true."
+      "description": "Refuses attached transitions or unreadable transition collections before structural edits; inspect transitionsAffected and use remove_transition first. Preview or apply a single-pass ripple removal for up to 50 sorted, non-overlapping timeline ranges on all unlocked, sync-locked tracks. Requires a preview confirmation token to apply. Integer frame rates only. The preview returns per-track counts and at most 50 planned-clip samples; clips fully inside ranges are removed. Kept pieces cut from one linked audio/video clip are relinked and read back after the move. Large edits need allow_large_ripple: true."
     },
     {
       "name": "roll_edit",
@@ -2708,14 +2726,14 @@
     {
       "name": "set_clip_anchor_point",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Set the Anchor Point property on a video clip's Motion effect."
+      "modes": "units: pixels, normalized",
+      "description": "Set and read back Motion Anchor Point in source-frame pixels by default, or explicit normalized 0–1 source-frame fractions. Omitted units with a 0–1 pair keeps pixels and adds a warning."
     },
     {
       "name": "set_clip_duration",
       "surface": "default",
       "modes": "keyframe_policy: reject, preserve",
-      "description": "Set one timeline clip's visible duration by moving only its timeline end (TrackItem.end) while keeping its start fixed. Pass exactly one of duration_seconds or end_seconds. Works for extending still images past their import length. Refuses to overlap the next clip on the same track, rejects shortening that would strand effect keyframes unless keyframe_policy is preserve, reads start/end back, and restores the original end if Premiere clamps or ignores the write (for example when video media has no handle left). Linked audio/video partners get the same change by default (include_linked), applied as the same end offset so partners with a J/L cut keep their offset; every clip is checked before any is changed. Use this instead of speed changes, which Premiere does not expose to scripting. Existing host Out padding below one sequence frame may be preserved or reduced, but never used to create additional padding. Non-still sources require readable ffprobe duration evidence and a readable sequence frame grid."
+      "description": "Refuses attached transitions or unreadable transition collections before structural edits; inspect transitionsAffected and use remove_transition first. Set one timeline clip's visible duration by moving only its timeline end (TrackItem.end) while keeping its start fixed. Pass exactly one of duration_seconds or end_seconds. Works for extending still images past their import length. Refuses to overlap the next clip on the same track, rejects shortening that would strand effect keyframes unless keyframe_policy is preserve, reads start/end back, and restores the original end if Premiere clamps or ignores the write (for example when video media has no handle left). Linked audio/video partners get the same change by default (include_linked), applied as the same end offset so partners with a J/L cut keep their offset; every clip is checked before any is changed. Use this instead of speed changes, which Premiere does not expose to scripting. Existing host Out padding below one sequence frame may be preserved or reduced, but never used to create additional padding. Non-still sources require readable ffprobe duration evidence and a readable sequence frame grid."
     },
     {
       "name": "set_clip_opacity",
@@ -2732,20 +2750,20 @@
     {
       "name": "set_clip_position",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Set the Position property on a video clip's Motion effect using English or measured Spanish built-in names, then read it back. Values are in pixels."
+      "modes": "units: pixels, normalized",
+      "description": "Set the Position property on a video clip's Motion effect using English or measured Spanish built-in names, then read it back. Values default to pixels; explicit normalized values are fractions from 0 to 1. Omitted units with a 0–1 pair keeps pixels and adds a warning."
     },
     {
       "name": "set_clip_properties",
       "surface": "default",
-      "modes": "Single operation",
-      "description": "Set supported clip properties (opacity, scale, position, rotation) and read each requested value back. Clip speed is unsupported and fails before mutation; use set_clip_duration to change a clip's timeline length."
+      "modes": "units: pixels, normalized",
+      "description": "Set supported clip properties (opacity, scale, position, rotation) and read each requested value back. Position uses pixels by default or explicit normalized 0–1 fractions; an omitted-unit 0–1 pair retains pixels with a warning. Clip speed is unsupported and fails before mutation; use set_clip_duration to change a clip's timeline length."
     },
     {
       "name": "set_clip_properties_batch",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Apply Motion/Opacity values to up to 16 clips after preflighting every target property. The handler reads each requested value back and never reports a partial batch as verified."
+      "description": "Apply Motion/Opacity values to up to 16 clips after preflighting every target property. Position defaults to pixels or accepts explicit normalized 0–1 fractions; omitted-unit 0–1 pairs retain pixels and add per-item warnings. The handler reads each requested value back and never reports a partial batch as verified."
     },
     {
       "name": "set_clip_rotation",
@@ -3111,7 +3129,7 @@
       "name": "trim_clip",
       "surface": "default",
       "modes": "keyframe_policy: reject, preserve, hold_last_value",
-      "description": "Trim exactly one source in/out point and verify the corresponding visible timeline edge. Requires accessible physical media duration from ffprobe; unknown duration or linked partners using different source files refuse before mutation. Refuses retimed clips, extensions that would overlap the neighbouring clip on the same track, and, by default, trims that would leave effect keyframes outside the visible clip. Linked audio/video partners get the same trim by default (include_linked), applied as the same offset from each partner's own source point so a J/L cut or slipped audio stays in sync; every clip is checked before any is changed. To set a clip's timeline length or extend a still image, use set_clip_duration. Existing host Out padding below one sequence frame may be preserved or reduced, but never used to create additional padding."
+      "description": "Refuses attached transitions or unreadable transition collections before structural edits; inspect transitionsAffected and use remove_transition first. Trim exactly one source in/out point and verify the corresponding visible timeline edge. Requires accessible physical media duration from ffprobe; unknown duration or linked partners using different source files refuse before mutation. Refuses retimed clips, extensions that would overlap the neighbouring clip on the same track, and, by default, trims that would leave effect keyframes outside the visible clip. Linked audio/video partners get the same trim by default (include_linked), applied as the same offset from each partner's own source point so a J/L cut or slipped audio stays in sync; every clip is checked before any is changed. To set a clip's timeline length or extend a still image, use set_clip_duration. Existing host Out padding below one sequence frame may be preserved or reduced, but never used to create additional padding."
     },
     {
       "name": "undo",
