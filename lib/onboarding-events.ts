@@ -5,6 +5,7 @@ export type OnboardingEvent =
   | "primary_cta_clicked"
   | "onboarding_assistant_selected"
   | "onboarding_download_started"
+  | "onboarding_first_run_panel_viewed"
   | "onboarding_safe_prompt_copied"
   | "onboarding_copy_failed"
   | "onboarding_project_intake_prompt_copied"
