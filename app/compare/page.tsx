@@ -4,25 +4,131 @@ import { PublicPage } from "@/components/site/public-page"
 import { HomeLink } from "@/components/ui/home-link"
 
 export const metadata: Metadata = pageMetadata({
-  title: "Compare Premiere Pro MCP Servers: Setup & Evidence",
-  description: "Compare Premiere Pro MCP servers by package identity, CEP or UXP bridge, setup requirements and workflow evidence. Includes a dated Higgsfield package review.",
+  title: "Best Premiere Pro MCP Servers: Compare Tools & Bridges",
+  description: "Compare the leading Premiere Pro MCP servers by published tool count, bridge, platform, and project identity. Read the GitHub README evidence before you install.",
   alternates: { canonical: "/compare/" },
+  openGraph: { title: "Best Premiere Pro MCP Servers: Compare Tools & Bridges", description: "A fair, source-linked comparison of Premiere Pro MCP servers, including tool counts, bridge requirements, and platform limits.", url: "/compare/", type: "article" },
 })
+
 const projects = [
-  { name: "Higgsfield / @higgsfield_org/premiere-mcp", source: "https://www.npmjs.com/package/@higgsfield_org/premiere-mcp/v/0.1.3", setup: "Published 0.1.3 README: Node.js 24+, local signed CEP extension, fnf-premiere configuration CLI, and fnf-premiere-mcp stdio executable.", fit: "Editors evaluating local project inspection, media import, bins, sequence and clip operations, track controls, and exports.", check: "The package describes testing on macOS / Premiere 26.5.1; Windows support is experimental. Reviewed October 3, 2026 from the npm README; no independent host test was performed." },
-  { name: "leancoderkavy / premiere-pro-mcp", source: "https://github.com/leancoderkavy/premiere-pro-mcp", setup: "Local Node.js server with CEP compatibility and capability-gated UXP tools.", fit: "Editors who want a searchable tool reference, guided setup, workflow recipes, and explicit released-versus-source availability.", check: "Review the recorded assembly workflow, then verify your own host connection. The recording covers one workflow on Premiere 26.5.0." },
-  { name: "hetpatel-11 / Adobe_Premiere_Pro_MCP", source: "https://github.com/hetpatel-11/Adobe_Premiere_Pro_MCP/blob/ee31c3def7c3ca1c68662ea7737a9f8e5a2b634f/README.md", setup: "Node.js 20+, Premiere 2020+, local CEP panel; UXP is described as experimental.", fit: "Clients that benefit from a small always-on surface with search_tools / invoke_tool routing, guided prompts, and multilingual documentation.", check: "The README lists 283 tools and an installer/doctor workflow. Those are project claims, not independent host certification." },
-  { name: "ayushozha / AdobePremiereProMCP", source: "https://github.com/ayushozha/AdobePremiereProMCP/blob/914823b84d05030578b65fb10048fcd4dd03ae02/README.md", setup: "Go orchestration, Rust media services, Python intelligence, and a TypeScript CEP bridge.", fit: "Developers evaluating script-to-timeline workflows, asset matching, EDL planning, captions, and broader media automation.", check: "The README distinguishes 1,064 schemas, 932 host commands, and a curated 72-tool standard profile. These are different units; the larger compatibility surface is not uniformly certified." },
-  { name: "antipaster / Adobe-Premiere-Pro-MCP", source: "https://github.com/antipaster/Adobe-Premiere-Pro-MCP/blob/9cb62cf9c7f9a64379e0cb1600ff3be93a46cac5/README.md", setup: "Windows, Node.js 18+, Premiere 2023+; Node server connects over WebSocket to a CEP panel.", fit: "Windows users exploring a batch installer, editing and caption tools, and optional ElevenLabs voiceover integration.", check: "The README advertises 170+ tools and says tested on Premiere 2026. Optional voice services need separate configuration; test your exact actions locally." },
-]
+  {
+    name: "MCP for Adobe Premiere Pro",
+    repository: "https://github.com/leancoderkavy/premiere-pro-mcp",
+    toolCount: "441 core tools in v1.25.0; 96 additional tools with a compatible UXP connection",
+    bridge: "CEP production bridge; authenticated UXP preview/additional surface",
+    platform: "Windows and macOS; Premiere Pro 2020–2026 in the project README",
+    fit: "A local-first project with a searchable catalog, capability-gated tools, and active maintenance.",
+    note: "These are the v1.25.0 README figures, not a licensed-host success guarantee. Verify your own Premiere version, connector, and requested action.",
+    sourceLabel: "Project README",
+  },
+  {
+    name: "hetpatel-11 / Adobe_Premiere_Pro_MCP",
+    repository: "https://github.com/hetpatel-11/Adobe_Premiere_Pro_MCP#readme",
+    toolCount: "283 tools",
+    bridge: "CEP is the supported production bridge; UXP is experimental",
+    platform: "The README documents a local bridge for Premiere Pro and a Node.js install path",
+    fit: "A smaller always-on MCP surface with search_tools/invoke_tool routing, context resources, and guided prompts.",
+    note: "The tool count is the repository's published catalog claim. Its website is premiere-mcp.com, which is a different project and brand from this site.",
+    sourceLabel: "GitHub README",
+  },
+  {
+    name: "antipaster / Adobe-Premiere-Pro-MCP",
+    repository: "https://github.com/antipaster/Adobe-Premiere-Pro-MCP#readme",
+    toolCount: "170+ tools",
+    bridge: "Node.js server over WebSocket to a CEP panel",
+    platform: "Windows only; Premiere Pro 2023+ and Node.js 18+ in the README",
+    fit: "A Windows-focused option with editing, effects, captions, export, and a batch installer.",
+    note: "The README says 170+ rather than an exact count. Optional integrations and the exact host behavior should be tested on the user's machine.",
+    sourceLabel: "GitHub README",
+  },
+  {
+    name: "compimprove / adobe-premiere-mcp",
+    repository: "https://github.com/compimprove/adobe-premiere-mcp#readme",
+    toolCount: "284 tools",
+    bridge: "CEP editing bridge; optional UXP helper for transcript reads",
+    platform: "macOS and Windows validation described in the README; Premiere Pro 2020+",
+    fit: "A fork-derived project with a broad catalog spanning editing, effects, captions, exports, and higher-level workflows.",
+    note: "The README describes 284 exposed tools and identifies this repository separately. Treat its live-validation statements as that project's claims, not an independent benchmark.",
+    sourceLabel: "GitHub README",
+  },
+] as const
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://premiere-pro-mcp.com/compare/#article",
+      headline: "Best Premiere Pro MCP Servers: Compare Tools & Bridges",
+      description: "A source-linked comparison of Premiere Pro MCP servers by published tool count, bridge, platform, and project identity.",
+      url: "https://premiere-pro-mcp.com/compare/",
+      dateModified: "2026-10-29",
+      inLanguage: "en-US",
+      citation: projects.map((project) => project.repository),
+      mainEntityOfPage: "https://premiere-pro-mcp.com/compare/",
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://premiere-pro-mcp.com/compare/#breadcrumb",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "MCP for Adobe Premiere Pro", item: "https://premiere-pro-mcp.com/" },
+        { "@type": "ListItem", position: 2, name: "Compare Premiere Pro MCP servers", item: "https://premiere-pro-mcp.com/compare/" },
+      ],
+    },
+  ],
+}
+
 export default function ComparePage() {
-  return <PublicPage><main id="main-content" className="min-h-screen bg-site-bg px-5 py-16 text-site-text sm:py-24"><article className="mx-auto max-w-4xl space-y-10">
-    <nav aria-label="Breadcrumb" className="text-sm text-site-muted"><HomeLink href="/">MCP for Adobe Premiere Pro</HomeLink> / Compare</nav>
-    <header><p className="font-mono text-sm uppercase text-site-accent">Source review · Updated October 3, 2026</p><h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-6xl">Choose a Premiere Pro MCP server for your workflow.</h1><p className="mt-6 text-lg text-site-muted">Start with your operating system, connection method, and the edit you need to complete. A larger tool catalog alone cannot tell you whether an operation works on your Premiere host.</p></header>
-    <p>This guide is maintained by leancoderkavy/premiere-pro-mcp. It compares five public projects and is not an independent benchmark. The Higgsfield package README was reviewed on October 3, 2026. The other external projects retain their linked README revisions reviewed on September 15, 2026. We have not run their tools in Premiere for this comparison.</p>
-    <section className="space-y-4"><h2 className="text-2xl font-semibold">Check the package name before installing</h2><p>Our project is MCP for Adobe Premiere Pro, installed from <code>premiere-pro-mcp</code> and maintained at <a className="text-site-accent underline" href="https://github.com/leancoderkavy/premiere-pro-mcp">leancoderkavy/premiere-pro-mcp</a>. The similarly named <code>adobe-premiere-pro-mcp</code> and <code>@higgsfield_org/premiere-mcp</code> packages are separate projects. Match the package, repository, and client configuration before following a guide.</p><p>For this project, the default CEP route serves local Premiere workflows, while the UXP preview adds authenticated, capability-gated documented APIs. Use the <a className="text-site-accent underline" href="/facts/">published release facts</a> and <a className="text-site-accent underline" href="/tools/">searchable tool reference</a> to check the exact action you need.</p></section>
-    {projects.map(project => <section key={project.name} className="space-y-4 rounded-xl border border-site-line p-6"><h2 className="break-words text-2xl font-semibold">{project.name}</h2><dl className="space-y-3"><div><dt className="font-semibold">Setup and bridge</dt><dd>{project.setup}</dd></div><div><dt className="font-semibold">Why evaluate it</dt><dd>{project.fit}</dd></div><div><dt className="font-semibold">What to verify</dt><dd>{project.check}</dd></div></dl><a className="text-site-accent underline" href={project.source}>Read this project’s source documentation</a></section>)}
-    <section className="space-y-4"><h2 className="text-2xl font-semibold">Compare the same task on the same host</h2><ol className="list-decimal space-y-3 pl-6"><li>Record your Premiere version, OS, bridge, package version, and enabled tool profile.</li><li>Use a duplicate project and the same three sample clips for each evaluation.</li><li>Inspect the connection, assemble a sequence, add markers, and read back clip positions.</li><li>Check the native timeline and saved project. Record unsupported actions and failures alongside successes.</li></ol><p>Separate registered schemas, default exposed tools, and live supported operations. Stars indicate community interest; they do not establish reliability or feature parity.</p></section>
-    <section className="space-y-4"><h2 className="text-2xl font-semibold">Evaluate this project before installing</h2><p><a href="/demo/" className="text-site-accent underline">Watch the recorded workflow and inspect its receipt</a>, search the <a href="/tools/" className="text-site-accent underline">tool catalog</a>, or read the <a href="/facts/" className="text-site-accent underline">release and compatibility facts</a>. Ready to connect? Follow the <a href="/docs/" className="text-site-accent underline">installation guide</a>.</p></section>
-  </article></main></PublicPage>
+  return (
+    <PublicPage>
+      <>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+        <main id="main-content" className="min-h-screen bg-site-bg px-5 py-16 text-site-text sm:py-24">
+          <article className="mx-auto max-w-5xl space-y-12">
+            <nav aria-label="Breadcrumb" className="text-sm text-site-muted">
+              <HomeLink href="/" className="hover:text-site-accent">MCP for Adobe Premiere Pro</HomeLink>{" "}
+              <span aria-hidden="true">/</span> Compare
+            </nav>
+            <header className="border-b border-site-line pb-12">
+              <p className="font-mono text-sm uppercase tracking-wide text-site-accent">README comparison · Updated October 29, 2026</p>
+              <h1 className="mt-5 text-balance text-4xl font-bold tracking-tight sm:text-6xl">Best Premiere Pro MCP servers, compared fairly.</h1>
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-site-muted">Tool count is a useful starting point, not proof that a licensed Premiere host will complete an operation. Compare the bridge, platform, project identity, and verification boundary before choosing a server.</p>
+            </header>
+
+            <section className="space-y-5" aria-labelledby="snapshot-heading">
+              <h2 id="snapshot-heading" className="text-3xl font-semibold">The short answer</h2>
+              <p className="leading-8 text-site-muted">For the broadest published catalog in this snapshot, start with <strong className="text-site-text">MCP for Adobe Premiere Pro</strong>: its v1.25.0 README lists 441 core tools and 96 additional tools when a compatible UXP connection is enabled. It is actively maintained and supports Windows and macOS. That does not make every tool equally available in every profile or Premiere build, so use the <a className="text-site-accent underline" href="/facts/">published release facts</a> and <a className="text-site-accent underline" href="/tools/">tool reference</a> for the current package before installing.</p>
+              <p className="rounded-xl border border-site-line bg-site-panel p-5 leading-8 text-site-muted"><strong className="text-site-text">Important brand clarification:</strong> <code>premiere-mcp.com</code> belongs to the separate <a className="text-site-accent underline" href="https://github.com/hetpatel-11/Adobe_Premiere_Pro_MCP#readme">hetpatel-11 project</a>. This site is for <code>premiere-pro-mcp</code>, maintained at <a className="text-site-accent underline" href="https://github.com/leancoderkavy/premiere-pro-mcp">leancoderkavy/premiere-pro-mcp</a>. Check the repository and npm package name before copying a setup command.</p>
+            </section>
+
+            <section className="space-y-6" aria-labelledby="comparison-heading">
+              <h2 id="comparison-heading" className="text-3xl font-semibold">Published project comparison</h2>
+              <p className="text-site-muted">Counts and platform details below are transcribed from each linked GitHub README. They are not an independent benchmark, and the projects may change after this page is updated.</p>
+              <div className="grid gap-6 lg:grid-cols-2">
+                {projects.map((project, index) => (
+                  <section key={project.name} className={`space-y-4 rounded-xl border p-6 ${index === 0 ? "border-site-accent bg-site-panel" : "border-site-line"}`}>
+                    <div className="flex items-start justify-between gap-4"><h3 className="break-words text-2xl font-semibold">{project.name}</h3>{index === 0 ? <span className="shrink-0 rounded-full border border-site-accent px-2 py-1 text-xs font-semibold text-site-accent">This project</span> : null}</div>
+                    <dl className="space-y-3 leading-7">
+                      <div><dt className="font-semibold">Published tools</dt><dd className="text-site-muted">{project.toolCount}</dd></div>
+                      <div><dt className="font-semibold">Bridge</dt><dd className="text-site-muted">{project.bridge}</dd></div>
+                      <div><dt className="font-semibold">Platform</dt><dd className="text-site-muted">{project.platform}</dd></div>
+                      <div><dt className="font-semibold">Good fit to evaluate</dt><dd className="text-site-muted">{project.fit}</dd></div>
+                    </dl>
+                    <p className="border-t border-site-line pt-4 text-sm leading-6 text-site-muted">{project.note}</p>
+                    <a className="text-site-accent underline" href={project.repository}>Read the {project.sourceLabel}</a>
+                  </section>
+                ))}
+              </div>
+            </section>
+
+            <section className="space-y-5" aria-labelledby="test-heading">
+              <h2 id="test-heading" className="text-3xl font-semibold">How to choose without trusting a number</h2>
+              <ol className="list-decimal space-y-3 pl-6 leading-8 text-site-muted"><li>Match the repository and package name to your client configuration.</li><li>Confirm your operating system, Premiere version, and CEP or UXP bridge requirements.</li><li>Start with a read-only connection check on a disposable project.</li><li>Run the exact workflow you need, then inspect Premiere and the saved project for readback evidence.</li></ol>
+              <p className="leading-8 text-site-muted">Ready to evaluate this project? <a className="text-site-accent underline" href="/demo/">Watch the bounded workflow demo</a>, read the <a className="text-site-accent underline" href="/docs/">installation guide</a>, or search the <a className="text-site-accent underline" href="/tools/">tool catalog</a>.</p>
+            </section>
+          </article>
+        </main>
+      </>
+    </PublicPage>
+  )
 }
