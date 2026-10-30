@@ -76,7 +76,12 @@ export function FirstRunPanel() {
                 <p className="font-medium text-zinc-100">
                   Run the safe first prompt (one-click copy)
                 </p>
-                <div className="mt-2 flex flex-col gap-3 rounded-lg border border-zinc-700/50 bg-black/40 p-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="mt-3 rounded-lg border border-amber-500/20 bg-amber-500/[0.04] p-3">
+                  <p className="text-xs leading-5 text-amber-100">
+                    <span className="font-semibold">This runs locally on your computer.</span> There is no public hosted URL to paste into your MCP config. The server and Premiere bridge communicate through private files on your machine.
+                  </p>
+                </div>
+                <div className="mt-3 flex flex-col gap-3 rounded-lg border border-zinc-700/50 bg-black/40 p-3 sm:flex-row sm:items-center sm:justify-between">
                   <code className="flex-1 font-mono text-xs leading-6 text-zinc-200">
                     {safeFirstPrompt}
                   </code>

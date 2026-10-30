@@ -345,6 +345,12 @@ export default function WhatIsPremiereProMcpPage() {
                   View installation guide <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
+                  href="/blog/windsurf-premiere-pro-mcp-setup/"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-site-line bg-site-panel px-6 text-sm font-semibold text-site-text transition-colors hover:border-site-accent"
+                >
+                  Windsurf setup guide
+                </Link>
+                <Link
                   href="/"
                   className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-site-line bg-site-panel px-6 text-sm font-semibold text-site-text transition-colors hover:border-site-accent"
                 >
