@@ -2,6 +2,7 @@ import { pageMetadata } from "@/lib/seo"
 import type { Metadata } from "next"
 import { PublicPage } from "@/components/site/public-page"
 import { HomeLink } from "@/components/ui/home-link"
+import Link from "next/link"
 
 export const metadata: Metadata = pageMetadata({
   title: "Best Premiere Pro MCP Servers: Compare Tools & Bridges",
@@ -124,6 +125,17 @@ export default function ComparePage() {
             <section className="space-y-5" aria-labelledby="test-heading">
               <h2 id="test-heading" className="text-3xl font-semibold">How to choose without trusting a number</h2>
               <ol className="list-decimal space-y-3 pl-6 leading-8 text-site-muted"><li>Match the repository and package name to your client configuration.</li><li>Confirm your operating system, Premiere version, and CEP or UXP bridge requirements.</li><li>Start with a read-only connection check on a disposable project.</li><li>Run the exact workflow you need, then inspect Premiere and the saved project for readback evidence.</li></ol>
+            </section>
+
+            <section className="space-y-5" aria-labelledby="setup-heading">
+              <h2 id="setup-heading" className="text-3xl font-semibold">Setup guides by AI client</h2>
+              <p className="leading-8 text-site-muted">Once you&apos;ve chosen a server, follow the setup guide for your AI assistant. Each guide covers the MCP configuration, connector installation, and connection verification for that specific client.</p>
+              <ul className="grid gap-3 sm:grid-cols-2">
+                <li><Link className="block rounded-lg border border-site-line bg-site-panel p-4 text-site-accent transition-colors hover:border-site-accent" href="/blog/claude-desktop-premiere-pro-mcp-setup/"><span className="font-semibold">Claude Desktop</span> <span className="text-site-muted">→</span></Link></li>
+                <li><Link className="block rounded-lg border border-site-line bg-site-panel p-4 text-site-accent transition-colors hover:border-site-accent" href="/blog/windsurf-premiere-pro-mcp-setup/"><span className="font-semibold">Windsurf IDE</span> <span className="text-site-muted">→</span></Link></li>
+                <li><Link className="block rounded-lg border border-site-line bg-site-panel p-4 text-site-accent transition-colors hover:border-site-accent" href="/blog/cursor-premiere-pro-mcp-setup/"><span className="font-semibold">Cursor</span> <span className="text-site-muted">→</span></Link></li>
+                <li><Link className="block rounded-lg border border-site-line bg-site-panel p-4 text-site-accent transition-colors hover:border-site-accent" href="/blog/codex-premiere-pro-mcp-setup/"><span className="font-semibold">Codex</span> <span className="text-site-muted">→</span></Link></li>
+              </ul>
               <p className="leading-8 text-site-muted">Ready to evaluate this project? <a className="text-site-accent underline" href="/demo/">Watch the bounded workflow demo</a>, read the <a className="text-site-accent underline" href="/docs/">installation guide</a>, or search the <a className="text-site-accent underline" href="/tools/">tool catalog</a>.</p>
             </section>
           </article>

@@ -1687,6 +1687,78 @@ export const articles: Article[] = [
     ],
   },
   {
+    slug: "windsurf-premiere-pro-mcp-setup",
+    title: "How to Set Up Windsurf with Premiere Pro MCP",
+    seoTitle: "Windsurf Premiere Pro MCP Setup: Connect AI IDE to Adobe Premiere",
+    description: "Connect Windsurf IDE to Adobe Premiere Pro with a local MCP server configuration, install the CEP connector, and verify the bridge before running AI-assisted editing workflows.",
+    eyebrow: "Windsurf Premiere Pro setup",
+    publishedAt: "2026-10-30",
+    modifiedAt: "2026-10-30",
+    readingTime: "5 min read",
+    keywords: ["Windsurf Premiere Pro MCP", "Windsurf Premiere Pro", "Windsurf MCP setup", "Premiere Pro Windsurf IDE"],
+    sections: [
+      {
+        heading: "Use Windsurf on the computer running Premiere",
+        paragraphs: [
+          "Windsurf IDE can call this project's local MCP server through its MCP integration, which passes supported operations to the separate Premiere connector. Install Windsurf, Node.js, the MCP server, and the CEP connector on the computer running your licensed Premiere application. Begin with a disposable project and an active sequence.",
+          "This guide uses a local stdio process. Windsurf's AI assistant accesses the Premiere Pro installation on your local machine. The public product website is not a relay to your workstation.",
+        ],
+        links: [{ label: "Check release requirements and package provenance", href: "/facts/" }],
+      },
+      {
+        heading: "Install and diagnose the Premiere connector",
+        paragraphs: [
+          `Use Node.js ${product.nodeVersion}+ and run these commands in a local terminal. Fully quit Premiere before installing its connector. The versioned npm command selects premiere-pro-mcp from leancoderkavy; adobe-premiere-pro-mcp is a separate package whose global executable has the same name.`,
+          "Restart Premiere, open Window > Extensions > MCP for Adobe Premiere Pro, and open your test project. The doctor command reports setup diagnostics; it does not prove that Windsurf has reached the current Premiere session.",
+        ],
+        codeBlocks: [{ label: "Install the CEP connector and inspect diagnostics", code: connectorSetup }],
+        links: [{ label: "Compare the two Premiere MCP packages", href: "/blog/premiere-pro-mcp-vs-adobe-premiere-pro-mcp/" }],
+      },
+      {
+        heading: "Add MCP configuration to Windsurf",
+        paragraphs: [
+          "Windsurf supports MCP servers through its settings. Open Windsurf Settings, navigate to the MCP Servers section, and add this server configuration. Merge this entry with any existing MCP servers rather than replacing your whole configuration.",
+          "The first run may download the pinned npm release. If you already configured a different Premiere MCP entry, disable it while evaluating this one so the assistant does not receive two overlapping tool sets. Keep each project's connector and configuration together.",
+        ],
+        codeBlocks: [{ label: "Windsurf MCP configuration for this published package", code: JSON.stringify({ "premiere-pro-leancoderkavy": { command: "npx", args: ["-y", `premiere-pro-mcp@${product.version}`] } }, null, 2) }],
+        links: [{ label: "Windsurf MCP documentation", href: "https://docs.windsurf.ai/mcp" }],
+      },
+      {
+        heading: "Verify the connection before a timeline edit",
+        paragraphs: [
+          "In a Windsurf Cascade conversation, request the connection tool explicitly. Inspect the returned project, active sequence, connector, and readiness diagnostics. A tool listed by Windsurf has been advertised by the server; it is not evidence that the corresponding host action has succeeded.",
+          "After the read-only check succeeds, choose a small inspection or preview workflow from the starter kit. Review arguments and results before approving a mutation. The tool reference explains source action names and availability, while your running session determines which calls are available.",
+        ],
+        codeBlocks: [{ label: "First request in Windsurf", code: "Safely check my Premiere connection with verify_premiere_connection. Make no changes." }],
+        links: [{ label: "Search tool names and availability", href: "/tools/" }, { label: "Evaluate with synthetic starter media", href: "/workflows/" }],
+      },
+      {
+        heading: "Resolve setup failures from the returned evidence",
+        paragraphs: ["Check the failing layer before retrying. Keep screenshots and reports free of private project paths, tokens, and client footage."],
+        bullets: [
+          "Server cannot start: confirm Node.js and npx are available to Windsurf. Restart Windsurf after installing Node, and inspect the MCP startup output in Windsurf's developer tools.",
+          "Invalid configuration: check JSON syntax, preserve existing MCP servers, and confirm you edited Windsurf's MCP settings correctly.",
+          "Tools appear but Premiere is disconnected: restart the CEP panel, open a project, and rerun the read-only connection check.",
+          "A UXP tool is absent: it requires an authenticated compatible UXP panel with the required host capability. The default CEP setup does not advertise every UXP addition.",
+        ],
+        links: [{ label: "Follow the connection recovery checklist", href: "/docs/troubleshooting/" }],
+      },
+    ],
+    faqs: [
+      { question: "Does Windsurf need a remote URL to edit local Premiere?", answer: "No. This guide uses local stdio so Windsurf starts the MCP server beside Premiere on your machine. The separate CEP connector is still required." },
+      { question: "Where does the Windsurf MCP configuration go?", answer: "Add it through Windsurf Settings in the MCP Servers section. The configuration is stored in Windsurf's settings and preserved across sessions." },
+      { question: "Will the configuration change my Premiere project?", answer: "Adding the server does not itself request an edit. Later tool calls can change a project, so start with verify_premiere_connection and review each proposed operation." },
+      { question: "Can Windsurf Cascade use all MCP tools?", answer: "Yes, when the local connection is verified. The Windsurf Cascade AI can call any advertised tool. Tool availability depends on the connector type and your Premiere host capabilities." },
+    ],
+    resources: [
+      { label: "Windsurf IDE official website", href: "https://codeium.com/windsurf" },
+      { label: "Windsurf MCP integration docs", href: "https://docs.windsurf.ai/mcp" },
+      { label: "npm versioned package execution", href: "https://docs.npmjs.com/cli/v11/commands/npx/" },
+      { label: "Our source repository", href: product.links.repository },
+    ],
+    relatedSlugs: ["cursor-premiere-pro-mcp-setup", "claude-desktop-premiere-pro-mcp-setup", "how-to-set-up-premiere-pro-mcp", "premiere-pro-mcp-vs-adobe-premiere-pro-mcp"],
+  },
+  {
     slug: "codex-premiere-pro-mcp-setup",
     title: "How to Set Up Codex with Premiere Pro MCP",
     seoTitle: "Codex Premiere Pro MCP Setup",
