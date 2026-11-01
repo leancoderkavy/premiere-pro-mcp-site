@@ -73,6 +73,7 @@ The hosted endpoint does not automatically pair a visitor to their local Premier
 - Tool reference JSON: ${origin}/tool-catalog.json
 - Setup and recovery: ${origin}/docs/troubleshooting/
 - Claude setup: ${origin}/blog/claude-desktop-premiere-pro-mcp-setup/
+- Windsurf IDE setup: ${origin}/blog/windsurf-premiere-pro-mcp-setup/
 - Codex setup: ${origin}/blog/codex-premiere-pro-mcp-setup/
 - Cursor setup: ${origin}/blog/cursor-premiere-pro-mcp-setup/
 - Claude Fable 5.1: ${origin}/blog/claude-fable-5-1-premiere-pro-mcp/

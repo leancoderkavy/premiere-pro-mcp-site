@@ -367,6 +367,15 @@ export default function HowPremiereProMcpWorksPage() {
                     A beginner-friendly introduction to what Premiere Pro MCP is and who it&apos;s for.
                   </p>
                 </Link>
+                <Link
+                  href="/compare/"
+                  className="rounded-xl border border-site-line bg-site-panel p-6 transition-colors hover:border-site-accent"
+                >
+                  <h3 className="text-lg font-semibold text-site-accent">Compare Premiere MCP servers</h3>
+                  <p className="mt-2 text-sm leading-6 text-site-muted">
+                    Compare tool counts, bridges, and platforms across Premiere Pro MCP implementations.
+                  </p>
+                </Link>
                 <a
                   href="https://github.com/leancoderkavy/premiere-pro-mcp#readme"
                   target="_blank"
@@ -378,6 +387,15 @@ export default function HowPremiereProMcpWorksPage() {
                     View the full source code, architecture docs, and contribution guidelines on GitHub.
                   </p>
                 </a>
+                <Link
+                  href="/blog/windsurf-premiere-pro-mcp-setup/"
+                  className="rounded-xl border border-site-line bg-site-panel p-6 transition-colors hover:border-site-accent"
+                >
+                  <h3 className="text-lg font-semibold text-site-accent">Windsurf setup guide</h3>
+                  <p className="mt-2 text-sm leading-6 text-site-muted">
+                    Connect Windsurf IDE to Premiere Pro with step-by-step MCP configuration.
+                  </p>
+                </Link>
               </div>
             </section>
           </article>

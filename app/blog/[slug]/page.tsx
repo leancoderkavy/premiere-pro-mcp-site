@@ -76,6 +76,18 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       .filter((related): related is (typeof articles)[number] => Boolean(related))
     : articles.filter((candidate) => candidate.slug !== article.slug).slice(0, 2)
   const articleUrl = `https://premiere-pro-mcp.com/blog/${article.slug}/`
+  
+  // Detect setup guides and add HowTo schema
+  const isSetupGuide = article.slug.includes("setup") || article.slug.includes("set-up")
+  const howToSteps = isSetupGuide && article.sections.length > 0
+    ? article.sections.map((section, index) => ({
+        "@type": "HowToStep" as const,
+        position: index + 1,
+        name: section.heading,
+        text: section.paragraphs.join(" "),
+      }))
+    : []
+
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
@@ -98,6 +110,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         keywords: article.keywords.join(", "),
         image: `https://premiere-pro-mcp.com${socialImage}`,
       },
+      ...(isSetupGuide && howToSteps.length > 0 ? [{
+        "@type": "HowTo",
+        "@id": `${articleUrl}#howto`,
+        name: article.title,
+        description: article.description,
+        step: howToSteps,
+        totalTime: article.readingTime,
+      }] : []),
       {
         "@type": "FAQPage",
         "@id": `${articleUrl}#faq`,
