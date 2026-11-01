@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.27.0",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.27.0",
-  "sourceSha256": "746e8a054d73d1dd1747eb6efd4c70cfe60ac70d2f695fd3431ef864efa5d5d2",
+  "packageVersion": "1.28.0",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.28.0",
+  "sourceSha256": "038c87fdeeb16fc667f4698bc9c26d4c65b9f5e2f29e111b96ba1b65349e0814",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
-    "default": 442,
-    "uxp": 97,
+    "default": 444,
+    "uxp": 98,
     "restricted": 2
   },
   "tools": [
@@ -153,7 +153,7 @@
       "name": "apply_after_effects_render_handoff",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Import exactly one previewed completed AE render into its approved Premiere bin after rechecking both hosts and file metadata. Requires confirmation and consumes the token before dispatch. Does not save, render, or change a timeline."
+      "description": "Import exactly one previewed completed AE render into its approved Premiere bin after rechecking both hosts and file metadata. Requires confirmation and consumes the token before dispatch. Does not save, render, or change a timeline; the receipt returns the new projectItemId, and replace_clip swaps it in for an existing timeline clip at the same span."
     },
     {
       "name": "apply_audio_effect",
@@ -214,6 +214,12 @@
       "surface": "default",
       "modes": "Single operation",
       "description": "Consume approved source-scene preview once, create reviewed source markers and/or subclips requesting audio in a new verified bin using existing typed CEP tools. Same-command source/project guards refuse relinks or project changes. Stops on failed/unverified receipt and retains bounded partial results; no rollback or false-positive correctness claim."
+    },
+    {
+      "name": "apply_send_clip_to_after_effects",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Send the previewed clip to After Effects: recheck the clip, add a comp with its exact source range (footage layer audio off) to the open AE project and save it, import the comp into Premiere over Dynamic Link, then replace the clip with it at the same timeline span. The original's linked audio stays. Requires confirmation; the token is single-use. A failure after the AE save leaves the comp in AE and reports where it stopped."
     },
     {
       "name": "apply_spot_workflow_plan",
@@ -436,6 +442,12 @@
       "surface": "default",
       "modes": "from: ticks, frames, samples, seconds, timecode; to: ticks, frames, timecode; rounding: floor, ceil, nearest",
       "description": "Convert exact Premiere tick strings, rational frames, samples, decimal seconds and signed/drop-frame timecode locally. Nearest ties round away from zero; intervals use inclusive start and exclusive end. No floating-point tick parsing or host dispatch."
+    },
+    {
+      "name": "copy_clips_between_sequences_uxp",
+      "surface": "uxp",
+      "modes": "inspect, apply",
+      "description": "Inspect or apply a copy of every clip in a time range of one sequence into another sequence (or elsewhere in the same one), the way an editor's copy and paste does, by cloning each clip with documented UXP SequenceEditor actions. Unlike placing a clip from its project item, a clone keeps the clip's effects (Motion, Opacity, Lumetri including curves and LUTs), keyframes, enabled state and source range. Choose the source range and the destination start in ticks or in seconds (seconds snap to the nearest frame of their sequence), which source tracks to copy (default all), and an optional track offset per media type. The relative layout of the copied clips is kept. A clip that crosses an edge of the range is trimmed to it; one that is retimed or reversed is refused instead. Inspect returns the full plan: every clip with its source track and clip index, destination track, tick-exact start and end, source in and out, trim, and enabled state. It refuses a missing track, an empty range, and any destination range already occupied, so nothing is ever overwritten. Apply requires that unchanged plan, confirm_copy: true and an operation_id; whole clips are cloned in one locked undoable transaction, and clips that need a trim are cloned to a parking spot past the end of the destination, trimmed there and moved into place, which adds two more Undo steps (undo_steps in the result says how many). It reads back each copy's start, end, source range, project item and enabled state. Transitions and links between a clip's picture and sound are not copied. It does not prove rendered frames, playback or persistence."
     },
     {
       "name": "copy_effect_values",
@@ -723,7 +735,7 @@
       "name": "duplicate_sequence",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Duplicate an existing sequence and report the new copy's sequence ID (id) and, when Premiere exposes it, its project item node ID (projectItemNodeId). Project-item tools accept either."
+      "description": "Duplicate an existing sequence and report the new copy's sequence ID (id) and, when Premiere exposes it, its project item node ID (projectItemNodeId). Project-item tools accept either. Readback verifies identity only; audio track-to-master routing is not verified. When sound is expected, check an export with export_sequence audio_check=expect_signal."
     },
     {
       "name": "duplicate_track_item_uxp",
@@ -819,7 +831,7 @@
       "name": "export_frame",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Export a file-verified still image. PNG stills keep the sequence's transparency (straight alpha, reported as hasAlpha); composite them over black before measuring brightness or comparing with a video render. A single still does not verify motion over time, playback or audio."
+      "description": "Export a file-verified still image. PNG stills keep the sequence's transparency (straight alpha, reported as hasAlpha); composite them over black before measuring brightness or comparing with a video render. A single still does not verify motion over time, playback or audio. After a linked After Effects composition changes, Premiere can return its cached frame for a time it already rendered; to check the change, export a time not exported since the change."
     },
     {
       "name": "export_frame_uxp",
@@ -848,8 +860,8 @@
     {
       "name": "export_sequence",
       "surface": "default",
-      "modes": "range: entire, in_to_out, work_area",
-      "description": "Export the active sequence directly (Premiere renders it; blocks until done) with an Adobe Media Encoder preset. The output extension must match what the preset writes (an H.264 preset in AME's QuickTime folder writes .mov); a missing extension is added. Refuses an output_path that already exists unless overwrite is true. Fails if Premiere rejects the render, verifies a non-empty file was written (for an overwrite, that the file changed), and checks its duration with ffprobe within one sequence frame. An unavailable or mismatched duration leaves a written artifact unverified. range 'work_area' fails closed unless the work area is enabled and covers only part of the sequence — otherwise Premiere would encode the entire timeline."
+      "modes": "range: entire, in_to_out, work_area; audio_check: report, expect_signal",
+      "description": "Export the active sequence directly (Premiere renders it; blocks until done) with an Adobe Media Encoder preset. The output extension must match what the preset writes (an H.264 preset in AME's QuickTime folder writes .mov); a missing extension is added. Refuses an output_path that already exists unless overwrite is true. Fails if Premiere rejects the render, verifies a non-empty file was written (for an overwrite, that the file changed), and checks its duration with ffprobe within one sequence frame. An unavailable or mismatched duration leaves a written artifact unverified. Optional audio_check reports decoded signal, silence, absent audio or an unavailable check; expect_signal makes a silent or absent stream fail verification. Signal does not establish audibility, sync or sound quality. range 'work_area' fails closed unless the work area is enabled and covers only part of the sequence — otherwise Premiere would encode the entire timeline."
     },
     {
       "name": "export_sequence_clip_review_frames",
@@ -909,7 +921,7 @@
       "name": "freeze_frame",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Create a freeze frame from a clip at a specific SEQUENCE time (for a source-media time, use create_source_freeze_frame). Exports the frame, imports it back as a still image, and sets the still's Out mark to duration_seconds so add_to_timeline places it at that length (snapped to the still's frame grid, then to the sequence frame). It does not place the still on the timeline."
+      "description": "Create a freeze frame from a clip at a specific SEQUENCE time (for a source-media time, use create_source_freeze_frame). Existing outputs require overwrite true. Exports the frame, imports it back as a still image, and sets the still's Out mark to duration_seconds so add_to_timeline places it at that length (snapped to the still's frame grid, then to the sequence frame). It does not place the still on the timeline."
     },
     {
       "name": "generate_media_contact_sheet",
@@ -1041,7 +1053,7 @@
       "name": "get_effect_properties",
       "surface": "default",
       "modes": "Single operation",
-      "description": "List all properties of a specific effect on a clip, including current values. Values are what Premiere's scripting API returns, not necessarily the units shown in Effect Controls. Effects on audio clips (anything other than the built-in Volume, Channel Volume, Panner and Balance) use normalized 0-1 values: those properties report valueScale normalized_0_1 and the result carries a warning, because Adobe does not document the mapping to Hz, dB or ms. Calibrate audio effect changes by rendering. Volume > Level also reports displayValue in dB."
+      "description": "List all properties of a specific effect on a clip, including current values. Values are what Premiere's scripting API returns, not necessarily the units shown in Effect Controls. Effects on audio clips (anything other than the built-in Volume, Channel Volume, Panner and Balance) usually use normalized 0-1 values. Each numeric property reports valueScale (normalized_0_1 or host_raw_unknown), parameterScale summarises the values seen (normalized_0_1, host_raw_unknown, mixed or unknown), and the result carries a warning, because Adobe does not document the mapping to Hz, dB or ms. Calibrate audio effect changes by rendering. Volume > Level also reports displayValue in dB."
     },
     {
       "name": "get_encoder_presets",
@@ -1359,7 +1371,7 @@
       "name": "import_ae_comps",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Import After Effects compositions from an .aep file, failing closed when the file does not exist or when the target bin gains no items."
+      "description": "Import After Effects compositions from an .aep file as Dynamic Link clips, failing closed when the file does not exist or when the target bin gains no items. Returns each new item's nodeId and name for placement (add_to_timeline, replace_clip). With comp_names the result is verified only when every requested composition is read back by name and source .aep. Importing all comps verifies the target-bin item-count increase only, because the expected set is unknown; its items list is informational and is omitted when the bin's items cannot be read."
     },
     {
       "name": "import_edl",
@@ -1431,7 +1443,7 @@
       "name": "inspect_after_effects_render_templates",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Read available render and output-module template names from the first existing After Effects render-queue item. It never queues or renders a composition."
+      "description": "Read available render and output-module template names from the first existing After Effects render-queue item. After Effects only exposes templates through a queue item, so on an empty queue pass allow_temporary_queue_item: true to add one composition to the queue, read the names and remove it again (requires edit; the queue length is read back unchanged). It never renders."
     },
     {
       "name": "inspect_after_effects_template_source",
@@ -2079,7 +2091,7 @@
       "name": "overwrite_clip",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Overwrite a project item onto validated timeline tracks and verify a new source placement at the requested time. Every video/audio stream the item actually has must land on the requested tracks; a picture-only or sound-only placement (for example 5.1 audio that does not fit a stereo track) is committed_unverified, not verified. Video-only and audio-only items overwrite only the receiving track, so Sequence.overwriteClip cannot smash V0 or A0 for the unused kind. When Premiere moves the source In to a sequence frame (an audio subclip cut between frames), the receipt reports sourceInShift and a note so the shift can be corrected with slip_edit."
+      "description": "Overwrite a project item onto validated timeline tracks and verify a new source placement at the requested time. Every video/audio stream the item actually has must land on the requested tracks; a picture-only or sound-only placement (for example 5.1 audio that does not fit a stereo track) is committed_unverified, not verified. Video-only and audio-only items overwrite only the receiving track, so Sequence.overwriteClip cannot smash V0 or A0 for the unused kind. When Premiere moves the source In to a sequence frame (an audio subclip cut between frames), the receipt reports sourceInShift and a note. slip_edit snaps to whole sequence frames, so it cannot correct a shift smaller than one frame."
     },
     {
       "name": "overwrite_from_source",
@@ -2364,6 +2376,12 @@
       "description": "Preview reviewed scene candidates against one exact CEP source and measured physical media duration. Binds project document/source path, explicit marker/subclip mode and destination bin name. No mutation; flashes/pans/fades remain in review evidence rather than automatic cuts."
     },
     {
+      "name": "preview_send_clip_to_after_effects",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Preview sending one video timeline clip to After Effects, like Premiere's Replace with After Effects Composition. Reads the clip, its source media and the sequence, and the open saved AE project. Refuses speed-changed, reversed, offline or non-file clips. Lists effects and Motion/Opacity changes on the clip that the swap would not carry over. Changes nothing; returns a ten-minute token for apply_send_clip_to_after_effects."
+    },
+    {
       "name": "preview_stacked_camera_edit",
       "surface": "default",
       "modes": "Single operation",
@@ -2613,7 +2631,7 @@
       "name": "save_project_as",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Save the current project to a new .prproj path. Premiere then has the NEW copy open and closes the original, so later edits go to the copy; the result reports both paths. Fails when Premiere writes no file or leaves a pre-existing path unchanged. Use open_project to return to the original."
+      "description": "Save the current project to a new .prproj path. Existing outputs require overwrite true. Premiere then has the NEW copy open and closes the original, so later edits go to the copy; the result reports both paths. Fails when Premiere writes no file or leaves a pre-existing path unchanged. Use open_project to return to the original."
     },
     {
       "name": "save_project_uxp",
@@ -2823,7 +2841,7 @@
       "name": "set_effect_property",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Set one effect property. Duplicate names require property_index from get_effect_properties. Colour values use [alpha, red, green, blue] and the lossless colour API; keyframed writes are refused. Readback reports verified, failed or committed_unverified; unreadable values are never reported as applied. Audio effect parameters (effects on audio clips other than built-in Volume, Channel Volume, Panner and Balance) take Premiere's normalized 0-1 value, not Hz, dB or ms; a number outside 0-1 is refused before the write when the current value is inside 0-1, unless allow_out_of_range_audio_value is true. Calibrate audio changes by rendering."
+      "description": "Set one effect property. Duplicate names require property_index from get_effect_properties. Colour values use [alpha, red, green, blue] and the lossless colour API; keyframed writes are refused. Readback reports verified, failed or committed_unverified; unreadable values are never reported as applied. Audio effect parameters (effects on audio clips other than built-in Volume, Channel Volume, Panner and Balance) take Premiere's normalized 0-1 value, not Hz, dB or ms; a number outside 0-1 is refused before the write when the current value is inside 0-1, unless allow_out_of_range_audio_value is true. valueScale describes the returned value; requestedValueScale is added when the request was on a different scale. Calibrate audio changes by rendering."
     },
     {
       "name": "set_footage_interpretation",
