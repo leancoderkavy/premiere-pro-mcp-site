@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.28.0",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.28.0",
-  "sourceSha256": "038c87fdeeb16fc667f4698bc9c26d4c65b9f5e2f29e111b96ba1b65349e0814",
+  "packageVersion": "1.29.0",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.29.0",
+  "sourceSha256": "75ddc14b964d045dac1a6e0c45fd39aa8f8a747040400a671662ccb9aa6d5e13",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
-    "default": 444,
+    "default": 445,
     "uxp": 98,
     "restricted": 2
   },
@@ -249,7 +249,7 @@
       "name": "audit_project_structure",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Audit the Project panel against explicit layout rules (allowed root names, extension-to-bin placement, a sequences bin, maximum bin depth, empty bins) and report violations by node ID. Read-only by default (inspect authority): walks up to 5000 items, reports truncation, and returns at most 200 proposed moves plus a plan_token bound to the project, rules, and those exact moves. With apply: true (edit authority) it requires that plan_token, re-reads the project and refuses if the plan changed, the walk was truncated, or any target path is ambiguous (two bins with one name at a level). It then creates missing target bins and moves only the planned items, reading back each item's parent bin; outcome is verified only when every move is verified, otherwise partial or failed with per-item details. It never deletes, renames, or moves bins; root-name, depth, and empty-bin findings are report-only."
+      "description": "Audit the Project panel against explicit layout rules (allowed root names, extension-to-bin placement, a sequences bin, maximum bin depth, empty bins, an explicit target_tree of bins with item node IDs, renames, remove_empty) and report violations by node ID. Read-only by default (inspect authority): walks up to 5000 items, reports truncation, and returns at most 200 proposed moves, 200 renames and 200 empty-bin removals plus a plan_token bound to the project, rules, and those exact operations. With apply: true (edit authority) it requires that plan_token, re-reads the project and refuses if the plan changed, the walk was truncated, or any target path is ambiguous (two bins with one name at a level). It then creates missing target bins, moves only the planned items (reading back each parent), deletes only remove_empty bins that are still empty (reading back the parent's children), then renames (reading back each name); target paths are resolved against the audited names, so renames run last. Outcome is verified only when every planned operation is verified, otherwise partial or failed with per-item details. Without target_tree, rename, or remove_empty it never deletes, renames, or moves bins; root-name, depth, and forbid_empty_bins findings are report-only."
     },
     {
       "name": "audit_timeline_health",
@@ -621,7 +621,7 @@
       "name": "delete_multiple_project_items",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Delete several project items (bins, sequences, clips or files) and read back that each is gone. Every item is checked before any is deleted. organize_project_items_uxp with action 'remove' (authenticated UXP bridge) is the preferred, documented route; this CEP fallback deletes clips and files through a temporary bin, which cannot be undone here. Items (or bins whose contents are) used on a timeline are refused unless confirm_remove_from_sequences is true. Nested sequences count as in use on the parent timeline."
+      "description": "Delete several project items (bins, sequences, clips or files) and read back that each is gone. Every item is checked before any is deleted, against one timeline-usage index built in a single pass over every sequence (the same scan get_unused_media uses), so 100 items cost one scan instead of 100. Deletions then run in chunks of 25 items per host command with per-chunk readback and a progress notification at least every 10 s; up to 500 items per call. A chunk that fails stops the batch and the reply counts what was deleted before it. organize_project_items_uxp with action 'remove' (authenticated UXP bridge) is the preferred, documented route; this CEP fallback deletes clips and files through a temporary bin, which cannot be undone here. Items (or bins whose contents are) used on a timeline are refused unless confirm_remove_from_sequences is true. Nested sequences count as in use on the parent timeline."
     },
     {
       "name": "delete_preview_files",
@@ -1653,7 +1653,7 @@
       "name": "inspect_timeline_snapshot",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Inspect one exact CEP sequence into version1 canonical snapshot preserving raw tick strings, source/link identities, bounded clips and explicit unknown fields. Track targeted/muted come from the documented track DOM; sync_locked comes from the experimental QE DOM only when this is the active sequence and stays null otherwise. Host missing lock/effect/transition/marker state remains incomplete; this inspection never implies atomic host state. Re-query from zero after change or truncation."
+      "description": "Inspect one exact CEP sequence into version1 canonical snapshot preserving raw tick strings, source/link identities, bounded clips and explicit unknown fields. Track targeted/muted come from the documented track DOM; sync_locked comes from the experimental QE DOM only when this is the active sequence and stays null otherwise. Host missing lock/effect/transition/marker state remains incomplete; this inspection never implies atomic host state. Re-query from zero after change or truncation. With output_path inside an approved private workspace the snapshot is written to a .json file (sha256 reported); its parent must satisfy bridge ownership/ancestor protections (0700 on POSIX), and failures can leave an empty reservation and return_content:false keeps the clips out of the reply."
     },
     {
       "name": "inspect_track_item_identity_uxp",
@@ -3022,6 +3022,12 @@
       "surface": "default",
       "modes": "Single operation",
       "description": "Request time interpolation for a clip (Frame Sampling, Frame Blending, Optical Flow) through QE DOM. Premiere exposes no interpolation readback, so the result is committed_unverified and must be checked in Effect Controls."
+    },
+    {
+      "name": "set_track_states",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "Set mute, solo and lock on several video or audio tracks of the active sequence in one host command, with per-track readback. Every requested track is read first; if any target is out of range, unreadable or asks for a state this host cannot read and write (solo has no public ExtendScript API and is probed on the QE track), nothing is changed. snapshot: true returns the pre-write state of the same tracks as a restore payload this tool accepts unchanged; with no state fields at all it is a read-only capture."
     },
     {
       "name": "set_transcode_on_ingest",
