@@ -65,17 +65,7 @@ const structuredData = {
       author: { "@type": "Organization", name: "MCP for Adobe Premiere Pro contributors", url: product.links.repository },
       citation: [product.links.readme, "https://premiere-pro-mcp.com/facts/", "https://premiere-pro-mcp.com/tools/"],
       mainEntityOfPage: "https://premiere-pro-mcp.com/what-is-premiere-pro-mcp/",
-      about: {
-        "@type": "SoftwareApplication",
-        name: "Premiere Pro MCP",
-        applicationCategory: "DeveloperApplication",
-        operatingSystem: "macOS, Windows",
-        offers: {
-          "@type": "Offer",
-          price: "0",
-          priceCurrency: "USD",
-        },
-      },
+      about: { "@id": "https://premiere-pro-mcp.com/#software" },
     },
     {
       "@type": "BreadcrumbList",

@@ -39,7 +39,7 @@ export function ArchitectureSection() {
       <div className="mx-auto max-w-6xl">
         <figure className="mb-16 overflow-hidden rounded-xl border border-white/10 bg-black">
           <Image
-            src="/marketing/premiere-pro-mcp-workflow-v1.png"
+            src="/marketing/premiere-pro-mcp-workflow-1280.webp"
             alt="Local-first workflow: an AI assistant sends a request through the MCP bridge to Premiere, which returns a verified result."
             width={1672}
             height={941}

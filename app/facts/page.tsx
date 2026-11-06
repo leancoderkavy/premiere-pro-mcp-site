@@ -10,7 +10,7 @@ const pageUrl = "https://premiere-pro-mcp.com/facts/"
 export const metadata: Metadata = pageMetadata({
   title: "Premiere Pro MCP Facts: Version, Compatibility & Sources",
   description:
-    "Canonical facts about MCP for Adobe Premiere Pro: what it is, how it connects, compatibility, privacy boundaries, pricing, and how it differs from Adobe AI Assistant.",
+    "Read the facts about MCP for Adobe Premiere Pro: setup, compatibility, privacy, costs, and how it differs from Adobe AI Assistant.",
   keywords: [
     "Premiere Pro MCP",
     "MCP for Adobe Premiere Pro",

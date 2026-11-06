@@ -6,7 +6,7 @@ import Link from "next/link"
 
 export const metadata: Metadata = pageMetadata({
   title: "Best Premiere Pro MCP Servers: Compare Tools & Bridges",
-  description: "Compare the leading Premiere Pro MCP servers by published tool count, bridge, platform, and project identity. Read the GitHub README evidence before you install.",
+  description: "Compare Premiere Pro MCP servers by published tool count, bridge, platform and project identity. Read linked GitHub evidence before installing.",
   alternates: { canonical: "/compare/" },
   openGraph: { title: "Best Premiere Pro MCP Servers: Compare Tools & Bridges", description: "A fair, source-linked comparison of Premiere Pro MCP servers, including tool counts, bridge requirements, and platform limits.", url: "/compare/", type: "article" },
 })
