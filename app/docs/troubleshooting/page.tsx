@@ -8,7 +8,7 @@ import { product, safeFirstPrompt } from "@/lib/product"
 export const metadata: Metadata = pageMetadata({
   title: "Premiere Pro MCP Not Connecting? Setup and Recovery",
   description:
-    "Diagnose a missing Premiere connector, unavailable MCP tools, missing active sequence, or unsupported workflow. Separate local setup from a verified Premiere connection.",
+    "Diagnose missing Premiere connectors, unavailable MCP tools and unsupported workflows. Check local setup separately from the Premiere connection.",
   alternates: { canonical: "/docs/troubleshooting/" },
   twitter: {
     card: "summary_large_image",

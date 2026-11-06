@@ -10,7 +10,7 @@ import { product, safeFirstPrompt } from "@/lib/product"
 
 export const metadata: Metadata = pageMetadata({
   title: { absolute: "Premiere Pro MCP Tools: Search Actions & Availability" },
-  description: "Find Premiere Pro MCP tools for media, captions, timelines, exports, and review workflows. Search source descriptions, action modes, and CEP or UXP availability.",
+  description: "Find Premiere Pro MCP tools for media, captions, timelines, exports and review. Search action descriptions and check CEP or UXP availability.",
   alternates: { canonical: "/tools/" },
   openGraph: { title: "Premiere Pro MCP Tool Reference", description: "Search tools and inspect availability before planning a Premiere workflow.", url: "/tools/", type: "website" },
 })

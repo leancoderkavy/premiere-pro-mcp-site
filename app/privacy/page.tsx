@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 import { HomeLink } from "@/components/ui/home-link"
 
 export const metadata: Metadata = pageMetadata({
-  title: "Privacy Policy",
+  title: "Privacy Policy | MCP for Adobe Premiere Pro",
   description: "How MCP for Adobe Premiere Pro handles local project data, operational telemetry, and website analytics.",
   alternates: { canonical: "/privacy/" },
 })

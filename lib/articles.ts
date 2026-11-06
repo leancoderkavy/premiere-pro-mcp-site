@@ -475,7 +475,7 @@ export const articles: Article[] = [
     seoTitle: "Project Intake Checklist",
     title: "Premiere Pro Project Intake Checklist: Prepare a Read-Only Review Before Organizing Media",
     description:
-      "Use this assistant-editor checklist to prepare a bounded, read-only Premiere Pro Project Intake preview with an approved facility template, clear scope, and review steps.",
+      "Prepare a bounded, read-only Premiere Pro Project Intake preview using an approved facility template, a clear scope and review steps.",
     eyebrow: "Project Intake readiness checklist",
     publishedAt: "2026-08-23",
     modifiedAt: "2026-08-23",
@@ -575,7 +575,7 @@ export const articles: Article[] = [
     seoTitle: "Project Backup Checklist",
     title: "Premiere Pro Project Backup Checklist: Make a Verifiable Copy Before High-Risk Changes",
     description:
-      "Use this practical checklist to create and verify a separate Premiere Pro project backup before testing automation, major reorganization, or a delivery-critical change.",
+      "Create and verify a separate Premiere Pro project backup before testing automation, reorganizing media or making delivery-critical changes.",
     eyebrow: "Project backup checklist",
     publishedAt: "2026-08-23",
     modifiedAt: "2026-08-23",
@@ -912,7 +912,7 @@ export const articles: Article[] = [
     seoTitle: "What Is a Premiere MCP Server?",
     title: "What Is an MCP Server for Adobe Premiere Pro? A Practical Guide to AI-Assisted Editing",
     description:
-      "Learn what an MCP server for Adobe Premiere Pro does, how it connects a compatible AI assistant to Adobe Premiere Pro, and how to start with a safe read-only check.",
+      "Learn what an MCP server for Adobe Premiere Pro does, how it connects an AI assistant, and how to begin with a read-only check.",
     eyebrow: "MCP for Adobe Premiere Pro explained",
     publishedAt: "2026-08-19",
     modifiedAt: "2026-08-19",
@@ -1067,7 +1067,7 @@ export const articles: Article[] = [
     workflowKit: "product-spot",
     title: "How to Automate Premiere Pro with Local MCP Tools",
     description:
-      "Automate Premiere Pro workflows with structured MCP tools. Learn which tasks to automate first, how to verify results, and build repeatable editing workflows that stay reviewable.",
+      "Automate Premiere Pro workflows with structured MCP tools. Choose tasks, verify results and build repeatable editing workflows you can review.",
     eyebrow: "Premiere Pro automation",
     publishedAt: "2026-08-19",
     modifiedAt: "2026-10-27",
@@ -1163,7 +1163,7 @@ export const articles: Article[] = [
     seoTitle: "Premiere Pro AI Assistant vs MCP: Compare AI Editing Workflows",
     title: "Premiere Pro AI Assistant vs. MCP: Which AI Workflow to Choose",
     description:
-      "Compare Premiere Pro AI Assistant with MCP workflows. Learn when to use Adobe\'s in-app AI Assistant, when to choose a local MCP workflow, and how to keep edits reviewable.",
+      "Compare Adobe Premiere AI Assistant and local MCP workflows. Learn when each fits and what to check before authorizing an edit.",
     eyebrow: "Choose the right workflow",
     publishedAt: "2026-08-22",
     modifiedAt: "2026-10-27",
@@ -1690,7 +1690,7 @@ export const articles: Article[] = [
     slug: "windsurf-premiere-pro-mcp-setup",
     title: "How to Set Up Windsurf with Premiere Pro MCP",
     seoTitle: "Windsurf Premiere Pro MCP Setup: Connect AI IDE to Adobe Premiere",
-    description: "Connect Windsurf IDE to Adobe Premiere Pro with a local MCP server configuration, install the CEP connector, and verify the bridge before running AI-assisted editing workflows.",
+    description: "Connect Windsurf to Adobe Premiere Pro with a local MCP configuration. Install the CEP connector and verify the bridge before editing.",
     eyebrow: "Windsurf Premiere Pro setup",
     publishedAt: "2026-10-30",
     modifiedAt: "2026-10-30",

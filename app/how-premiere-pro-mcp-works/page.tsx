@@ -9,7 +9,7 @@ import { ArrowRight, CheckCircle2, AlertTriangle, ShieldCheck, Zap } from "lucid
 
 export const metadata: Metadata = pageMetadata({
   title: "How Premiere Pro MCP Works: CEP, UXP & Verification",
-  description: "Learn how Premiere Pro MCP connects AI assistants to Adobe Premiere Pro using a local-first architecture with CEP bridges, file-based IPC, and explicit confirmation.",
+  description: "Learn how Premiere Pro MCP connects AI assistants to Adobe Premiere Pro through local CEP bridges, file-based communication and confirmation.",
   alternates: { canonical: "/how-premiere-pro-mcp-works/" },
   openGraph: {
     title: "How Premiere Pro MCP Works | Technical Architecture",
