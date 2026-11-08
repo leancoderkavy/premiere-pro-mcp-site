@@ -3,7 +3,7 @@
   "name": "MCP for Adobe Premiere Pro",
   "canonicalUrl": "https://premiere-pro-mcp.com/facts/",
   "publishedRelease": {
-    "version": "1.29.0",
+    "version": "1.30.0",
     "coreTools": 447,
     "defaultProfileTools": 445,
     "uxpAdditionalTools": 98,
@@ -13,14 +13,14 @@
     "guidedWorkflows": 29,
     "premiereVersions": "2020–2026",
     "uxpMinimumVersion": "25.6.0",
-    "releaseDate": "2026-11-03",
+    "releaseDate": "2026-11-08",
     "nodeVersion": "20.19",
     "provenance": {
-      "tag": "v1.29.0",
-      "commit": "532a9891d24c54a86555e4c93cdebcbfa344e775",
-      "tarball": "https://registry.npmjs.org/premiere-pro-mcp/-/premiere-pro-mcp-1.29.0.tgz",
-      "integrity": "sha512-J0ao4NtA1RWs1QcyUC9mF9rKU5uiyNi/hQE82D0ILbcxk3gkk/bmZeHEniuEF1wd9EBZn/qE18c52s8ICag7Og==",
-      "verifiedAt": "2026-11-03",
+      "tag": "v1.30.0",
+      "commit": "4159f5c1650ddd0a2293d09006a0d65094bddf42",
+      "tarball": "https://registry.npmjs.org/premiere-pro-mcp/-/premiere-pro-mcp-1.30.0.tgz",
+      "integrity": "sha512-vw/5NdkKdETRAcft8xt4YD1tB0Ua/Fq4HkfKg+E7AF1jEhhLCHeN6L+DahxeK77H68XqTX2qnONeCucCIr4jQw==",
+      "verifiedAt": "2026-11-08",
       "evidence": "Downloaded npm tarball public-product-manifest and supported-actions catalog, integrity verified; not a licensed-host test."
     }
   },

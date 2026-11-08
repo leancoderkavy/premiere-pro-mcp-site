@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.29.0",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.29.0",
+  "packageVersion": "1.30.0",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.30.0",
   "sourceSha256": "75ddc14b964d045dac1a6e0c45fd39aa8f8a747040400a671662ccb9aa6d5e13",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
