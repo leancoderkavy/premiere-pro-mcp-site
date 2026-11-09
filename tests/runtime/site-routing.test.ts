@@ -94,8 +94,10 @@ describe("content security policy", () => {
     const policy = buildContentSecurityPolicy({ scriptNonce: "abc123" })
     const scriptSource = policy.split("; ").find((directive) => directive.startsWith("script-src "))
     expect(scriptSource).toBe(
-      "script-src 'self' 'nonce-abc123' https://www.googletagmanager.com https://us-assets.i.posthog.com https://eu-assets.i.posthog.com",
+      "script-src 'self' 'nonce-abc123' https://www.googletagmanager.com https://us-assets.i.posthog.com https://eu-assets.i.posthog.com https://analytics.ahrefs.com",
     )
+    const connectSource = policy.split("; ").find((directive) => directive.startsWith("connect-src "))
+    expect(connectSource).toContain("https://analytics.ahrefs.com")
     expect(policy).not.toContain("'unsafe-eval'")
     expect(policy).toContain("frame-ancestors 'none'")
     expect(policy).toContain("upgrade-insecure-requests")

@@ -27,6 +27,7 @@ export function buildContentSecurityPolicy(
     "https://www.googletagmanager.com",
     "https://us-assets.i.posthog.com",
     "https://eu-assets.i.posthog.com",
+    "https://analytics.ahrefs.com",
   ].join(" ")
 
   return [
@@ -40,7 +41,7 @@ export function buildContentSecurityPolicy(
     "font-src 'self'",
     "style-src 'self' 'unsafe-inline'",
     `script-src ${scriptSource}`,
-    "connect-src 'self' https://www.google.com https://www.google-analytics.com https://www.googletagmanager.com https://us.i.posthog.com https://eu.i.posthog.com https://*.posthog.com",
+    "connect-src 'self' https://www.google.com https://www.google-analytics.com https://www.googletagmanager.com https://us.i.posthog.com https://eu.i.posthog.com https://*.posthog.com https://analytics.ahrefs.com",
     ...(options.development ? [] : ["upgrade-insecure-requests"]),
   ].join("; ")
 }

@@ -21,7 +21,7 @@ function load(privacy: { globalPrivacyControl?: boolean } = {}, host = "https://
     createElement: () => ({}),
     head: { appendChild: (tag: (typeof tags)[number]) => tags.push(tag) },
   };
-  runInNewContext(script, { window, document, navigator: privacy, URLSearchParams });
+  runInNewContext(script, { window, document, navigator: privacy, URLSearchParams, URL });
   return { tags, window, capture, config: () => config };
 }
 
@@ -41,7 +41,7 @@ describe("PostHog capture privacy boundaries", () => {
     expect(fixture.capture).toHaveBeenCalledExactlyOnceWith("onboarding_copy_failed", { surface: "website", action: "safe_prompt" });
   });
 
-  it("drops SDK-enriched sensitive data while retaining ingestion IDs and bounded actions", () => {
+  it("drops SDK-enriched sensitive data while retaining ingestion IDs, web analytics fields, and bounded actions", () => {
     const fixture = load();
     fixture.tags[0].onload();
     const result = fixture.config().before_send({ event: "onboarding_copy_failed", properties: {
@@ -50,16 +50,27 @@ describe("PostHog capture privacy boundaries", () => {
       $current_url: "https://example.com/?token=secret#editor@example.com",
       $referrer: "https://example.com/private.mov", $initial_current_url: "secret",
       $set: { email: "editor@example.com" }, $set_once: { private: "secret" },
-      $pathname: "/private.mov", $exception_list: [{ value: "secret" }], gclid: "secret",
+      $pathname: "/docs/", $host: "example.com", $referring_domain: "example.com",
+      $browser: "Chrome", $os: "Mac OS X", $device_type: "Desktop", $screen_width: 1440,
+      $exception_list: [{ value: "secret" }], gclid: "secret",
       prompt: "private editing instructions", $process_person_profile: true,
-      utm_campaign: "editor@example.com", $ip: "192.0.2.1",
+      utm_campaign: "editor@example.com", $ip: "192.0.2.1", $geoip_disable: true,
     } });
     expect(result.properties).toEqual({
       token: "phc_public_project", distinct_id: "anonymous", $session_id: "session",
       surface: "website", action: "safe_prompt", path: "/docs", utm_source: "newsletter",
+      $current_url: "https://example.com/", $referrer: "https://example.com",
+      $pathname: "/docs/", $host: "example.com", $referring_domain: "example.com",
+      $browser: "Chrome", $os: "Mac OS X", $device_type: "Desktop", $screen_width: 1440,
       $process_person_profile: false,
-      $ip: "0", $geoip_disable: true,
     });
+    expect(result.properties).not.toHaveProperty("$geoip_disable");
+    expect(result.properties).not.toHaveProperty("$ip");
+    expect(fixture.config()).not.toHaveProperty("ip");
+    const direct = fixture.config().before_send({ event: "$pageview", properties: {
+      surface: "website", $referrer: "$direct", $current_url: "javascript:alert(1)",
+    } });
+    expect(direct.properties).toEqual({ surface: "website", $referrer: "$direct", $process_person_profile: false });
     expect(fixture.config().before_send({ event: "$exception", properties: {} })).toBeNull();
   });
 

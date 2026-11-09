@@ -28,6 +28,28 @@ describe("deferred marketing analytics privacy", () => {
     expect(result.appended).toHaveLength(0);
     expect(result.window.dataLayer).toHaveLength(0);
   });
+  it("loads cookieless Ahrefs Web Analytics behind the same privacy gate", () => {
+    const run = (privacy: { doNotTrack?: string; globalPrivacyControl?: boolean }, key = "9iTcM8k/OrHTgUuqCduLmA") => {
+      const appended: Array<{ src?: string; async?: boolean; attributes: Record<string, string> }> = [];
+      const window = { requestIdleCallback: (callback: () => void) => callback() };
+      const document = {
+        currentScript: { dataset: { ahrefsKey: key } },
+        createElement: () => {
+          const attributes: Record<string, string> = {};
+          return { attributes, setAttribute: (name: string, value: string) => { attributes[name] = value; } };
+        },
+        head: { appendChild: (element: (typeof appended)[number]) => appended.push(element) },
+      };
+      runInNewContext(script, { window, document, navigator: privacy, URLSearchParams });
+      return appended;
+    };
+    const [tag, ...rest] = run({});
+    expect(rest).toHaveLength(0);
+    expect(tag).toMatchObject({ src: "https://analytics.ahrefs.com/analytics.js", async: true, attributes: { "data-key": "9iTcM8k/OrHTgUuqCduLmA" } });
+    expect(run({ doNotTrack: "1" })).toHaveLength(0);
+    expect(run({ globalPrivacyControl: true })).toHaveLength(0);
+    expect(run({}, "bad key\"><script>")).toHaveLength(0);
+  });
   it("retains the existing deferred analytics behavior when permitted", () => {
     const result = loader({});
     expect(result.appended).toHaveLength(0);

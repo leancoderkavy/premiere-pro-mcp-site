@@ -29,6 +29,8 @@ const posthogProjectToken =
   "phc_ua4YCP5MJnrHUgWryu23xyuKYMuyVfwPacgYJYRwBVXb";
 const posthogHost =
   process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com";
+const ahrefsAnalyticsKey =
+  process.env.NEXT_PUBLIC_AHREFS_ANALYTICS_KEY ?? "9iTcM8k/OrHTgUuqCduLmA";
 
 export const metadata: Metadata = {
   title: {
@@ -150,7 +152,7 @@ export default async function RootLayout({
         <a className="skip-link" href="#main-content">Skip to main content</a>
         <MarketingPageView />
         {children}
-        {googleAnalyticsId || posthogProjectToken ? (
+        {googleAnalyticsId || posthogProjectToken || ahrefsAnalyticsKey ? (
           <Script
             src="/analytics.js"
             strategy="lazyOnload"
@@ -158,6 +160,7 @@ export default async function RootLayout({
             data-google-analytics-id={googleAnalyticsId}
             data-posthog-project-token={posthogProjectToken}
             data-posthog-host={posthogHost}
+            data-ahrefs-key={ahrefsAnalyticsKey}
           />
         ) : null}
       </body>
