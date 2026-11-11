@@ -1,36 +1,9 @@
 import { product } from "./product"
 import { connectorSetup, localMcpConfig, localMcpEntry } from "./client-setup"
+import type { Article } from "./article-types"
+import { novDec2026MarketingArticles } from "./articles-pack-2026-11"
 
-export type ArticleSection = {
-  heading: string
-  paragraphs: string[]
-  bullets?: string[]
-  steps?: string[]
-  codeBlocks?: Array<{ label: string; code: string }>
-  links?: Array<{ label: string; href: string }>
-}
-
-export type ArticleFaq = {
-  question: string
-  answer: string
-}
-
-export type Article = {
-  slug: string
-  title: string
-  seoTitle?: string
-  description: string
-  eyebrow: string
-  publishedAt: string
-  modifiedAt: string
-  readingTime: string
-  keywords: string[]
-  sections: ArticleSection[]
-  faqs: ArticleFaq[]
-  resources: Array<{ label: string; href: string }>
-  relatedSlugs?: string[]
-  workflowKit?: string
-}
+export type { Article, ArticleFaq, ArticleSection } from "./article-types"
 
 export const articles: Article[] = [
   {
@@ -1865,6 +1838,7 @@ export const articles: Article[] = [
       "claude-desktop-premiere-pro-mcp-setup",
     ],
   },
+  ...novDec2026MarketingArticles,
 ]
 
 export const articleBySlug = new Map(articles.map((article) => [article.slug, article]))
