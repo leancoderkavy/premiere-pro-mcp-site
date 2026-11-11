@@ -47,6 +47,14 @@ The hosted endpoint does not automatically pair a visitor to their local Premier
 - AI in Premiere: https://premiere-pro-mcp.com/blog/set-up-ai-in-premiere-pro/
 - ChatGPT connection options: https://premiere-pro-mcp.com/blog/chatgpt-premiere-pro-mcp/
 - Workflow automation: https://premiere-pro-mcp.com/blog/premiere-pro-workflow-automation/
+- Automate Premiere Pro with AI: https://premiere-pro-mcp.com/blog/automate-premiere-pro-with-ai/
+- Claude and Cursor setup hub: https://premiere-pro-mcp.com/blog/premiere-pro-mcp-setup-claude-cursor/
+- Cut silence with AI: https://premiere-pro-mcp.com/blog/cut-silence-in-premiere-pro-with-ai/
+- AI captions workflow: https://premiere-pro-mcp.com/blog/premiere-pro-ai-captions-workflow/
+- AI rough cut workflow: https://premiere-pro-mcp.com/blog/premiere-pro-ai-rough-cut-workflow/
+- Beat montage planning: https://premiere-pro-mcp.com/blog/premiere-pro-beat-montage-with-mcp/
+- Vertical cutdowns: https://premiere-pro-mcp.com/blog/premiere-pro-vertical-cutdowns-with-mcp/
+- Agencies and YouTube teams: https://premiere-pro-mcp.com/blog/premiere-pro-mcp-for-agencies-and-youtube-teams/
 - Project Intake: https://premiere-pro-mcp.com/project-intake/
 - Guides: https://premiere-pro-mcp.com/blog/
 - Documentation: https://premiere-pro-mcp.com/docs/
