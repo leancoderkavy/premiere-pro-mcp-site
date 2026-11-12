@@ -1220,15 +1220,16 @@ export const articles: Article[] = [
     slug: "claude-desktop-premiere-pro-mcp-setup",
     workflowKit: "project-check",
     title: "How to Set Up Claude with Premiere Pro MCP",
-    seoTitle: "Claude Premiere Pro MCP Setup",
+    seoTitle: "How to Connect Claude to Premiere Pro (MCP Setup)",
     description:
-      "Set up Claude with Adobe Premiere Pro using the local MCP bundle and CEP connector, then verify the bridge before requesting any supported edit.",
+      "Connect Claude to Adobe Premiere Pro with the local MCP bundle and CEP connector, then run a safe connection check before requesting any supported edit.",
     eyebrow: "Claude Premiere Pro setup",
     publishedAt: "2026-08-22",
     modifiedAt: "2026-10-27",
     readingTime: "9 min read",
     keywords: [
       "Claude Premiere Pro",
+      "how to connect Claude to Premiere Pro",
       "how to set up Claude Premiere Pro",
       "Claude Desktop Premiere Pro",
       "Claude Premiere Pro MCP setup",
