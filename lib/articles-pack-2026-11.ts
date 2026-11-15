@@ -15,8 +15,8 @@ export const novDec2026MarketingArticles: Article[] = [
     description:
       "Automate Adobe Premiere Pro with an AI assistant through a local MCP server. Discover tools, preview edits, and verify results without giving up editorial control.",
     eyebrow: "Automate Premiere Pro with AI",
-    publishedAt: "2026-11-16",
-    modifiedAt: "2026-11-16",
+    publishedAt: "2026-10-15",
+    modifiedAt: "2026-10-15",
     readingTime: "8 min read",
     workflowKit: "project-check",
     keywords: [
@@ -120,8 +120,8 @@ export const novDec2026MarketingArticles: Article[] = [
     description:
       "Set up Premiere Pro MCP with Claude Desktop or Cursor: install the published npm package, connect the CEP panel, and verify the local bridge before editing.",
     eyebrow: "Claude and Cursor setup",
-    publishedAt: "2026-11-18",
-    modifiedAt: "2026-11-18",
+    publishedAt: "2026-10-20",
+    modifiedAt: "2026-10-20",
     readingTime: "7 min read",
     keywords: [
       "Premiere Pro MCP setup",
@@ -223,8 +223,8 @@ export const novDec2026MarketingArticles: Article[] = [
     description:
       "Use Premiere Pro MCP to detect silent ranges with FFmpeg, plan review markers or a silence stringout, preview ripple removals, and verify the timeline before delivery.",
     eyebrow: "Silence cutting workflow",
-    publishedAt: "2026-11-21",
-    modifiedAt: "2026-11-21",
+    publishedAt: "2026-10-25",
+    modifiedAt: "2026-10-25",
     readingTime: "8 min read",
     keywords: [
       "cut silence Premiere Pro",
@@ -321,8 +321,8 @@ export const novDec2026MarketingArticles: Article[] = [
     description:
       "Build SRT or VTT caption artifacts from a word timeline, import a caption track into Premiere, apply manual style guidance, and verify render evidence with MCP tools.",
     eyebrow: "Captions workflow",
-    publishedAt: "2026-11-25",
-    modifiedAt: "2026-11-25",
+    publishedAt: "2026-10-28",
+    modifiedAt: "2026-10-28",
     readingTime: "8 min read",
     keywords: [
       "Premiere Pro AI captions",
@@ -414,8 +414,8 @@ export const novDec2026MarketingArticles: Article[] = [
     description:
       "Build evidence-backed rough-cut and stringout plans with Premiere Pro MCP, preview compound edits, and apply only after you review targets on a duplicate sequence.",
     eyebrow: "Rough cut workflow",
-    publishedAt: "2026-11-28",
-    modifiedAt: "2026-11-28",
+    publishedAt: "2026-11-01",
+    modifiedAt: "2026-11-01",
     readingTime: "8 min read",
     keywords: [
       "Premiere Pro AI rough cut",
@@ -504,8 +504,8 @@ export const novDec2026MarketingArticles: Article[] = [
     description:
       "Detect a local beat grid with FFmpeg, plan a beat-synced montage with Premiere Pro MCP, then place clips in reviewed batches without guessing the rhythm.",
     eyebrow: "Beat montage workflow",
-    publishedAt: "2026-12-03",
-    modifiedAt: "2026-12-03",
+    publishedAt: "2026-11-05",
+    modifiedAt: "2026-11-05",
     readingTime: "7 min read",
     keywords: [
       "beat synced montage Premiere Pro",
@@ -587,8 +587,8 @@ export const novDec2026MarketingArticles: Article[] = [
     description:
       "Plan multi-ratio Premiere deliveries, auto-reframe sequences, check caption safe zones, and preflight exports for Shorts, Reels, TikTok, and YouTube with MCP tools.",
     eyebrow: "Platform cutdowns",
-    publishedAt: "2026-12-08",
-    modifiedAt: "2026-12-08",
+    publishedAt: "2026-11-10",
+    modifiedAt: "2026-11-10",
     readingTime: "8 min read",
     keywords: [
       "Premiere Pro vertical cutdown",
@@ -678,8 +678,8 @@ export const novDec2026MarketingArticles: Article[] = [
     description:
       "Use Premiere Pro MCP for agency and YouTube team handoffs: project intake preview, backups, sequence review reports, review frames, and bounded edit recipes editors can audit.",
     eyebrow: "Agencies and YouTube teams",
-    publishedAt: "2026-12-12",
-    modifiedAt: "2026-12-12",
+    publishedAt: "2026-11-12",
+    modifiedAt: "2026-11-12",
     readingTime: "8 min read",
     keywords: [
       "Premiere Pro MCP for agencies",
