@@ -1,4 +1,5 @@
 import { Code2, FolderOpen, KeyRound, Scissors, SlidersHorizontal, Upload } from "lucide-react"
+import Link from "next/link"
 
 const capabilities = [
   {
@@ -42,7 +43,7 @@ export function FeaturesSection() {
             A narrower interface for <span className="text-violet-300">predictable edit work.</span>
           </h2>
           <p className="mt-5 text-lg leading-8 text-zinc-400">
-            Give an MCP-compatible client structured operations instead of asking it to infer state from Premiere&apos;s interface.
+            Give an MCP-compatible client structured operations instead of asking it to infer state from Premiere&apos;s interface. Learn how to <Link href="/blog/automate-premiere-pro-with-ai/" className="font-medium text-violet-200 underline decoration-violet-400/30 underline-offset-2 transition-colors hover:text-white hover:decoration-violet-400/60">automate Premiere Pro</Link> with local tools, or follow the <Link href="/blog/premiere-pro-mcp-setup-claude-cursor/" className="font-medium text-violet-200 underline decoration-violet-400/30 underline-offset-2 transition-colors hover:text-white hover:decoration-violet-400/60">Premiere Pro MCP with Claude</Link> setup guide.
           </p>
         </div>
 

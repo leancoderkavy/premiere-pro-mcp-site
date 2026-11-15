@@ -109,6 +109,8 @@ export default function DocsPage() {
         <nav aria-label="Workflow guides" className="py-8">
           <h2 className="text-xl font-semibold">After your connection check</h2>
           <ul className="mt-3 space-y-2 text-site-accent">
+            <li><Link className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-site-text" href="/blog/automate-premiere-pro-with-ai/">Automate Premiere Pro with AI workflows</Link></li>
+            <li><Link className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-site-text" href="/blog/premiere-pro-mcp-setup-claude-cursor/">Set up Premiere Pro MCP with Claude or Cursor</Link></li>
             <li><Link className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-site-text" href="/tools/">Search tool names, actions, and availability</Link></li>
             <li><Link className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-site-text" href="/workflows/">Try a workflow with disposable sample media</Link></li>
             <li><Link className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-site-text" href="/project-intake/">Review a project with the Project Intake checklist</Link></li>
