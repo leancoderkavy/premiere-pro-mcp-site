@@ -627,16 +627,18 @@ export const articles: Article[] = [
   },
   {
     slug: "premiere-pro-review-frames-and-scene-detection",
-    seoTitle: "Review Frames & Scene Detection",
+    seoTitle: "Scene Edit Detection in Premiere Pro (+ MCP)",
     workflowKit: "review-frames",
-    title: "Premiere Pro Review Frames and Scene Detection: Build a Faster Human Review Pass",
+    title: "Scene Edit Detection in Premiere Pro: Native Cuts, MCP Tools, and Review Frames",
     description:
-      "Build a Premiere Pro review pass with file-verified stills, clip midpoint samples, and scene candidates. Keep playback and editorial approval separate.",
+      "Scene Edit Detection in Premiere Pro: add cuts, markers, or subclips at detected shots, run it with MCP tools, then check the result with review frames.",
     eyebrow: "Visual review workflow",
     publishedAt: "2026-08-23",
-    modifiedAt: "2026-10-04",
-    readingTime: "7 min read",
+    modifiedAt: "2026-11-16",
+    readingTime: "9 min read",
     keywords: [
+      "scene edit detection Premiere Pro",
+      "Premiere Pro scene edit detection markers",
       "Premiere Pro review frames",
       "Premiere Pro scene detection workflow",
       "Premiere Pro visual QC",
@@ -644,6 +646,36 @@ export const articles: Article[] = [
     ],
     sections: [
       { heading: "Try this with disposable sample media", paragraphs: ["The downloadable workflow starter kit contains two synthetic video clips, a caption sample, and step-by-step evaluation prompts. Build a disposable sequence and compare the result with the checklist. The kit is not a recorded demonstration or a verified Premiere project; report any failed or unsupported check accurately."], bullets: ["Install the server and separate Premiere connector before trying the kit.", "Start with a read-only connection check and stop if it is not ready.", "Keep file exports and project changes behind their own explicit confirmation."] },
+      {
+        heading: "Scene Edit Detection in Premiere Pro: native cuts, markers, or subclips",
+        paragraphs: [
+          "Scene Edit Detection is Premiere Pro’s built-in analysis for finding the original cut points inside a single video file, such as a long master clip or a flattened, compiled edit. It runs on clips you select in a sequence. Adobe’s help page lists three outputs: a cut at each detected cut point, a bin of subclips with one subclip per detected segment, or a clip marker at each detected cut point for manual review. Analysis can take minutes on long clips.",
+          "Premiere Pro MCP drives the same host feature through two tools. scene_edit_detection works on the clips selected in the active sequence and refuses to run when there is no active sequence or no selected clip. Its action is CreateMarkers (the default) or ApplyCuts; sensitivity is LowSensitivity, MediumSensitivity (the default), or HighSensitivity; and apply_cuts_to_linked_audio stays off unless you set it. CreateMarkers puts Segmentation markers on the selected clips’ source project items, which every sequence using those items shares, reports each detected cut in source and timeline seconds, and counts as verified only when at least one new marker was added. ApplyCuts razors the selected clips and counts as verified only when the clip count grew.",
+          "detect_scene_edits is the safe facade for the UXP path. It offers apply_cuts, create_markers, or create_subclips on the current native selection, requires confirm_non_undoable:true, and runs only through an authenticated Premiere UXP bridge. Its CEP fallback is intentionally withheld because synchronous scene detection can block the panel. Neither tool claims a verified undo, so duplicate the sequence or back up the project before a run.",
+          "Both differ from detect_source_scene_changes, covered below. That tool reads a local source file with FFmpeg scene scores and changes nothing in Premiere, while Scene Edit Detection writes cuts, markers, or subclips into the project.",
+        ],
+        steps: [
+          "Import the media, add it to a sequence, and select the clip in the Timeline panel.",
+          "Choose Clip > Scene Edit Detection, or right-click the selection in the Timeline panel.",
+          "Pick one or more options: Apply a cut at each detected cut point, Create bin of subclips from each detected cut point, or Create clip marker at each detected cut point.",
+          "Select Analyze. Adobe notes that native cuts also apply to linked audio, so unlink the audio first if it should stay whole.",
+        ],
+        codeBlocks: [
+          {
+            label: "Marker-first scene edit detection prompt",
+            code: "Confirm a sequence is active and only the clip I selected on V1 is selected. Run scene_edit_detection with action CreateMarkers and MediumSensitivity, then list each detected cut in source and timeline seconds. Do not apply cuts, create subclips, or change any other clip.",
+          },
+        ],
+        bullets: [
+          "Start with markers on a duplicate sequence; move to cuts or subclips only after reviewing the detected points.",
+          "Markers land on the source project item, so they appear in every sequence that uses it.",
+          "Review each detected point in Premiere before trimming, grading, or reframing against it.",
+        ],
+        links: [
+          { label: "Adobe: Detect edit points using Scene Edit Detection", href: "https://helpx.adobe.com/premiere/desktop/edit-projects/change-clip-sequence/detect-edit-points-using-scene-edit-detection.html" },
+          { label: "Plan vertical cutdowns from the detected shots", href: "/blog/premiere-pro-vertical-cutdowns-with-mcp/" },
+        ],
+      },
       {
         heading: "Use sampled frames to focus an editor’s review, not to replace it",
         paragraphs: [
@@ -690,6 +722,11 @@ export const articles: Article[] = [
         question: "Does source scene detection create edits in Premiere?",
         answer:
           "No. detect_source_scene_changes is read-only local source-file analysis. It returns candidate source-relative times and does not cut or otherwise modify a Premiere timeline.",
+      },
+      {
+        question: "Can Premiere Pro MCP undo Scene Edit Detection?",
+        answer:
+          "Do not rely on it. detect_scene_edits requires confirm_non_undoable:true and does not claim undo. scene_edit_detection records a guarded marker boundary for CreateMarkers, but that boundary does not verify native marker reversal. Run detection on a duplicate sequence or after a project backup.",
       },
       {
         question: "What should happen when a frame is missing or suspicious?",
