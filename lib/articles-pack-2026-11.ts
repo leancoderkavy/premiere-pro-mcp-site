@@ -768,6 +768,7 @@ export const novDec2026MarketingArticles: Article[] = [
     resources: [
       { label: "Beat montage workflow", href: "/blog/premiere-pro-beat-montage-with-mcp/" },
       { label: "Export and loudness checklist", href: "/blog/premiere-pro-delivery-qc-and-loudness-checklist/" },
+      { label: "Scene Edit Detection in Premiere Pro", href: "/blog/premiere-pro-review-frames-and-scene-detection/" },
       { label: "Facts and compatibility", href: "/facts/" },
     ],
     relatedSlugs: [
