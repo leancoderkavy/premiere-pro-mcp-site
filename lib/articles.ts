@@ -785,6 +785,7 @@ export const articles: Article[] = [
       { label: "Build a faster human visual-review pass", href: "/blog/premiere-pro-review-frames-and-scene-detection/" },
       { label: "Read the supported loudness and QC actions", href: "https://github.com/leancoderkavy/premiere-pro-mcp/blob/main/docs/supported-actions.md" },
       { label: "Back up a project before a high-risk workflow", href: "/blog/premiere-pro-project-backup-checklist/" },
+      { label: "Prepare caption tracks with the captions workflow", href: "/blog/premiere-pro-ai-captions-workflow/" },
     ],
     relatedSlugs: ["premiere-pro-review-frames-and-scene-detection", "premiere-pro-project-backup-checklist"],
   },
@@ -1032,6 +1033,7 @@ export const articles: Article[] = [
       { label: "Install and run a safe first check", href: "/docs/" },
       { label: "Learn about Adobe Premiere’s AI Assistant", href: "https://helpx.adobe.com/premiere/desktop/premiere-ai-assistant/overview.html" },
       { label: "Read how an MCP server for Adobe Premiere Pro works", href: "/blog/what-is-a-premiere-pro-mcp-server/" },
+      { label: "Auto generate captions in Premiere Pro", href: "/blog/premiere-pro-ai-captions-workflow/" },
     ],
   },
   {
@@ -1129,6 +1131,7 @@ export const articles: Article[] = [
       { label: "See the supported capability categories", href: "/docs/" },
       { label: "Read the full README and setup guidance", href: "https://github.com/leancoderkavy/premiere-pro-mcp#readme" },
       { label: "Explore AI-assisted Premiere workflows", href: "/blog/ai-video-editing-with-premiere-pro/" },
+      { label: "Learn auto captions in Premiere Pro, native and with MCP", href: "/blog/premiere-pro-ai-captions-workflow/" },
     ],
   },
   {
@@ -1578,6 +1581,7 @@ export const articles: Article[] = [
       { label: "Compare Adobe AI Assistant with MCP", href: "/blog/adobe-premiere-ai-assistant-vs-mcp/" },
       { label: "Learn how to set up Premiere Pro MCP", href: "/blog/how-to-set-up-premiere-pro-mcp/" },
       { label: "Read the Premiere Pro AI workflow checklist", href: "/blog/premiere-pro-ai-workflow-checklist/" },
+      { label: "Set up Premiere Pro auto captions", href: "/blog/premiere-pro-ai-captions-workflow/" },
     ],
     relatedSlugs: [
       "ai-video-editing-with-premiere-pro",
