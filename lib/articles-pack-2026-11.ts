@@ -878,4 +878,159 @@ export const novDec2026MarketingArticles: Article[] = [
       "premiere-pro-mcp-setup-claude-cursor",
     ],
   },
+  {
+    slug: "premiere-pro-scripting-extendscript-uxp",
+    title: "Premiere Pro Scripting: ExtendScript vs. UXP vs. MCP",
+    seoTitle: "Premiere Pro Scripting: ExtendScript vs UXP vs MCP",
+    description:
+      "Compare the ways to script Adobe Premiere Pro: legacy ExtendScript, UXP plugins, and an MCP server on top of both. Adobe's CEP timeline, trade-offs, and when to use each.",
+    eyebrow: "Premiere Pro scripting for developers",
+    publishedAt: "2026-11-16",
+    modifiedAt: "2026-11-16",
+    readingTime: "9 min read",
+    keywords: [
+      "Premiere Pro scripting",
+      "Premiere Pro ExtendScript",
+      "Premiere Pro UXP plugin",
+      "Premiere Pro API",
+      "ExtendScript vs UXP",
+    ],
+    sections: [
+      {
+        heading: "Three layers, not three competitors",
+        paragraphs: [
+          "If you want code to drive Adobe Premiere Pro, you will run into three names: ExtendScript, UXP, and, more recently, MCP. They are often compared as if you must pick one. In practice they sit at different layers. ExtendScript and UXP are Adobe’s host scripting environments: they run inside Premiere and touch its project, sequences, and clips. An MCP server is a protocol layer outside Premiere that exposes named, typed tools to an AI client and calls one of those host environments to do the actual work.",
+          "This guide explains what each layer is, what Adobe has said about the transition from CEP to UXP, and how to decide where your own scripts should live. It is written for developers and technical editors. If you want to know which editing tasks are worth automating, read the workflow automation guide instead.",
+        ],
+        links: [
+          { label: "Which Premiere tasks to automate first", href: "/blog/premiere-pro-workflow-automation/" },
+          { label: "How Premiere Pro MCP works", href: "/how-premiere-pro-mcp-works/" },
+        ],
+      },
+      {
+        heading: "ExtendScript: the long-standing Premiere DOM",
+        paragraphs: [
+          "ExtendScript is Adobe’s ES3-era JavaScript dialect. In Premiere it exposes the app object and a document model of projects, bins, sequences, tracks, and track items. Scripts run inside the host, so they can read and change project state directly. Many existing Premiere panels are CEP extensions: an HTML and JavaScript panel that sends ExtendScript to the host and reads the result back.",
+          "The trade-offs are familiar to anyone who has shipped a CEP panel. The language lacks let, const, arrow functions, and modern modules. Adobe’s UXP reference notes that ExtendScript calls to Premiere were synchronous and blocked the Premiere UI while they ran. Some common operations also have no documented ExtendScript setter, which pushes scripts toward the undocumented QE DOM, whose behavior can vary between Premiere builds.",
+        ],
+        codeBlocks: [
+          {
+            label: "A one-line ExtendScript read",
+            code: "app.project.activeSequence.name",
+          },
+        ],
+      },
+      {
+        heading: "UXP: Adobe’s current extensibility platform",
+        paragraphs: [
+          "UXP (Unified Extensibility Platform) is the plugin runtime Adobe describes as the current extensibility standard for Creative Cloud applications, and its documentation lists Premiere 25.6 among the supported hosts. Plugins use modern JavaScript and load the Premiere API with require(\"premierepro\"). According to Adobe’s Premiere UXP reference, method calls are asynchronous and do not block the UI thread, while property getters and setters were designed to stay synchronous to ease the move from the ExtendScript DOM.",
+          "Adobe also announced UXP hybrid plugins for Premiere 26.2. A hybrid plugin can load native C++ libraries at runtime for work that JavaScript alone handles poorly, such as heavy media processing. The Premiere UXP API is still growing, so check the reference for the specific objects and methods your script needs before committing to it.",
+        ],
+        codeBlocks: [
+          {
+            label: "Loading the Premiere API in a UXP plugin",
+            code: 'const ppro = require("premierepro")\n// Methods return promises; await them inside an async function.',
+          },
+        ],
+        links: [
+          { label: "Adobe Premiere UXP API reference", href: "https://developer.adobe.com/premiere-pro/uxp/ppro-reference/" },
+          {
+            label: "Adobe: UXP hybrid plugins for Premiere",
+            href: "https://blog.developer.adobe.com/en/publish/2026/04/uxp-hybrid-plugins-now-available-for-premiere",
+          },
+        ],
+      },
+      {
+        heading: "What Adobe has said about the CEP timeline",
+        paragraphs: [
+          "In September 2026, Adobe published its plan for moving its flagship applications from CEP to UXP. The dates below come from that announcement. Plan against them, and recheck the Adobe post before a release decision, because published schedules can change.",
+          "One point is easy to misread. Adobe states that ExtendScripts are not affected by this transition. The retirement applies to CEP, the HTML panel framework, not to ExtendScript itself. A CEP panel that relies on ExtendScript is still affected, because the panel host is what goes away.",
+        ],
+        bullets: [
+          "December 2027: Premiere stops accepting new CEP submissions.",
+          "December 2028: CEP becomes disabled by default in Premiere.",
+          "December 2029: Adobe says CEP will no longer be included in its flagship applications, and CEP is retired at the end of 2029.",
+          "Today: Adobe lists Premiere as having generally available UXP plugins and hybrid plugins.",
+        ],
+        links: [
+          {
+            label: "Adobe: UXP comes to our flagship applications",
+            href: "https://blog.developer.adobe.com/en/publish/2026/09/investing-in-the-future-of-creative-cloud-extensibility-uxp-comes-to-our-flagship-applications",
+          },
+        ],
+      },
+      {
+        heading: "When to use ExtendScript, UXP, or MCP",
+        paragraphs: [
+          "Choose by who triggers the work and which Premiere versions you must support, not by which technology sounds newest.",
+        ],
+        bullets: [
+          "Write a UXP plugin when you are building a new panel or product for current Premiere releases, need a non-blocking UI, or want native code through a hybrid plugin.",
+          "Keep ExtendScript when you maintain scripts for older Premiere hosts, rely on an operation the UXP API does not yet cover, or need a quick one-off utility. Plan any CEP-hosted panel around Adobe’s dates.",
+          "Use an MCP server when the caller is an AI assistant or agent rather than a person clicking a panel. You get named tools with schemas, preflight checks, and structured results instead of generating raw script text for every request.",
+          "Combine them when you need to. An MCP server still runs ExtendScript or UXP underneath, so improvements to either host API benefit the tools above it.",
+        ],
+      },
+      {
+        heading: "How an MCP server sits on top of both",
+        paragraphs: [
+          `MCP for Adobe Premiere Pro is an independent, MIT-licensed local server that uses Adobe’s documented UXP and CEP/ExtendScript APIs. Its CEP connector is the production and compatibility bridge for Premiere ${product.premiereCompatibility}. On Premiere ${product.uxpMinimumVersion} and later, a compatible, authenticated UXP panel can advertise ${product.uxpAdditionalToolCount} additional capability-gated tools without replacing the CEP bridge. Tools without a documented UXP route keep using CEP.`,
+          `Published v${product.version} registers ${product.coreToolCount} core tools. The default authority profile lists ${product.defaultProfileToolCount} of them and withholds execute_extendscript and evaluate_expression, which run raw ExtendScript and require explicit unsafe-script authority. Leave that capability disabled unless you need it: most scripting tasks are better served by a named tool that validates targets and reads results back than by free-form code. These counts describe the published npm package; they are not proof that every operation succeeds in a licensed Premiere host.`,
+        ],
+        links: [
+          { label: "Searchable tool reference", href: "/tools/" },
+          { label: "Canonical product facts", href: "/facts/" },
+        ],
+      },
+      {
+        heading: "A minimal example: the same read, three ways",
+        paragraphs: [
+          "Suppose you want the active sequence name. In ExtendScript it is the one-line expression shown above. In a UXP plugin you load the premierepro module and await the project and sequence calls documented in Adobe’s reference. Through MCP, the assistant calls a read-only tool and returns a structured result, so neither you nor the model writes host script text.",
+          "Start with a no-change check like the request below. It confirms that the server, the selected bridge, an open project, and an active sequence are reachable. It does not prove that a later edit, export, or UXP-only tool will succeed.",
+        ],
+        codeBlocks: [
+          {
+            label: "Read-only MCP request",
+            code: "Run verify_premiere_connection. If ready, call get_active_sequence and report its name and the active bridge. Do not change Premiere or write files.",
+          },
+        ],
+        links: [
+          { label: "Install and run a safe first check", href: "/docs/" },
+          { label: "What is an MCP server for Premiere Pro?", href: "/blog/what-is-a-premiere-pro-mcp-server/" },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Is ExtendScript deprecated in Premiere Pro?",
+        answer:
+          "Adobe’s September 2026 CEP-to-UXP announcement states that ExtendScripts are not affected by the transition; the retirement schedule applies to CEP. Check Adobe’s developer documentation before relying on ExtendScript for a long-lived product, and prefer UXP for new panels.",
+      },
+      {
+        question: "When will CEP panels stop working in Premiere Pro?",
+        answer:
+          "Adobe says Premiere stops accepting new CEP submissions in December 2027 and disables CEP by default in December 2028. Starting December 2029, CEP will no longer be included in Adobe’s flagship applications.",
+      },
+      {
+        question: "Which Premiere version supports UXP plugins?",
+        answer: `Adobe’s UXP documentation lists Premiere 25.6 as a supported host, and hybrid plugins with native C++ libraries arrived in Premiere 26.2. The MCP server’s UXP bridge targets Premiere ${product.uxpMinimumVersion} and later.`,
+      },
+      {
+        question: "Can an MCP server run my own ExtendScript?",
+        answer:
+          "Yes, through execute_extendscript and evaluate_expression, but only when you explicitly enable the unsafe-script authority. The default profile hides both. Named tools are the safer route for routine reads and edits.",
+      },
+    ],
+    resources: [
+      { label: "How Premiere Pro MCP works", href: "/how-premiere-pro-mcp-works/" },
+      { label: "Premiere Pro MCP docs", href: "/docs/" },
+      { label: "Premiere Pro workflow automation", href: "/blog/premiere-pro-workflow-automation/" },
+      { label: "Source repository", href: product.links.repository },
+    ],
+    relatedSlugs: [
+      "what-is-a-premiere-pro-mcp-server",
+      "premiere-pro-workflow-automation",
+      "how-to-set-up-premiere-pro-mcp",
+    ],
+  },
 ]

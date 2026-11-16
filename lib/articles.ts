@@ -1169,6 +1169,7 @@ export const articles: Article[] = [
       { label: "Read the full README and setup guidance", href: "https://github.com/leancoderkavy/premiere-pro-mcp#readme" },
       { label: "Explore AI-assisted Premiere workflows", href: "/blog/ai-video-editing-with-premiere-pro/" },
       { label: "Learn auto captions in Premiere Pro, native and with MCP", href: "/blog/premiere-pro-ai-captions-workflow/" },
+      { label: "Compare ExtendScript, UXP and MCP for Premiere Pro scripting", href: "/blog/premiere-pro-scripting-extendscript-uxp/" },
     ],
   },
   {
