@@ -316,47 +316,134 @@ export const novDec2026MarketingArticles: Article[] = [
   },
   {
     slug: "premiere-pro-ai-captions-workflow",
-    title: "Premiere Pro AI Captions Workflow: Build, Import, Style, Verify",
-    seoTitle: "Premiere Pro AI Captions Workflow (MCP)",
+    title: "How to Auto Generate Captions in Premiere Pro (Native + MCP Workflow)",
+    seoTitle: "How to Auto Generate Captions in Premiere Pro (+ MCP)",
     description:
-      "Build SRT or VTT caption artifacts from a word timeline, import a caption track into Premiere, apply manual style guidance, and verify render evidence with MCP tools.",
+      "Yes, Premiere Pro has auto captions: transcribe in the Text panel, then Create captions. Plus an MCP workflow to build, import, retime and check SRTs.",
     eyebrow: "Captions workflow",
     publishedAt: "2026-11-11",
-    modifiedAt: "2026-11-11",
+    modifiedAt: "2026-11-16",
     readingTime: "8 min read",
     keywords: [
+      "how to auto generate captions in Premiere Pro",
+      "Premiere Pro auto captions",
+      "does Premiere Pro have auto captions",
+      "Premiere Pro speech to text captions",
       "Premiere Pro AI captions",
       "Premiere Pro captions MCP",
-      "auto captions Premiere Pro",
-      "SRT VTT Premiere Pro AI",
+      "SRT captions Premiere Pro",
       "caption safe zone Premiere",
     ],
     sections: [
       {
-        heading: "Know what the caption tools do and do not do",
+        heading: "Does Premiere Pro have auto captions?",
         paragraphs: [
-          "build_caption_artifact builds a CapCut/Submagic-style SRT or VTT file from a caller-supplied word timeline. It balances word groups, applies sentence-aware breaks, supports style presets (clean, bold_pop, karaoke, podcast, lecture), and can write karaoke word timestamps in VTT. It is local-only and never changes Premiere by itself.",
-          "add_text_overlay cannot create caption clips from raw text through Premiere’s scripting API. For on-screen titles use add_title. For captions, import an reviewed .srt/.vtt with create_caption_track.",
+          "Yes. Premiere Pro has built-in Speech to Text. It transcribes the dialogue in a sequence, and the Create captions command turns that transcript into a caption track aligned to the speech. You do not need a plugin or a separate service for the basic workflow.",
+          "Premiere Pro MCP is optional automation around that native path. It can help you request a transcript, turn an approved word timeline into an SRT file, import it as a caption track, retime it after edits, and check placement. It does not replace Adobe's Speech to Text, and it does not style captions for you. The native steps come first below; the MCP section follows.",
+        ],
+        links: [
+          {
+            label: "Adobe: Auto-transcribe video using Speech to Text",
+            href: "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-captions/auto-transcribe-video-using-speech-to-text.html",
+          },
+          {
+            label: "Adobe: Create captions",
+            href: "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-captions/create-captions.html",
+          },
         ],
       },
       {
-        heading: "Build the artifact, then import one caption track",
+        heading: "How to auto generate captions in Premiere Pro",
         paragraphs: [
-          "Supply a reviewed word timeline from your transcription source. Ask the assistant to call build_caption_artifact with the format and style preset you want. Inspect the cues before import.",
-          "create_caption_track import rejects unsupported formats before host dispatch and reports structural success only when readback shows exactly one new caption track. Unreadable results stay committed_unverified. Captions import with Premiere’s default style.",
+          "These steps follow Adobe's current help pages (Speech to Text updated June 2, 2026; Create captions updated January 7, 2026). Menu names can move between Premiere versions, so check the linked pages if a label differs on your install.",
+          "Caption the final edited sequence where you can. Captions are timed against the timeline, so heavy edits after captioning mean retiming work later.",
+        ],
+        steps: [
+          "Open the sequence you want to caption and choose Window > Text to open the Text panel.",
+          "In the Transcript tab, choose Generate static transcript. Pick the language (Premiere offers a language pack download if one is missing), decide on speaker labeling, and choose what to analyze: dialogue-tagged clips or a specific audio track. You can limit transcription to the In and Out points or merge the result with an existing transcription.",
+          "Select Transcribe and wait for the transcript to appear in the Text panel.",
+          "Read the transcript and fix names, jargon, and misheard words before you make captions. Corrections here carry into the captions you create from it.",
+          "Switch to Window > Workspaces > Captions and Graphics, then choose Captions > Create captions from transcript.",
+          "In the dialog, pick a caption preset (Subtitle is the default), format, stream, and style, then set caption length, duration, gap between captions, and single or double lines.",
+          "Select Create captions. Premiere adds a caption track aligned to the dialogue. Play it back and correct any cues that break awkwardly.",
+        ],
+        bullets: [
+          "Tip: if you select Automatic Transcription when importing media, Premiere transcribes the clips on import, so the transcript is ready before you create captions.",
+          "Review is not optional. Speech recognition varies with audio quality, accents, crosstalk, and vocabulary, so treat the first pass as a draft.",
+        ],
+      },
+      {
+        heading: "Languages, language packs and transcription settings",
+        paragraphs: [
+          "Adobe's supported-languages page (updated August 22, 2025) lists 18 Speech to Text languages: Danish, Dutch (Netherlands), English, English (UK), French, German, Hindi, Italian, Japanese, Korean, Norwegian, Portuguese (European), Russian, Simplified Chinese (Mandarin), Spanish, Swedish, Traditional Cantonese, and Traditional Chinese (Mandarin). Check that page for the current list before you plan a multilingual job.",
+          "Additional language packs install from the Creative Cloud desktop app: Apps > All apps, open the three-dots menu next to Premiere, and choose Get add-ons.",
+          "The Media Analysis & Transcription preferences control the defaults: automatically transcribe all imported clips or only clips in a sequence, speaker labeling, language auto-detection, a default language, and where the transcript cache lives (sidecar files, the Media Cache, or the project only).",
+        ],
+        links: [
+          {
+            label: "Adobe: Languages supported by Speech to Text",
+            href: "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-captions/languages-supported-by-speech-to-text.html",
+          },
+          {
+            label: "Adobe: Download language packs",
+            href: "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-captions/download-language-packs-from-creative-cloud.html",
+          },
+          {
+            label: "Adobe: Transcription preferences",
+            href: "https://helpx.adobe.com/premiere/desktop/get-started/preferences-and-settings/transcription-preferences.html",
+          },
+        ],
+      },
+      {
+        heading: "Already have an SRT? Import captions from another tool",
+        paragraphs: [
+          "If a transcription service or another editor already produced captions, you can skip Speech to Text. Import the SRT file like any other media, then drag it from the Project panel into the sequence. Premiere creates a new caption track from it.",
+          "Adobe's supported sidecar caption formats are SCC, MCC, XML, STL, SRT, and DFXP, with XML covering W3C TTML (DFXP), SMPTE-TT, and EBU-TT. WebVTT is not on that list, so use SRT when the destination is a Premiere timeline. Keep VTT for web players that ask for it.",
+        ],
+        links: [
+          {
+            label: "Adobe: Import a caption file from a third-party service",
+            href: "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-captions/import-caption-file-from-third-party-service.html",
+          },
+          {
+            label: "Adobe: Supported file formats for captions",
+            href: "https://helpx.adobe.com/premiere/desktop/add-text-images/insert-captions/supported-file-formats-for-captions.html",
+          },
+        ],
+      },
+      {
+        heading: "Where Premiere Pro MCP fits",
+        paragraphs: [
+          `Premiere Pro MCP does not transcribe audio by itself in published v${product.version}. On a compatible Premiere 26.3 or later UXP connection, transcribe_clip_uxp and prepare_transcript_workflow can ask Premiere to start Adobe's own Speech to Text for one exact source clip. Both need explicit confirmation and an operation id. A start request is reported as accepted or pending, never as a finished transcript, and transcription may use Adobe cloud services according to your host preferences.`,
+          "Once the native transcript exists, get_clip_transcript_uxp exports it as JSON with a revision hash. It is read-only and does not run Speech to Text.",
+          "build_caption_artifact then turns a word timeline you have reviewed into an SRT (or VTT) file. It balances word groups, applies sentence-aware breaks, enforces minimum and maximum cue durations, and supports the clean, bold_pop, karaoke, podcast, and lecture presets. It is local-only and never changes Premiere by itself.",
+          "add_text_overlay cannot create caption clips from raw text through Premiere's scripting API. For on-screen titles use add_title. For captions, import a reviewed SRT and create the caption track as described next.",
+        ],
+        links: [
+          { label: "Set up Premiere Pro MCP", href: "/blog/how-to-set-up-premiere-pro-mcp/" },
+          { label: "Adobe AI Assistant vs MCP", href: "/blog/adobe-premiere-ai-assistant-vs-mcp/" },
+          { label: "Published package facts", href: "/facts/" },
+        ],
+      },
+      {
+        heading: "Build the SRT, then import one caption track",
+        paragraphs: [
+          "Supply a reviewed word timeline, either the native transcript you exported or one from your own transcription source. Ask the assistant to call build_caption_artifact with SRT output and the style preset you want. Inspect the cues before import.",
+          "Import the reviewed SRT into the project so it becomes a project item, then call create_caption_track with that item's id. create_caption_track rejects unsupported caption formats before host dispatch and reports verified only when readback shows exactly one new caption track. Unreadable results stay committed_unverified. Captions import with Premiere's default style.",
         ],
         codeBlocks: [
           {
             label: "Build then import (after your review)",
-            code: "Build an SRT caption artifact from my approved word timeline with style_preset podcast. Show the cue list for review. After I approve the file, import it with create_caption_track on the active sequence. Do not style or export yet.",
+            code: "Build an SRT caption artifact from my approved word timeline with style_preset podcast. Show the cue list for review. After I approve the file and it is in the project, import it with create_caption_track on the active sequence. Do not style or export yet.",
           },
         ],
         steps: [
           "Verify the Premiere connection read-only.",
-          "Build the SRT/VTT artifact from the approved word timeline.",
+          "Build the SRT artifact from the approved word timeline.",
           "Spot-check cues for timing, speaker breaks, and wording.",
-          "Import with create_caption_track and confirm one new caption track.",
+          "Import the SRT as a project item, then run create_caption_track with its item id and confirm one new caption track.",
         ],
+        links: [{ label: "Rough cut workflow", href: "/blog/premiere-pro-ai-rough-cut-workflow/" }],
       },
       {
         heading: "Style in Premiere; use guidance tools for the clicks",
@@ -369,7 +456,7 @@ export const novDec2026MarketingArticles: Article[] = [
       {
         heading: "Retime after ripple edits and verify renders",
         paragraphs: [
-          "If you ripple-remove timeline ranges after captions exist, Premiere captions do not follow those ripples automatically. retime_caption_file shifts or ripples a local SRT/VTT; then re-import and reapply styling.",
+          "The simplest way to avoid retiming is to caption the final edited sequence. If you ripple-remove timeline ranges after captions exist, Premiere captions do not follow those ripples automatically. retime_caption_file shifts or ripples a local SRT/VTT; then re-import and reapply styling.",
           "verify_caption_render_evidence checks caller-measured caption/title bounds, missing glyphs, and safe-zone review against a rendered-artifact checksum. It does not perform OCR or certify unsampled frames. plan_reaction_captions can plan stacked speaker-colored reaction captions from a word timeline without mutating Premiere.",
         ],
         bullets: [
@@ -381,25 +468,43 @@ export const novDec2026MarketingArticles: Article[] = [
     ],
     faqs: [
       {
-        question: "Does Premiere Pro MCP transcribe audio automatically?",
+        question: "Does Premiere Pro have auto captions?",
         answer:
-          "build_caption_artifact expects a caller-supplied word timeline. Guarded speech-to-text start routes may exist in the published package for supported hosts; a start request is not a completed transcript. Confirm the live tool list with get_capabilities.",
+          "Yes. Premiere Pro's built-in Speech to Text transcribes dialogue in the Text panel, and Captions > Create captions from transcript turns that transcript into a caption track aligned to the speech.",
+      },
+      {
+        question: "Which languages does Speech to Text support?",
+        answer:
+          "Adobe's supported-languages page, updated August 22, 2025, lists 18 languages, including English, English (UK), Spanish, French, German, Japanese, Korean, Hindi, and three Chinese variants. Extra language packs install through the Creative Cloud app's Get add-ons option.",
+      },
+      {
+        question: "Can I import SRT captions from another tool?",
+        answer:
+          "Yes. Import the SRT like any media file and drag it from the Project panel into the sequence. Premiere creates a new caption track from it.",
+      },
+      {
+        question: "Should I use SRT or VTT?",
+        answer:
+          "Use SRT for Premiere. Adobe's supported caption formats list SRT but not WebVTT. build_caption_artifact can write VTT for web players, but import SRT into Premiere.",
+      },
+      {
+        question: "Does Premiere Pro MCP transcribe audio automatically?",
+        answer: `No. In published v${product.version} it can request that Adobe's own Speech to Text start on compatible Premiere 26.3 or later UXP hosts and read the native transcript; a start request is not a completed transcript. Caption files are built from a word timeline you approve. Confirm the live tool list with get_capabilities.`,
       },
       {
         question: "Can the assistant style captions through the API?",
         answer:
           "No. Styling, per-word colour, and Upgrade Caption to Graphic remain manual in Premiere. Use get_caption_style_guidance for the click path.",
       },
-      {
-        question: "What formats can I import?",
-        answer:
-          "create_caption_track import rejects unsupported formats before dispatch. Build SRT or VTT with build_caption_artifact, review the file, then import.",
-      },
     ],
     resources: [
       { label: "Silence cutting workflow", href: "/blog/cut-silence-in-premiere-pro-with-ai/" },
+      { label: "Rough cut workflow", href: "/blog/premiere-pro-ai-rough-cut-workflow/" },
+      { label: "Set up Premiere Pro MCP", href: "/blog/how-to-set-up-premiere-pro-mcp/" },
+      { label: "Adobe AI Assistant vs MCP", href: "/blog/adobe-premiere-ai-assistant-vs-mcp/" },
       { label: "Delivery QC checklist", href: "/blog/premiere-pro-delivery-qc-and-loudness-checklist/" },
       { label: "Tool catalog", href: "/tools/" },
+      { label: "Published package facts", href: "/facts/" },
     ],
     relatedSlugs: [
       "cut-silence-in-premiere-pro-with-ai",
