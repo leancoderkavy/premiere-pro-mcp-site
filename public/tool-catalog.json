@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "evidenceScope": "published_npm_package",
-  "packageVersion": "1.30.0",
-  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.30.0",
-  "sourceSha256": "75ddc14b964d045dac1a6e0c45fd39aa8f8a747040400a671662ccb9aa6d5e13",
+  "packageVersion": "1.31.0",
+  "sourcePath": "docs/supported-actions.md in premiere-pro-mcp@1.31.0",
+  "sourceSha256": "d94e2f05d128b1aa7c73e662100b81a483387a2a4a1b1ed7ff3e23537b2bb227",
   "hostVerification": "not_established_by_catalogs",
   "counts": {
-    "default": 445,
+    "default": 451,
     "uxp": 98,
     "restricted": 2
   },
@@ -28,6 +28,24 @@
       "surface": "default",
       "modes": "Single operation",
       "description": "Add audio level keyframes to create fades or level changes"
+    },
+    {
+      "name": "add_audio_transition",
+      "surface": "default",
+      "modes": "Single operation",
+      "description": "EXPERIMENTAL (undocumented QE DOM): Add a native audio crossfade at the cut between two adjacent clips on one audio track. Defaults to Constant Power. Verifies timeline placement and duration, not playback. This tool cannot bridge clips on different tracks."
+    },
+    {
+      "name": "add_audio_transition_to_clip",
+      "surface": "default",
+      "modes": "position: start, end",
+      "description": "EXPERIMENTAL (undocumented QE DOM): Add a native audio transition to the start (fade-in) or end (fade-out) of a particular audio clip. Defaults to Constant Power. An edge shared with an adjacent audio clip can form a crossfade; requires host readback and listening to verify."
+    },
+    {
+      "name": "add_caption_graphics",
+      "surface": "default",
+      "modes": "transcript_format: srt, vtt, json; standard: netflix_adult, netflix_kids, bbc, dcmp, social_9x16; speaker_style: none, color, hyphen, label; word_mode: off, single, accumulate; safe_area: reels_9_16, tiktok_9_16, instagram_reels_9_16, youtube_shorts_9_16, landscape_16_9; placement: template, safe_bottom, safe_middle, safe_top; fit: both, rebreak, shrink, none; cut_source: none, edit_points",
+      "description": "Burn captions into the timeline as MOGRT / Essential Graphics clips on an existing video track, one clip per caption (word_mode single or accumulate: one per word). Plans from a transcript or saved plan_path at the sequence's own frame rate, then removes this tool's earlier clips ('<name_prefix> 001', ... on that track; replace_existing true by default, read back before placing) and places clips in chunks of 25 (importMGT at the frame-rounded start, text written to the template's controls, duration trimmed, named, optional speaker colour through color_field, optional Motion position for safe_bottom / safe_middle / safe_top assuming the template's text is centred on the frame). Fit (rebreak and shrink) is ESTIMATED from character counts and a font size (font_size_px, else read from the first placed clip's text JSON fontSizeEditValue, else 6% of the frame short side with a warning); shrink rewrites fontSizeEditValue when capPropFontSizeEdit is true, else Motion Scale. Each chunk is read back in a separate call (name, start/end within half a frame, text values, colour): per clip verified, committed_unverified or mismatch; a failure or mismatch stops the run and reports what was placed, never a partial batch as success. Before anything is sent to Premiere the .mogrt is opened: a Premiere-built template (definition.json authorApp ppro) is refused, because Premiere does not expose its text to scripts (use an After Effects-built MOGRT), and every text_fields name and color_field must be a text or colour control of the template (the available names are listed when one is not). Captions are clamped to the sequence end (rule sequence_end in plan.sequence_end_changes). A template with fewer line fields than the plan has lines gets its captions re-broken to the field count (fit.rebreaks). Refuses when other clips on the track overlap the captions (use another track; add_track first if needed). expected_project_path is honoured: the server applies it to every CEP command automatically. Results can be committed_unverified. Text template convention: text_fields.line_fields [\"Line 1\", \"Line 2\"] (one line per field) or text_fields.text_field (lines joined with a carriage return). Per-word colour inside one text field has no Premiere equivalent; see host_limitations in the result."
     },
     {
       "name": "add_custom_metadata_field",
@@ -356,8 +374,14 @@
     {
       "name": "check_caption_safe_zone",
       "surface": "default",
-      "modes": "platform: tiktok, instagram_reels, youtube_shorts, instagram_feed, youtube, linkedin, x",
-      "description": "Check caption, title, logo, and graphic rectangles against approximate platform UI overlay zones (TikTok, Reels, Shorts, feed, YouTube, LinkedIn, X) and suggest the nearest clear position. Local-only geometry on caller-supplied normalized rects; it never reads or changes Premiere."
+      "modes": "platform: reels_9_16, tiktok, instagram_reels, youtube_shorts, instagram_feed, youtube, linkedin, x",
+      "description": "Check caption, title, logo, and graphic rectangles against approximate platform UI overlay zones (reels_9_16 shared box, TikTok, Reels, Shorts, feed, YouTube, LinkedIn, X) and suggest the nearest clear position. Local-only geometry on caller-supplied normalized rects; it never reads or changes Premiere."
+    },
+    {
+      "name": "check_captions",
+      "surface": "default",
+      "modes": "format: srt, vtt; standard: netflix_adult, netflix_kids, bbc, dcmp, social_9x16; safe_area: reels_9_16, tiktok_9_16, instagram_reels_9_16, youtube_shorts_9_16, landscape_16_9",
+      "description": "Read-only caption QA against a published standard (default netflix_adult): reading speed, line length and count, durations, gaps, overlaps, line-break grammar, shot changes (cut_times) and an estimated safe area for 9:16. Input: file_path (.srt/.vtt), text, plan_path or cues (e.g. from read_sequence_captions). Local-only; never changes Premiere."
     },
     {
       "name": "check_offline_media",
@@ -476,8 +500,8 @@
     {
       "name": "create_caption_track",
       "surface": "default",
-      "modes": "import, plan_lecture_workflow",
-      "description": "Import an already reviewed caption artifact into the active sequence, or create a local lecture-caption timing and review workflow plan. Import rejects unsupported formats before host dispatch and reports structural success only when valid count readback shows exactly one new caption track. Unreadable or unexpected results preserve committed_unverified diagnostics; inspect before retrying. Captions import with Premiere's default style; styling, per-word colour, and Upgrade Caption to Graphic stay manual (get_caption_style_guidance). The planning action never contacts Premiere or changes an artifact. Caption tracks render in export_sequence by default; CEP cannot remove or hide them. Import results include observed undoSteps (null when unavailable) and reversal guidance for guarded experimental QE multiple_undo or caption mute through a capable UXP panel."
+      "modes": "import, plan_lecture_workflow, import_plan",
+      "description": "Import an already reviewed caption artifact into the active sequence, create a local lecture-caption timing and review workflow plan, or (action import_plan) plan captions from a transcript or saved plan at the sequence's own frame rate, write an SRT inside approved_workspace_path (never overwriting), import it and create the native caption track, each host step in its own CEP call. import_plan clamps every caption to the sequence end (minus start_seconds): an out-time past it is shortened and a caption that would start at or after it is dropped, listed in plan.sequence_end_changes. It reports the plan summary, SRT cue-count readback, the imported item and the track-count receipt (verified or committed_unverified); speaker colours cannot be applied to a native caption track (use speaker_style label or hyphen, or add_caption_graphics), and a re-run creates another caption track. Import rejects unsupported formats before host dispatch and reports structural success only when valid count readback shows exactly one new caption track. Unreadable or unexpected results preserve committed_unverified diagnostics; inspect before retrying. Captions import with Premiere's default style; styling, per-word colour, and Upgrade Caption to Graphic stay manual (get_caption_style_guidance). The planning action never contacts Premiere or changes an artifact. Caption tracks render in export_sequence by default; CEP cannot remove or hide them. Import results include observed undoSteps (null when unavailable) and reversal guidance for guarded experimental QE multiple_undo or caption mute through a capable UXP panel."
     },
     {
       "name": "create_context_edit_plan",
@@ -933,7 +957,7 @@
       "name": "get_active_sequence",
       "surface": "default",
       "modes": "track_type: video, audio, both",
-      "description": "Get bounded, paged information about the currently active sequence (50 clips by default). Audio and video clips include source In/Out seconds. Follow pagination.nextOffset for more. Bounded source-alignment diagnostics include separate picture/sound offsets and media-pair group inconsistencies, with limited group context outside this page; they do not verify playback sync."
+      "description": "Get bounded, paged information about the currently active sequence (50 clips by default). Audio and video tracks include transitionCount plus up to 50 transition ranges; inspect transitionsTruncated before structural edits, which can refuse to strand a transition. Use get_full_sequence_info for settings and broader sequence inspection. Audio and video clips include source In/Out seconds. Follow pagination.nextOffset for more. Bounded source-alignment diagnostics include separate picture/sound offsets and media-pair group inconsistencies, with limited group context outside this page; they do not verify playback sync."
     },
     {
       "name": "get_advanced_feature_support",
@@ -974,8 +998,8 @@
     {
       "name": "get_caption_style_guidance",
       "surface": "default",
-      "modes": "preset: clean, bold_pop, karaoke, podcast, lecture",
-      "description": "Read-only caption style guidance: a preset and/or custom_style turned into Premiere 2024+ Properties-panel Track Style steps, plus keyword_highlight per-word steps, manual Upgrade Caption to Graphic steps, and render-verification routes. NEVER modifies captions: Premiere has no caption style, per-word, or upgrade API."
+      "modes": "preset: clean, bold_pop, karaoke, podcast, lecture; standard: netflix_adult, netflix_kids, bbc, dcmp, social_9x16",
+      "description": "Read-only caption style guidance: a preset and/or custom_style as Premiere Properties-panel Track Style steps, plus keyword_highlight steps, manual Upgrade Caption to Graphic steps, render-verification routes, and a standard's rules (standard). NEVER modifies captions: Premiere has no caption style, per-word, or upgrade API."
     },
     {
       "name": "get_clip_adjustment_layer",
@@ -2130,6 +2154,12 @@
       "description": "Plan a beat-synced montage: carve a detect_beats grid into shots every N beats (merging short and splitting long spans), assign clips in order, and emit add_to_timeline_batch chunks, trim ranges, and cut markers. Local-only and deterministic; never changes Premiere."
     },
     {
+      "name": "plan_captions",
+      "surface": "default",
+      "modes": "transcript_format: srt, vtt, json; standard: netflix_adult, netflix_kids, bbc, dcmp, social_9x16; speaker_style: none, color, hyphen, label",
+      "description": "Plan captions to a published standard (netflix_adult, netflix_kids, bbc, dcmp, social_9x16) from a transcript (word_timeline, text or file; SRT, VTT, ElevenLabs Scribe or Premiere transcript JSON): chunking, line breaks, timing, gaps, speakers, SDH. Optionally writes the plan JSON and an SRT/VTT/TTML file. cut_times come from detect_scene_edits / scene_edit_detection or sequence edit points. Local-only; never changes Premiere."
+    },
+    {
       "name": "plan_chapter_markers",
       "surface": "default",
       "modes": "Single operation",
@@ -2210,7 +2240,7 @@
     {
       "name": "plan_short_subscribe_cta",
       "surface": "default",
-      "modes": "brand: watch_club, cafe, other; platform: tiktok, instagram_reels, youtube_shorts, instagram_feed, youtube, linkedin, x",
+      "modes": "brand: watch_club, cafe, other; platform: reels_9_16, tiktok, instagram_reels, youtube_shorts, instagram_feed, youtube, linkedin, x",
       "description": "Plan a brief subscribe overlay about two-thirds through a Short, after an optional hook, in a platform-safe lower-third. Local-only; never changes Premiere."
     },
     {
@@ -2427,7 +2457,7 @@
       "name": "read_sequence_captions",
       "surface": "default",
       "modes": "Single operation",
-      "description": "Diagnose whether the active Premiere scripting host can enumerate caption tracks. It never treats an empty result as proof that the sequence has no captions, because most CEP builds expose caption creation but not caption reads."
+      "description": "Diagnose whether the active Premiere scripting host can enumerate caption tracks. It never treats an empty result as proof that the sequence has no captions, because most CEP builds expose caption creation but not caption reads. Cues are returned per track as cues_by_track [{track_index, cues:[{start_seconds,end_seconds,text}]}] for every caption track whose captions all have readable text and times, and as a flat cues list (ready for check_captions) only when the sequence has exactly one caption track and it is readable. Optional export {format, output_path, approved_workspace_path, track_index?} writes those cues to a new .srt/.vtt/.ttml (never overwriting, cue-count readback) and refuses with an explanation when the host exposes no caption text; the diagnostic is returned either way. Without export the call is read-only."
     },
     {
       "name": "read_video_scopes",
@@ -3136,6 +3166,12 @@
       "surface": "default",
       "modes": "Single operation",
       "description": "Set video track visibility using Premiere's track mute state (eye icon) and read the mute state back. Premiere's scripting API exposes mute, not a separate video visibility setter."
+    },
+    {
+      "name": "transcribe_audio",
+      "surface": "default",
+      "modes": "engine: elevenlabs",
+      "description": "Transcribe speech to word-level JSON with a THIRD-PARTY engine (ElevenLabs Scribe), not Adobe: an audio or video file is UPLOADED to ElevenLabs (US-hosted; the picture is uploaded too when the source is a video file) and needs ELEVENLABS_API_KEY; confirm_upload: true is required and nothing is sent without it. Source is one of media_path (an audio or video file; no Premiere call), or a sequence: when its only audible clip is one untouched media file that file is uploaded directly (offset and audible range returned; an .mp4 or .mov is uploaded with its picture), otherwise the active sequence is exported to the workspace first. Without export_preset_path the export uses an audio-only Adobe Media Encoder system preset (WAV, else AAC, MP3 or AIFF, found under the AME install's MediaIO/systempresets and checked to render no video), so only sound is uploaded; export_preset_used names the preset. Only if none is found does it fall back to the H.264 preset, which writes picture and sound, so the picture is uploaded too and a warning says so. The exported file stays in the workspace (named in exported_file_left_in_workspace) unless delete_export_after_upload is true. Writes the engine's raw JSON into approved_workspace_path and returns its path, revision, summary and the offset to give plan_captions. For Adobe's own on-device Speech to Text use prepare_transcript_workflow."
     },
     {
       "name": "transcribe_clip_uxp",
