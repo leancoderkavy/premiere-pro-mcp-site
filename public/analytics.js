@@ -72,6 +72,18 @@
       if (currentUrl) event.properties.$current_url = currentUrl;
       else delete event.properties.$current_url;
     }
+    // save_referrer is off (nothing referrer-related is persisted), so the SDK
+    // sends no referrer. Fill it from document.referrer, origin only, so Web
+    // Analytics can attribute search and referral traffic.
+    if (!("$referrer" in event.properties)) {
+      const referrer = typeof document.referrer === "string" && document.referrer
+        ? referrerOrigin(document.referrer)
+        : "$direct";
+      if (referrer) {
+        event.properties.$referrer = referrer;
+        event.properties.$referring_domain = referrer === "$direct" ? "$direct" : new URL(referrer).hostname;
+      }
+    }
     if ("$referrer" in event.properties) {
       const referrer = referrerOrigin(event.properties.$referrer);
       if (referrer) event.properties.$referrer = referrer;

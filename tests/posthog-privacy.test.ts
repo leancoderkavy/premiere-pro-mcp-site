@@ -5,7 +5,7 @@ import { analyticsPath, trackOnboardingEvent } from "../lib/onboarding-events";
 
 const script = readFileSync("public/analytics.js", "utf8");
 
-function load(privacy: { globalPrivacyControl?: boolean } = {}, host = "https://us.i.posthog.com") {
+function load(privacy: { globalPrivacyControl?: boolean } = {}, host = "https://us.i.posthog.com", referrer?: string) {
   const tags: Array<{ src: string; onload: () => void }> = [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the SDK config is an untyped vm fixture
   let config: Record<string, any> = {};
@@ -17,6 +17,7 @@ function load(privacy: { globalPrivacyControl?: boolean } = {}, host = "https://
     __premierePosthogQueue: [{ eventName: "onboarding_copy_failed", properties: { surface: "website", action: "safe_prompt" } }],
   };
   const document = {
+    referrer,
     currentScript: { dataset: { posthogProjectToken: "phc_test", posthogHost: host } },
     createElement: () => ({}),
     head: { appendChild: (tag: (typeof tags)[number]) => tags.push(tag) },
@@ -72,6 +73,26 @@ describe("PostHog capture privacy boundaries", () => {
     } });
     expect(direct.properties).toEqual({ surface: "website", $referrer: "$direct", $process_person_profile: false });
     expect(fixture.config().before_send({ event: "$exception", properties: {} })).toBeNull();
+  });
+
+  it("fills a missing referrer from document.referrer as origin only, else $direct", () => {
+    const search = load({}, "https://us.i.posthog.com", "https://www.google.com/search?q=premiere+pro+mcp#top");
+    search.tags[0].onload();
+    expect(search.config().before_send({ event: "$pageview", properties: { surface: "website" } }).properties).toEqual({
+      surface: "website", $referrer: "https://www.google.com", $referring_domain: "www.google.com", $process_person_profile: false,
+    });
+    const direct = load({}, "https://us.i.posthog.com", "");
+    direct.tags[0].onload();
+    expect(direct.config().before_send({ event: "$pageview", properties: { surface: "website" } }).properties).toEqual({
+      surface: "website", $referrer: "$direct", $referring_domain: "$direct", $process_person_profile: false,
+    });
+    const unsafe = load({}, "https://us.i.posthog.com", "file:///Users/editor/private.mov");
+    unsafe.tags[0].onload();
+    expect(unsafe.config().before_send({ event: "$pageview", properties: { surface: "website" } }).properties).toEqual({
+      surface: "website", $process_person_profile: false,
+    });
+    const sdk = search.config().before_send({ event: "$pageview", properties: { surface: "website", $referrer: "https://bing.com/x?q=1", $referring_domain: "bing.com" } });
+    expect(sdk.properties).toMatchObject({ $referrer: "https://bing.com", $referring_domain: "bing.com" });
   });
 
   it("rechecks privacy after the SDK download and before every send", () => {
