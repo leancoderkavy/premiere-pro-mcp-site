@@ -79,7 +79,7 @@ const otherWays = [
     sourceLabel: "Eddie AI",
     checked: "checked Nov 23, 2026",
   },
-] as const
+]
 
 const structuredData = {
   "@context": "https://schema.org",
