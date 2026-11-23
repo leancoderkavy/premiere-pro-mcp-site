@@ -15,11 +15,11 @@ const projects = [
   {
     name: "MCP for Adobe Premiere Pro",
     repository: "https://github.com/leancoderkavy/premiere-pro-mcp",
-    toolCount: "441 core tools in v1.25.0; 96 additional tools with a compatible UXP connection",
+    toolCount: "441 core tools in v1.31.0; 96 additional tools with a compatible UXP connection",
     bridge: "CEP production bridge; authenticated UXP preview/additional surface",
     platform: "Windows and macOS; Premiere Pro 2020–2026 in the project README",
     fit: "A local-first project with a searchable catalog, capability-gated tools, and active maintenance.",
-    note: "These are the v1.25.0 README figures, not a licensed-host success guarantee. Verify your own Premiere version, connector, and requested action.",
+    note: "These are the v1.31.0 README figures, not a licensed-host success guarantee. Verify your own Premiere version, connector, and requested action.",
     sourceLabel: "Project README",
   },
   {
@@ -54,6 +54,33 @@ const projects = [
   },
 ] as const
 
+const otherWays = [
+  {
+    name: "Adobe's own local MCP (preview)",
+    description: "Previewed at Adobe MAX on November 10, 2026 for Premiere Pro, After Effects, Photoshop and Illustrator; Adobe says private beta for Creative Cloud customers in early 2027; no price or tool list announced. Not installable today.",
+    note: "Adobe's cloud connectors (Adobe for Claude / ChatGPT) work on uploaded files, not the open project.",
+    source: "https://filmit.io/blog/premiere-pro-mcp",
+    sourceLabel: "Filmit.io blog",
+    adobeSource: "https://cut.pro/en/blog/adobe-max-premiere-firefly-agents-mcp-2026",
+    checked: "checked Nov 23, 2026",
+  },
+  {
+    name: "Filmit MCP",
+    description: "30 Premiere Pro actions via the Filmit Studio panel (hosted at mcp.filmit.io); also After Effects and DaVinci Resolve Studio; free Filmit account = 50 Filmit actions/day, more with Filmit Pro; all Filmit tools work through the connector since Nov 16.",
+    source: "https://filmit.io/blog/premiere-pro-mcp",
+    sourceLabel: "Filmit.io blog",
+    checked: "checked Nov 23, 2026",
+  },
+  {
+    name: "Eddie AI",
+    description: "Not a live Premiere bridge — Claude/ChatGPT cut in Eddie via https://mcp.heyeddie.ai/api/mcp, then Eddie exports a native .prproj / Premiere XML (timeline export 100 credits); Eddie says a chat can't edit your open Premiere timeline.",
+    note: "Premiere's built-in AI Assistant (27.0 beta, Firefly credits, no bring-your-own-model) is a separate Adobe feature.",
+    source: "https://www.heyeddie.ai/premiere-pro/edit-with-claude-or-chatgpt",
+    sourceLabel: "Eddie AI",
+    checked: "checked Nov 23, 2026",
+  },
+]
+
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
@@ -63,7 +90,7 @@ const structuredData = {
       headline: "Best Premiere Pro MCP Servers: Compare Tools & Bridges",
       description: "A source-linked comparison of Premiere Pro MCP servers by published tool count, bridge, platform, and project identity.",
       url: "https://premiere-pro-mcp.com/compare/",
-      dateModified: "2026-10-29",
+      dateModified: "2026-11-23",
       inLanguage: "en-US",
       citation: projects.map((project) => project.repository),
       mainEntityOfPage: "https://premiere-pro-mcp.com/compare/",
@@ -91,14 +118,15 @@ export default function ComparePage() {
               <span aria-hidden="true">/</span> Compare
             </nav>
             <header className="border-b border-site-line pb-12">
-              <p className="font-mono text-sm uppercase tracking-wide text-site-accent">README comparison · Updated October 29, 2026</p>
+              <p className="font-mono text-sm uppercase tracking-wide text-site-accent">README comparison · Updated November 23, 2026</p>
               <h1 className="mt-5 text-balance text-4xl font-bold tracking-tight sm:text-6xl">Best Premiere Pro MCP servers, compared fairly.</h1>
               <p className="mt-6 max-w-3xl text-lg leading-8 text-site-muted">Tool count is a useful starting point, not proof that a licensed Premiere host will complete an operation. Compare the bridge, platform, project identity, and verification boundary before choosing a server.</p>
             </header>
 
             <section className="space-y-5" aria-labelledby="snapshot-heading">
               <h2 id="snapshot-heading" className="text-3xl font-semibold">The short answer</h2>
-              <p className="leading-8 text-site-muted">For the broadest published catalog in this snapshot, start with <strong className="text-site-text">MCP for Adobe Premiere Pro</strong>: its v1.25.0 README lists 441 core tools and 96 additional tools when a compatible UXP connection is enabled. It is actively maintained and supports Windows and macOS. That does not make every tool equally available in every profile or Premiere build, so use the <a className="text-site-accent underline" href="/facts/">published release facts</a> and <a className="text-site-accent underline" href="/tools/">tool reference</a> for the current package before installing.</p>
+              <p className="leading-8 text-site-muted">For the broadest published catalog in this snapshot, start with <strong className="text-site-text">MCP for Adobe Premiere Pro</strong>: its v1.31.0 README lists 441 core tools and 96 additional tools when a compatible UXP connection is enabled. It is actively maintained and supports Windows and macOS. That does not make every tool equally available in every profile or Premiere build, so use the <a className="text-site-accent underline" href="/facts/">published release facts</a> and <a className="text-site-accent underline" href="/tools/">tool reference</a> for the current package before installing.</p>
+              <p className="leading-8 text-site-muted"><strong className="text-site-text">Adobe previewed its own local MCP</strong> at Adobe MAX on November 10, 2026 for Premiere Pro, After Effects, Photoshop and Illustrator, entering private beta for Creative Cloud customers in early 2027. No price or tool list has been announced. The projects below are installable today.</p>
               <p className="rounded-xl border border-site-line bg-site-panel p-5 leading-8 text-site-muted"><strong className="text-site-text">Important brand clarification:</strong> <code>premiere-mcp.com</code> belongs to the separate <a className="text-site-accent underline" href="https://github.com/hetpatel-11/Adobe_Premiere_Pro_MCP#readme">hetpatel-11 project</a>. This site is for <code>premiere-pro-mcp</code>, maintained at <a className="text-site-accent underline" href="https://github.com/leancoderkavy/premiere-pro-mcp">leancoderkavy/premiere-pro-mcp</a>. Check the repository and npm package name before copying a setup command.</p>
             </section>
 
@@ -117,6 +145,24 @@ export default function ComparePage() {
                     </dl>
                     <p className="border-t border-site-line pt-4 text-sm leading-6 text-site-muted">{project.note}</p>
                     <a className="text-site-accent underline" href={project.repository}>Read the {project.sourceLabel}</a>
+                  </section>
+                ))}
+              </div>
+            </section>
+
+            <section className="space-y-6" aria-labelledby="other-ways-heading">
+              <h2 id="other-ways-heading" className="text-3xl font-semibold">Other ways to connect AI to Premiere Pro (Nov 2026)</h2>
+              <div className="grid gap-6 lg:grid-cols-1">
+                {otherWays.map((item) => (
+                  <section key={item.name} className="space-y-4 rounded-xl border border-site-line p-6">
+                    <h3 className="text-2xl font-semibold">{item.name}</h3>
+                    <p className="leading-7 text-site-muted">{item.description}</p>
+                    {item.note && <p className="border-t border-site-line pt-4 text-sm leading-6 text-site-muted">{item.note}</p>}
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+                      <a className="text-site-accent underline" href={item.source}>{item.sourceLabel}</a>
+                      {item.adobeSource && <a className="text-site-accent underline" href={item.adobeSource}>Adobe MAX announcement</a>}
+                      <span className="text-site-muted">({item.checked})</span>
+                    </div>
                   </section>
                 ))}
               </div>
