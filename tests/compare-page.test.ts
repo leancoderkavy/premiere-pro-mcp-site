@@ -10,7 +10,7 @@ describe("Premiere Pro MCP comparison page", () => {
   const navigation = read("lib/site-navigation.ts")
 
   it("keeps the comparison figures and project identities source-linked", () => {
-    expect(page).toContain("441 core tools in v1.25.0; 96 additional tools")
+    expect(page).toContain("441 core tools in v1.31.0; 96 additional tools")
     expect(page).toContain("283 tools")
     expect(page).toContain("170+ tools")
     expect(page).toContain("284 tools")
